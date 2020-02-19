@@ -107,13 +107,14 @@ class EditMovie extends React.Component {
 
     updateMovie() {
         const { title, year, current, rating, id } = this.state;
-
+        let currentt = (current === "true");
         const data = {
             Title: title,
             Year: +year,
-            Current: current === 'true',
+            Current: currentt,
             Rating: +rating
         };
+        console.log(data);
 
         const requestOptions = {
             method: 'PUT',
@@ -121,6 +122,7 @@ class EditMovie extends React.Component {
                       'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
             body: JSON.stringify(data)
         };
+        console.log(requestOptions.body);
 
         fetch(`${serviceConfig.baseURL}/api/movies/${id}`, requestOptions)
             .then(response => {
