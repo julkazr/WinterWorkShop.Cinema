@@ -65,6 +65,7 @@ login() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-white" />
             <Navbar.Collapse id="basic-navbar-nav" className="text-white">
               <Nav className="mr-auto text-white" >
+              <Nav.Link href="/topten" className="text-white">Top 10 Movies</Nav.Link>
               </Nav>
               <Form inline onSubmit={this.handleSubmit}>
                 <FormControl type="text" placeholder="Username"
