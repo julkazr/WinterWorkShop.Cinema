@@ -111,4 +111,4 @@ class NewCinema extends React.Component {
     }
 }
 
-export default withRouter(NewMovie);
+export default withRouter(NewCinema);
