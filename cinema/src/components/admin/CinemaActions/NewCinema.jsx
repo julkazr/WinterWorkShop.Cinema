@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from '
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 
-class NewMovie extends React.Component {
+class NewCinema extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -50,11 +50,6 @@ class NewMovie extends React.Component {
             this.setState({ submitted: false });
         }
     }
-
-    // handleYearChange(year) {
-    //     this.setState({year: year});
-    //     this.validate('year', year);
-    // }
 
     addCinema() {
         const { name } = this.state;
