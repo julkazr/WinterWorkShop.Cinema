@@ -37,6 +37,7 @@ class ShowAllCinemas extends Component {
         return response.json();
         })
         .then(data => {
+            console.log({data})
           if (data) {
             this.setState({ cinemas: data, isLoading: false });
             }
