@@ -1,24 +1,90 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 
 class ProjectionDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
+        auditorium: [],
+        row: null,
+        seat: null,
+        submitted: false,
+        canSubmit: true,
         movies: []
     };
+
+    for (var i = 0; i < 5; i++) {
+      this.state.auditorium.push([]);
+      for (var j = 0; j < 26; j++) {
+        this.state.auditorium[i].push({clicked: false});
+      }
+    }
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     //this.getMovie();
   }
 
+  handleClick(row, seat) {
+    this.state.auditorium[row][seat].clicked = !this.state.auditorium[row][seat].clicked;
+    this.forceUpdate();
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    this.setState({ submitted: true });
+
+    for (var i = 0; i < 5; i++) {
+      for (var j = 0; j < 26; j++) {
+        if (this.state.auditorium[i][j].clicked === true) {
+          this.makePayment();
+        }
+        else {
+          this.setState({ submitted: false });
+        }
+      }
+    }
+    if(this.state.submitted === false) {
+      NotificationManager.error('Please, choose seats by clicking on them.');
+    }
+  }
+
+  // makePayment() {
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json',
+  //                 'Authorization' : 'Bearer ' + localStorage.getItem('jwt') },
+  //     body: JSON.stringify()
+  //   };
+
+  //   fetch(`${serviceConfig.baseURL}/api/levi9payment`, requestOptions)
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         return Promise.reject(response);
+  //       }
+  //       return response.statusText;
+  //     })
+  //     .then(result => {
+  //       NotificationManager.success('Reservation made successfully!');
+  //       alert('Payment successful')
+  //     })
+  //     .catch(response => {
+  //       NotificationManager.error(response.message || response.statusText);
+
+  //     })
+    
+  // }
+
   getProjection() {
     // TO DO: here you need to fetch movie with projection details using ID from router
     const requestOptions = {
-      method: 'GET'
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
     };
 
     fetch(`${serviceConfig.baseURL}/movies/261e3562-5f7b-418f-61a6-08d797a6bf42`, requestOptions)
@@ -51,14 +117,22 @@ class ProjectionDetails extends Component {
 
   renderSeats(seats, row) {
       let renderedSeats = [];
+    
       for (let i = 0; i < seats; i++) {
-          renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}></td>);
+          renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
+                                id={'row: ' + row + ', seat: ' + i}
+                                className={this.state.auditorium[row][i].clicked ? "want-to-reserve" : "is-not-reserved"}
+                                onClick={this.handleClick.bind(this, row, i)}
+                                ></td>);
       }
+      
       return renderedSeats;
   }
 
   render() {
-    const auditorium = this.renderRows(5, 26);
+  const auditorium = this.renderRows(5,26);
+  const { submitted, canSubmit } = this.state;
+
       return (
         <Container>
           <Row className="justify-content-center">
@@ -79,6 +153,10 @@ class ProjectionDetails extends Component {
                                 CINEMA SCREEN
                             </div>
                         </Row>
+                        <Row>
+                          <Badge variant="primary" className="mx-2">Available seats</Badge>
+                          <Badge variant="warning" className="mx-2">Reserved seats</Badge>
+                        </Row>
                         <Row className="justify-content-center">
                             <table className="table-cinema-auditorium">
                             <tbody>
@@ -93,6 +171,11 @@ class ProjectionDetails extends Component {
                   </Card.Text>
                   <Row className="justify-content-center font-weight-bold">
                     Price for reserved seats:  800 RSD
+                  </Row>
+                  <Row className="pt-2">
+                    <form onSubmit={this.handleSubmit}>
+                      <Button type="submit" disabled={submitted || !canSubmit} className="font-weight-bold" block>Pay for tickets and make reservations</Button>
+                    </form>
                   </Row>
                 </Card.Body>
               </Card>

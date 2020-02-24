@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import Projection from './Projection';
-import { Row } from 'react-bootstrap';
+import { Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import Spinner from '../Spinner';
 
 class AllProjectionsForCinema extends Component {
     constructor(props) {
       super(props);
       this.state = {
-          movies: []
+          movies: [],
+          cinemas: [],
+          isLoading: true,
+          //submitted: false
       };
+      this.handleSubmit = this.handleSubmit(this);
+
     }
 
     componentDidMount() {
@@ -39,12 +45,48 @@ class AllProjectionsForCinema extends Component {
         .catch(response => {
             NotificationManager.error(response.message || response.statusText);
             this.setState({ submitted: false });
-        });
+        })
     }
+
+    getCinemas() {
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+        }
+      };
+
+      fetch(`${serviceConfig.baseURL}/api/cinemas/all`, requestOptions)
+        .then(response => {
+          if(!response.ok) {
+            return Promise.reject(response);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if(data) {
+            this.setState({ cinemas: data, isLoading: false});
+          }
+        })
+        .catch(response => {
+          this.setState({isLoading: false});
+          NotificationManager.error(response.message || response.statusText);
+          //this.setState({ submitted: true });
+        })
+    }
+
     render() {
         return (
           <div className="no-gutters">
             <Row className="no-gutters">
+            </Row>
+            <Row>
+              <Col>
+                <form onSubmit={this.handleSubmit}>
+
+                </form>
+              </Col>
             </Row>
             <Row className="no-gutters set-overflow-y">
               <Projection></Projection>
