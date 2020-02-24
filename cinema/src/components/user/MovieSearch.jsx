@@ -18,6 +18,10 @@ class MovieSearch extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentDidMount() {
+        this.getMovies();
+      }
+
     handleSubmit(e) {
         e.preventDefault();
 
@@ -55,13 +59,41 @@ class MovieSearch extends Component {
             tag: tag
         }
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-            body: JSON.stringify(data)
+                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
         };
+        console.log({data})
+        fetch(`${serviceConfig.baseURL}/api/Movies/all`, requestOptions)
+            .then(response => {
+                if(!response.ok) {
+                    return Promise.reject(response);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(data) {
+                    this.setState({movies: data});
+                }
+            })
+            .catch(response => {
+                NotificationManager.error(response.message || response.statusText);
+                this.setState({submittes: false});
+            });
+    }
 
-        fetch(`${serviceConfig.baseURL}/api/Movies/getByTag`, requestOptions)
+    getMoviesByTag() {
+        const {tag} = this.state;
+        const data = {
+            tag: tag
+        }
+        const requestOptions = {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
+        };
+        console.log({data})
+        fetch(`${serviceConfig.baseURL}/api/Movies/getByTag/${tag}`, requestOptions)
             .then(response => {
                 if(!response.ok) {
                     return Promise.reject(response);
@@ -80,6 +112,8 @@ class MovieSearch extends Component {
     }
 
     fillTableWithData() {
+        console.log("fill table")
+        //this.getMovies();
         return this.state.movies.map(movie => {
             return <tr key={movie.id}>                     
                         <td>{movie.title}</td>
@@ -123,7 +157,7 @@ class MovieSearch extends Component {
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
-                        <Button type="submit" block>Search</Button>
+                        <Button type="submit" onClick ={() => this.getMoviesByTag()} block>Search</Button>
                     </form>
                 </Col>
                 <Row> 
