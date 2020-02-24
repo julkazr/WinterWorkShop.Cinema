@@ -63,7 +63,6 @@ class MovieSearch extends Component {
             headers: {'Content-Type': 'application/json',
                       'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
         };
-        console.log({data})
         fetch(`${serviceConfig.baseURL}/api/Movies/all`, requestOptions)
             .then(response => {
                 if(!response.ok) {
@@ -92,7 +91,6 @@ class MovieSearch extends Component {
             headers: {'Content-Type': 'application/json',
                       'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
         };
-        console.log({data})
         fetch(`${serviceConfig.baseURL}/api/Movies/getByTag/${tag}`, requestOptions)
             .then(response => {
                 if(!response.ok) {
@@ -112,14 +110,12 @@ class MovieSearch extends Component {
     }
 
     fillTableWithData() {
-        console.log("fill table")
-        //this.getMovies();
         return this.state.movies.map(movie => {
             return <tr key={movie.id}>                     
                         <td>{movie.title}</td>
                         <td>{movie.year}</td>
                         <td>{movie.rating}/10</td>
-                        <td>{movie.current}</td>
+                        <td>{movie.current ? 'Yes' : 'No'}</td>
                     </tr>
         })
     }
