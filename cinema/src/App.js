@@ -12,6 +12,7 @@ import AllProjectionsForCinema from './components/user/AllProjectionsForCinema';
 import TopMovies from './components/user/TopMovies'
 import Dashboard from './components/admin/Dashboard';
 import FilterProjections from './components/user/FilterProjections';
+import MovieSearch from './components/user/MovieSearch';
 
 // higher order component
 import { PrivateRouteAdmin } from './components/hoc/privateRouteAdmin';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/projectionlist" component={AllProjectionsForCinema} />
         <Route path="/topten" component={TopMovies} />
         <Route path="/FilterProjections" component={FilterProjections} />
+        <Route path="/MovieSearch" component={MovieSearch} />
         <PrivateRouteAdmin path="/dashboard" component={Dashboard} />
       </Switch>
       <NotificationContainer />

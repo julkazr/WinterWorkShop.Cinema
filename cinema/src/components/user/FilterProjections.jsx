@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Row, Table, Container, Col, FormGroup, FormText, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import Spinner from '../Spinner';
-import { withRouter } from 'react-router';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import DateTimePicker from 'react-datetime-picker';
 
@@ -342,7 +338,7 @@ class FilterProjections extends Component {
                 </Row>
                 <Row className="no-gutters pr-5 pl-5">
                     <Col>
-                        <form>
+                        <form style={{margin: 20}}>
                             {showTable}
                         </form>
                     </Col>
