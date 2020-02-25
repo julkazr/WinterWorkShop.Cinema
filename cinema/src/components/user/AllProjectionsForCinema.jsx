@@ -16,23 +16,25 @@ class AllProjectionsForCinema extends Component {
           cinemas: [],
           auditoriums: [],
           projections: [],
+          projectionTime: new Date().toISOString(),
           cinemaId: null,
           auditoriumId: null,
           projectionsId: null,
           cinemaIdError: '',
           auditoriumIdError: '',     
           isLoading: true,
-          //submitted: false
+          submitted: false,
+          canSubmit: true
       };
-
+      this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
       // this.getProjections();
       this.getCinemas();
-      this.getAuditoriums(this.state.cinemaId);
-      this.getProjectionsForAuditorium(this.state.auditoriumId);
+      //this.getAuditoriums(this.state.cinemaId);
+      //this.getProjectionsForAuditorium(this.state.auditoriumId);
     }
 
     handleChange(e) {
@@ -41,11 +43,22 @@ class AllProjectionsForCinema extends Component {
       this.validate(id, value);
     }
 
+    handleSubmit(e) {
+      e.preventDefault();
+
+      this.setState({ submitted: true });
+      const { cinemaId, auditoriumId } = this.state;
+      if (!cinemaId || !auditoriumId) {
+          NotificationManager.error('Please fill form with data.');
+          this.setState({ submitted: false });
+      }
+  }
+
     onAuditoriumChange(auditorium) {
         if(auditorium[0]) {
             this.setState({auditoriumId: auditorium[0].id});
-            this.validate('auditoriumId', auditorium[0]);
-            console.log(auditorium[0].id);
+            this.validate('auditoriumId', auditorium[0].id);
+            console.log(auditorium[0].id, this.state.projectionTime);
         } else {
             this.setState({auditoriumId: null});
             this.validate('auditoriumId', null);
@@ -55,7 +68,7 @@ class AllProjectionsForCinema extends Component {
     onCinemaChange(cinema) {
         if(cinema[0]) {
             this.setState({cinemaId: cinema[0].id});
-            this.validate('cinemaId', cinema[0]);
+            this.validate('cinemaId', cinema[0].id);
             console.log(cinema[0].id);
         } else {
             this.setState({cinemaId: null});
@@ -76,13 +89,15 @@ class AllProjectionsForCinema extends Component {
   
   validate(id, value) {
     if (id === 'cinemaId') {
-        if (!value) {
-            this.setState({cinemaIdError: '',
+        if (value === '') {
+            this.setState({cinemaIdError: 'Please choose cinema',
                             canSubmit: false})
+                            
         } else {
             this.setState({cinemaIdError: '',
                             canSubmit: true});
         }
+        console.log('CinemaError: ' + this.state.cinemaIdError);
     }
     else if (id === 'auditoriumId') {
         if (!value) {
@@ -104,31 +119,44 @@ class AllProjectionsForCinema extends Component {
     // }
 }
 
-    getProjections() {
-      // TO DO here you need to change this part and query, and fetch movies with projections, and in future add fetch by cinema name
-      const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-      };
+    // getProjections() {
+    //   // TO DO here you need to change this part and query, and fetch movies with projections, and in future add fetch by cinema name
+    //   const requestOptions = {
+    //     method: 'GET',
+    //     headers: {'Content-Type': 'application/json',
+    //                   'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
+    //   };
 
-      fetch(`${serviceConfig.baseURL}/api/Movies/current`, requestOptions)
-        .then(response => {
-          if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
-        })
-        .then(data => {
-          NotificationManager.success('Successfuly fetched data');
-          if (data) {
-            }
-        })
-        .catch(response => {
-            NotificationManager.error(response.message || response.statusText);
-            this.setState({ submitted: false });
-        })
-    }
+    //   fetch(`${serviceConfig.baseURL}/api/Movies/current`, requestOptions)
+    //     .then(response => {
+    //       if (!response.ok) {
+    //         return Promise.reject(response);
+    //     }
+    //     return response.json();
+    //     })
+    //     .then(data => {
+    //       NotificationManager.success('Successfuly fetched data');
+    //       //console.log(data);
+    //       if(data) {
+    //         let projectionsForMovie = [];
+    //         data.forEach(item => {
+    //           if(item.auditoriumId === auditoriumId) {
+    //             projectionsForAuditorium.push(item);
+    //             //console.log(item.auditoriumId);
+    //           }
+              
+              
+    //         });
+    //         console.log(projectionsForAuditorium);
+    //           this.setState({projections: projectionsForAuditorium});
+              
+    //       }
+    //     })
+    //     .catch(response => {
+    //         NotificationManager.error(response.message || response.statusText);
+    //         this.setState({ submitted: false });
+    //     })
+    // }
 
     getCinemas() {
       const requestOptions = {
@@ -173,16 +201,25 @@ class AllProjectionsForCinema extends Component {
               return response.json();
           })
           .then(data => {
+            console.log(data);
               if(data) {
                 let auditoriumsForCinema = [];
-                data.forEach(item => {
-                  if(item.cinemaId === cinemaId) {
-                    auditoriumsForCinema.push(item);
-                  }
-                  
-                });
+                if(cinemaId) {
+                  data.forEach(item => {
+                    if(item.cinemaId === cinemaId) {
+                      auditoriumsForCinema.push(item);
+                    }
+                    
+                  });
+                } else {
+                  data.forEach(item => {
+                    
+                      auditoriumsForCinema.push(item);
+                   }) 
+                }
+                
                 console.log(auditoriumsForCinema);
-                  this.setState({auditoriums: auditoriumsForCinema});
+                this.setState({auditoriums: auditoriumsForCinema});
               }
           })
           .catch(response => {
@@ -206,16 +243,12 @@ class AllProjectionsForCinema extends Component {
           return response.json();
       })
       .then(data => {
-        //console.log(data);
           if(data) {
             let projectionsForAuditorium = [];
             data.forEach(item => {
-              if(item.auditoriumId === auditoriumId) {
+              if(item.auditoriumId === auditoriumId && this.state.projectionTime <= item.projectionTime) {
                 projectionsForAuditorium.push(item);
-                //console.log(item.auditoriumId);
-              }
-              
-              
+              } 
             });
             console.log(projectionsForAuditorium);
               this.setState({projections: projectionsForAuditorium});
@@ -235,7 +268,7 @@ class AllProjectionsForCinema extends Component {
             </Row>
             <Container>
               <Row>
-                <form className="col-md-12 pt-4">
+                <form onSubmit={this.handleSubmit} className="col-md-12 pt-4">
                   <Row>
                     <Col sm={3}>
                       <Typeahead
@@ -244,11 +277,12 @@ class AllProjectionsForCinema extends Component {
                         placeholder="Choose a cinema..."
                         id="cinemaId"
                         onChange={e => {this.onCinemaChange(e)}}
+                        required={true}
                         />
                         <FormText className="text-danger">{cinemaIdError}</FormText>
                     </Col>
                     <Col sm={3}>
-                      <Button onClick={this.getAuditoriums.bind(this, this.state.cinemaId)} className="primary">See and select auditoriums <FontAwesomeIcon icon={faHandPointRight}/></Button>
+                      <Button onClick={this.getAuditoriums.bind(this, this.state.cinemaId)} className="primary">Press and go to auditoriums <FontAwesomeIcon icon={faHandPointRight}/></Button>
                     </Col>
                     <Col sm={4}>
                       <Typeahead
@@ -257,6 +291,7 @@ class AllProjectionsForCinema extends Component {
                         placeholder="Choose a auditorium..."
                         id="auditoriumId"
                         onChange={e => {this.onAuditoriumChange(e)}}
+                        required={true}
                         />
                         <FormText className="text-danger">{auditoriumIdError}</FormText>
                     </Col>
