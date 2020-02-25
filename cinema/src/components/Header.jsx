@@ -67,6 +67,7 @@ login() {
               <Nav className="mr-auto text-white" >
               <Nav.Link href="/topten" className="text-white">Top 10 Movies</Nav.Link>
               <Nav.Link href="/FilterProjections" className="text-white">Filter Projections</Nav.Link>
+              <Nav.Link href="/MovieSearch" className="text-white">Movies Search</Nav.Link>
               </Nav>
               <Form inline onSubmit={this.handleSubmit}>
                 <FormControl type="text" placeholder="Username"
