@@ -53,32 +53,6 @@ class ProjectionDetails extends Component {
     }
   }
 
-  // makePayment() {
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json',
-  //                 'Authorization' : 'Bearer ' + localStorage.getItem('jwt') },
-  //     body: JSON.stringify()
-  //   };
-
-  //   fetch(`${serviceConfig.baseURL}/api/levi9payment`, requestOptions)
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         return Promise.reject(response);
-  //       }
-  //       return response.statusText;
-  //     })
-  //     .then(result => {
-  //       NotificationManager.success('Reservation made successfully!');
-  //       alert('Payment successful')
-  //     })
-  //     .catch(response => {
-  //       NotificationManager.error(response.message || response.statusText);
-
-  //     })
-    
-  // }
-
   getProjection() {
     // TO DO: here you need to fetch movie with projection details using ID from router
     const requestOptions = {
