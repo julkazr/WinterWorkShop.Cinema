@@ -38,6 +38,7 @@ class ShowAllProjections extends Component {
         })
         .then(data => {
           if (data) {
+              console.log(data)
             this.setState({ projections: data, isLoading: false });
             }
         })
@@ -48,7 +49,30 @@ class ShowAllProjections extends Component {
     }
 
     removeProjection(id) {
-        // to be implemented
+      const requestOptions = {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
+    };
+
+    fetch(`${serviceConfig.baseURL}/api/projections/${id}`, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                return Promise.reject(response);
+            }
+            return response.statusText;
+        })
+        .then(result => {
+            NotificationManager.success('Successfuly removed projection with id:', id);
+            const newState = this.state.projections.filter(projection => {
+                return projection.id !== id;
+            })
+            this.setState({projections: newState});
+        })
+        .catch(response => {
+            NotificationManager.error(response.message || response.statusText);
+            this.setState({ submitted: false });
+        });
     }
 
     fillTableWithDaata() {
@@ -56,8 +80,9 @@ class ShowAllProjections extends Component {
             return <tr key={projection.id}>
                         <td width="18%">{projection.id}</td>
                         <td width="18%">{projection.movieId}</td>
-                        <td width="18%">{projection.movieTitle}</td>
-                        <td width="18%">{projection.auditoriumId}</td>
+                        <td width="15%">{projection.movieTitle}</td>
+                        <td width="5%">{projection.auditoriumId}</td>
+                        <td >{projection.aditoriumName}</td>
                         <td width="18%">{projection.projectionTime}</td>
                         <td width="5%" className="text-center cursor-pointer" onClick={() => this.editProjection(projection.id)}><FontAwesomeIcon className="text-info mr-2 fa-1x" icon={faEdit}/></td>
                         <td width="5%" className="text-center cursor-pointer" onClick={() => this.removeProjection(projection.id)}><FontAwesomeIcon className="text-danger mr-2 fa-1x" icon={faTrash}/></td>
@@ -66,7 +91,6 @@ class ShowAllProjections extends Component {
     }
 
     editProjection(id) {
-        // to be implemented
         this.props.history.push(`editProjection/${id}`);
     }
 
@@ -80,6 +104,7 @@ class ShowAllProjections extends Component {
                                 <th>Movie Id</th>
                                 <th>Movie Title</th>
                                 <th>Auditorium Id</th>
+                                <th>Auditorium Name</th>
                                 <th>Projection Time</th>
                                 <th></th>
                                 <th></th>
