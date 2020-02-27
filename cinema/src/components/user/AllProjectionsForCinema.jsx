@@ -31,7 +31,7 @@ class AllProjectionsForCinema extends Component {
     }
 
     componentDidMount() {
-      // this.getProjections();
+      //this.getProjections();
       this.getCinemas();
       //this.getAuditoriums(this.state.cinemaId);
       //this.getProjectionsForAuditorium(this.state.auditoriumId);
@@ -75,17 +75,6 @@ class AllProjectionsForCinema extends Component {
             this.validate('cinemaId', null);
         }
     }
-
-    // onProjectionsForAuditoriumChange(projection) {
-    //     if(projection[0]) {
-    //         this.setState({projectionId: projection[0].id});
-    //         this.validate('projectionId', projection[0]);
-    //         console.log(projection[0].id);
-    //     } else {
-    //         this.setState({projectionId: null});
-    //         this.validate('projectionId', null);
-    //     }
-    // }
   
   validate(id, value) {
     if (id === 'cinemaId') {
@@ -119,44 +108,42 @@ class AllProjectionsForCinema extends Component {
     // }
 }
 
-    // getProjections() {
-    //   // TO DO here you need to change this part and query, and fetch movies with projections, and in future add fetch by cinema name
-    //   const requestOptions = {
-    //     method: 'GET',
-    //     headers: {'Content-Type': 'application/json',
-    //                   'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-    //   };
+    getProjections(projections) {
+      // TO DO here you need to change this part and query, and fetch movies with projections, and in future add fetch by cinema name
+      const requestOptions = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
+      };
 
-    //   fetch(`${serviceConfig.baseURL}/api/Movies/current`, requestOptions)
-    //     .then(response => {
-    //       if (!response.ok) {
-    //         return Promise.reject(response);
-    //     }
-    //     return response.json();
-    //     })
-    //     .then(data => {
-    //       NotificationManager.success('Successfuly fetched data');
-    //       //console.log(data);
-    //       if(data) {
-    //         let projectionsForMovie = [];
-    //         data.forEach(item => {
-    //           if(item.auditoriumId === auditoriumId) {
-    //             projectionsForAuditorium.push(item);
-    //             //console.log(item.auditoriumId);
-    //           }
-              
-              
-    //         });
-    //         console.log(projectionsForAuditorium);
-    //           this.setState({projections: projectionsForAuditorium});
-              
-    //       }
-    //     })
-    //     .catch(response => {
-    //         NotificationManager.error(response.message || response.statusText);
-    //         this.setState({ submitted: false });
-    //     })
-    // }
+      fetch(`${serviceConfig.baseURL}/api/Movies/current`, requestOptions)
+        .then(response => {
+          if (!response.ok) {
+            return Promise.reject(response);
+        }
+        return response.json();
+        })
+        .then(data => {
+          NotificationManager.success('Successfuly fetched data');
+          console.log(data);
+          if(data) { 
+            let moviesForAuditoriumsProjections = [];
+            data.forEach(movie => {
+              for(var i = 0; i < projections.length; i++) {
+                if(movie.id === projections[i].movieId) {
+                  moviesForAuditoriumsProjections.push(movie);
+                }
+              }
+            });
+              this.setState({movies: moviesForAuditoriumsProjections});   
+          }
+          console.log('State: ' + this.state.movies);
+        })
+        .catch(response => {
+            NotificationManager.error(response.message || response.statusText);
+            this.setState({ submitted: false });
+        })
+    }
 
     getCinemas() {
       const requestOptions = {
@@ -219,7 +206,9 @@ class AllProjectionsForCinema extends Component {
                 }
                 
                 console.log(auditoriumsForCinema);
-                this.setState({auditoriums: auditoriumsForCinema});
+                this.setState({auditoriums: auditoriumsForCinema,
+                               });
+                console.log(this.state.auditorium);
               }
           })
           .catch(response => {
@@ -251,17 +240,32 @@ class AllProjectionsForCinema extends Component {
               } 
             });
             console.log(projectionsForAuditorium);
-              this.setState({projections: projectionsForAuditorium});
+              this.setState({projections: projectionsForAuditorium,
+                             auditoriumId: auditoriumId});
+              for(var i = 0; i < this.state.projections.length; i++) {
+                console.log(this.state.projections[i].id + 'state.audit.id: ' + this.state.auditoriumId);
+              }
+            
               
           }
-      })
+      }) 
       .catch(response => {
           NotificationManager.error(response.message || response.statusText);
       });
   }
 
+  // fillListWithData() {
+  //   this.getProjections();
+  //   if(this.state.movies != []) {
+  //     for (var i = 0; i < this.state.movies.length; i++) {
+  //        return <Projection></Projection>
+  //     }
+  //   }
+  // }
+
     render() {
       const { cinemas, auditoriums, cinemaIdError, auditoriumIdError } = this.state;
+      //const movieList = this.fillListWithData();
         return (
           <div className="no-gutters">
             <Row className="no-gutters">
