@@ -6,7 +6,8 @@ class Projection extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        movies: []
+        movies: [],
+        movie: this.props.movie
     };
   }
 
