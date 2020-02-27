@@ -15,6 +15,8 @@ import ShowAllAuditoriums from './AuditoriumActions/ShowAllAuditoriums';
 import ShowAllProjections from './ProjectionActions/ShowAllProjections';
 import NewProjection from './ProjectionActions/NewProjection';
 import EditCinema from './CinemaActions/EditCinema';
+import EditAuditorium from './AuditoriumActions/EditAuditorium';
+import EditProjection from './ProjectionActions/EditProjection'
 
 // higher order component
 import { PrivateRouteAdmin } from '../hoc/privateRouteAdmin';
@@ -72,7 +74,9 @@ class Dashboard extends Component {
                         <PrivateRouteAdmin path="/dashboard/EditCinema/:id" component={EditCinema} />
                         <PrivateRouteAdmin path="/dashboard/NewAuditorium" component={NewAuditorium} />
                         <PrivateRouteAdmin path="/dashboard/AllAuditoriums" component={ShowAllAuditoriums} />
+                        <PrivateRouteAdmin path="/dashboard/EditAuditorium/:id" component={EditAuditorium} />
                         <PrivateRouteAdmin path="/dashboard/AllProjections" component={ShowAllProjections} />
+                        <PrivateRouteAdmin path="/dashboard/EditProjection/:id" component={EditProjection} />
                         <PrivateRouteAdmin path="/dashboard/NewProjection" component={NewProjection} />
                     </Switch>
                 </Col>

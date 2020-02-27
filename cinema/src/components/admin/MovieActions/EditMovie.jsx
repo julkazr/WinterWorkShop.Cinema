@@ -36,6 +36,7 @@ class EditMovie extends React.Component {
     }
 
     validate(id, value) {
+        console.log("validate")
         if (id === 'title') {
             if (value === '') {
                 this.setState({titleError: 'Fill in movie title', 
