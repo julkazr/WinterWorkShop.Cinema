@@ -12,7 +12,8 @@ class AllProjectionsForCinema extends Component {
     constructor(props) {
       super(props);
       this.state = {
-          movies: [],
+          movies: null,
+          //movie: null,
           cinemas: [],
           auditoriums: [],
           projections: [],
@@ -27,15 +28,18 @@ class AllProjectionsForCinema extends Component {
           submitted: false,
           canSubmit: true
       };
-      this.handleSubmit = this.handleSubmit.bind(this);
+
       this.handleChange = this.handleChange.bind(this);
+      //added 
+      this.getProjectionsForAuditorium = this.getProjectionsForAuditorium.bind(this);
     }
 
     componentDidMount() {
-      this.getProjections();
       this.getCinemas();
-      //this.getAuditoriums(this.state.cinemaId);
-      //this.getProjectionsForAuditorium(this.state.auditoriumId);
+      //if(this.state.movies === null) {
+        
+       // this.getProjections();
+      //}
     }
 
     handleChange(e) {
@@ -44,91 +48,80 @@ class AllProjectionsForCinema extends Component {
       this.validate(id, value);
     }
 
-    handleSubmit(e) {
-      e.preventDefault();
-
-      this.setState({ submitted: true });
-      const { cinemaId, auditoriumId } = this.state;
-      if (!cinemaId || !auditoriumId) {
-          NotificationManager.error('Please fill form with data.');
-          this.setState({ submitted: false });
-      }
-      
-  }
-
     onAuditoriumChange(auditorium) {
         if(auditorium[0]) {
             this.setState({auditoriumId: auditorium[0].id});
             this.validate('auditoriumId', auditorium[0].id);
-            console.log(auditorium[0].id, this.state.projectionTime);
+
             
         } else {
-            this.setState({auditoriumId: null});
-            this.validate('auditoriumId', null);
+            this.setState({auditoriumId: ''});
+            this.validate('auditoriumId', '');
         }
-        console.log(this.state.auditoriumId);
+
     }
 
     onCinemaChange(cinema) {
         if(cinema[0]) {
             this.setState({cinemaId: cinema[0].id});
             this.validate('cinemaId', cinema[0].id);
-            console.log(cinema[0].id);
+
         } else {
-            this.setState({cinemaId: null});
-            this.validate('cinemaId', null);
+            this.setState({cinemaId: ''});
+            this.validate('cinemaId', '');
         }
     }
   
-  validate(id, value) {
-    if (id === 'cinemaId') {
-        if (value === '') {
-            this.setState({cinemaIdError: 'Please choose cinema',
-                            canSubmit: false})
-                            
-        } else {
-            this.setState({cinemaIdError: '',
-                            canSubmit: true});
-        }
-        console.log('CinemaError: ' + this.state.cinemaIdError);
-    }
-    else if (id === 'auditoriumId') {
-        if (!value) {
-            this.setState({auditoriumIdError: '',
-                            canSubmit: false})
-        } else {
-            this.setState({auditoriumIdError: '',
-                            canSubmit: true});
-        }
-    }
-  }
-
-  getProjections() {
-    const requestOptions = {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-    };
-
-    this.setState({isLoading: true});
-    fetch(`${serviceConfig.baseURL}/api/Projections/all`, requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          return Promise.reject(response);
-      }
-      return response.json();
-      })
-      .then(data => {
-        if (data) {
-            console.log(data)
-          this.setState({ projections: data, isLoading: false });
+    validate(id, value) {
+      if (id === 'cinemaId') {
+          if (value === '') {
+              this.setState({cinemaIdError: 'Please choose cinema'
+                              })
+                              
+          } else {
+              this.setState({cinemaIdError: ''
+                             });
           }
-      })
-      .catch(response => {
-          this.setState({isLoading: false});
-          NotificationManager.error(response.message || response.statusText);
-      });
-  }
+        //  console.log('CinemaError: ' + this.state.cinemaIdError);
+      }
+      else if (id === 'auditoriumId') {
+          if (!value) {
+              this.setState({auditoriumIdError: 'Please choose auditorium'
+                              })
+          } else {
+              this.setState({auditoriumIdError: ''
+                              });
+          }
+      }
+    }
+
+    getProjections() {
+      const requestOptions = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
+      };
+
+      this.setState({isLoading: true});
+      fetch(`${serviceConfig.baseURL}/api/Projections/all`, requestOptions)
+        .then(response => {
+          if (!response.ok) {
+            return Promise.reject(response);
+        }
+        return response.json();
+        })
+        .then(data => {
+          if (data) {
+              console.log("GetProjectionsData: ");
+              console.log(data);
+            this.setState({ projections: data, isLoading: false });
+            }
+        })
+        .catch(response => {
+            this.setState({isLoading: false});
+            NotificationManager.error(response.message || response.statusText);
+        });
+    }
 
     getCinemas() {
       const requestOptions = {
@@ -158,7 +151,6 @@ class AllProjectionsForCinema extends Component {
     }
 
     getAuditoriums(cinemaId) {
-      console.log(cinemaId);
       const requestOptions = {
           method: 'GET',
           headers: {'Content-Type': 'application/json',
@@ -173,7 +165,6 @@ class AllProjectionsForCinema extends Component {
               return response.json();
           })
           .then(data => {
-            console.log(data);
               if(data) {
                 let auditoriumsForCinema = [];
                 if(cinemaId) {
@@ -189,101 +180,93 @@ class AllProjectionsForCinema extends Component {
                       auditoriumsForCinema.push(item);
                    }) 
                 }
-                
-                console.log(auditoriumsForCinema);
-                this.setState({auditoriums: auditoriumsForCinema,
-                               });
-                console.log(this.state.auditorium);
+                this.setState({auditoriums: auditoriumsForCinema, isLoading: false});
               }
           })
           .catch(response => {
               NotificationManager.error(response.message || response.statusText);
           });
-  }
+    }
 
-  getProjectionsForAuditorium(auditoriumId) {
+    getProjectionsForAuditorium(auditoriumId) {
+      console.log("AuditId state in start getProj.For...");
+      console.log(this.state.auditoriumId);
+      const requestOptions = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
+      };
+
+      fetch(`${serviceConfig.baseURL}/api/Movies/movieprojections/` + auditoriumId, requestOptions)
+        .then(response => {
+            if(!response.ok) {
+                return Promise.reject(response);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if(data) {
+              console.log ("getProjectionsForAuditorium data: ");
+              console.log(data);
+              NotificationManager.success('Successfuly fetched data!');
+              this.setState({ movies: data, isLoading: false});  
+            }
+            this.forceUpdate();
+            console.log("this,state.movies from proj.for audit. ");
+            console.log(this.state.movies.movie);
+        }) 
+        .catch(response => {
+            NotificationManager.error(response.message || response.statusText);
+        });
+    }
+
+
     
-    const requestOptions = {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-    };
-
-    fetch(`${serviceConfig.baseURL}/api/Movies/movieprojections/` + auditoriumId, requestOptions)
-      .then(response => {
-          if(!response.ok) {
-              return Promise.reject(response);
-          }
-          return response.json();
-      })
-      .then(data => {
-          if(data) {
-            NotificationManager.success('Successfuly fetched data!');
-              this.setState({ movies: data });   
-              //this.fillListWithData(this.state.movies);
-          }
-          console.log(this.state.movies);
-      }) 
-      .catch(response => {
-          NotificationManager.error(response.message || response.statusText);
-      });
-  }
-
-  fillListWithData(movies) {
-    console.log(movies);
-    // if(this.state.movies != []) {
-    //   for (var i = 0; i < this.state.movies.length; i++) {
-    //     console.log(this.state.movies[i]);
-    //      return <Projection movie={this.state.movies[i]}></Projection>
-    //   }
-    // } else {
-      if(movies = []) {
-        let rows = this.state.projections.map(projection => {
-          return (<tr key={projection.id}>
-            {/* <td width="18%">{projection.id}</td>
-            <td width="18%">{projection.movieId}</td> */}
-            <td width="40%">{projection.movieTitle}</td>
-            {/* <td width="5%">{projection.auditoriumId}</td> */}
-            <td width="40%">{projection.aditoriumName}</td>
-            <td width="20%">{projection.projectionTime}</td>
-            {/* <td width="5%" className="text-center cursor-pointer" onClick={() => this.editProjection(projection.id)}><FontAwesomeIcon className="text-info mr-2 fa-1x" icon={faEdit}/></td>
-            <td width="5%" className="text-center cursor-pointer" onClick={() => this.removeProjection(projection.id)}><FontAwesomeIcon className="text-danger mr-2 fa-1x" icon={faTrash}/></td> */}
-          </tr>);
-          })
-        return <Table striped bordered hover size="sm" variant="dark">
-                  <thead>
-                    <tr>
-                        {/* <th>Id</th>
-                        <th>Movie Id</th> */}
-                        <th>Movie Title</th>
-                        {/* <th>Auditorium Id</th> */}
-                        <th>Auditorium Name</th>
-                        <th>Projection Time</th>
-                        {/* <th></th>
-                        <th></th> */}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows}
-                  </tbody>
-                </Table>
     
-      } else {
-        for (var i = 0; i < this.state.movies.length; i++) {
-          console.log(this.state.movies[i]);
-          return <Projection movie={this.state.movies[i]}></Projection>
-        }
+    fillListWithData(movies) {
+      console.log("fillList:");
+      console.log(movies);
+      if(movies) {
+        return movies.map((movie, index) => {
+          return <Projection key={index} movie={movie}></Projection>
+        })
       }
-  }
+      
+      //return this.fillTableWithData();  
+    }
+
+    fillTableWithData() {
+      let rows = this.state.projections.map(projection => {
+        return (<tr key={projection.id}>
+          <td width="40%">{projection.movieTitle}</td>
+          <td width="40%">{projection.aditoriumName}</td>
+          <td width="20%">{projection.projectionTime}</td>
+        </tr>);
+        })
+      return <Table striped bordered hover size="sm" variant="dark">
+                <thead>
+                  <tr>
+                      <th>Movie Title</th>
+                      <th>Auditorium Name</th>
+                      <th>Projection Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows}
+                </tbody>
+              </Table>
+    }
 
     render() {
-      const { cinemas, auditoriums, cinemaIdError, auditoriumIdError } = this.state;
-      const moviesProjectionsCard = this.fillListWithData(this.state.movies);
+      const { cinemas, auditoriums, cinemaIdError, auditoriumIdError, movies } = this.state;
+      
+      const list = this.fillListWithData(movies);
+      
         return (
           <div className="no-gutters">
             <Row className="no-gutters">
             </Row>
-            <Container>
+            <Container className="min-container-height">
               <Row>
                 <form onSubmit={this.handleSubmit} className="col-md-12 pt-4">
                   <Row>
@@ -313,18 +296,14 @@ class AllProjectionsForCinema extends Component {
                         <FormText className="text-danger">{auditoriumIdError}</FormText>
                     </Col>
                     <Col sm={2}>
-                      <Button onClick={this.getProjectionsForAuditorium.bind(this, this.state.auditoriumId)} className="primary">Find projections</Button>
+                      <Button onClick={() => this.getProjectionsForAuditorium(this.state.auditoriumId)} className="primary">Find projections</Button>
                     </Col>    
                   </Row>
                 </form>
               </Row>
               <Row className="no-gutters set-overflow-y mt-3">
-                {/* <Projection></Projection>
-                <Projection></Projection>
-                <Projection></Projection>
-                <Projection></Projection>
-                <Projection></Projection> */}
-                {moviesProjectionsCard}
+                {/* <Projection></Projection> */}
+                 {list} 
               </Row>
             </Container>
           </div>

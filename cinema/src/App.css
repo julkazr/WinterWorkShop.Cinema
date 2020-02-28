@@ -11,6 +11,11 @@
   overflow-y: auto;
 }
 
+.min-container-height {
+  min-height: 100vh;
+  background-color: white;
+}
+
 .cursor-pointer{
   cursor: pointer;
 }

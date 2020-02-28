@@ -12,6 +12,8 @@ class Projection extends Component {
   }
 
   componentDidMount() {
+    console.log("Prosledjeno childu: ");
+    console.log(this.state.movie);
   }
   
   getRoundedRating(rating) {
@@ -33,26 +35,27 @@ class Projection extends Component {
       const rating = this.getRoundedRating(5.9);
       const projectionTimes = this.getProjections();
       return (
-        <Container>
-          <Row className="justify-content-center">
-            <Col>
-              <Card className="mt-5 card-width">
-                <Card.Body>
-                    <Card.Title><span className="card-title-font">Star Wars: Last jedi</span> {rating}</Card.Title>
-                    <hr/>
-                    <Card.Subtitle className="mb-2 text-muted">Year of production: 2012</Card.Subtitle>
-                    <hr/>
-                    <Card.Text>
-                        <span className="mb-2 font-weight-bold">
-                          Projection times: 
-                        </span>
-                    </Card.Text>
-                        {projectionTimes}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+        // <Container>
+        //   <Row className="justify-content-center">
+        //     <Col>
+        //       <Card className="mt-5 card-width">
+        //         <Card.Body>
+        //             <Card.Title><span className="card-title-font">Star Wars: Last jedi</span> {rating}</Card.Title>
+        //             <hr/>
+        //             <Card.Subtitle className="mb-2 text-muted">Year of production: 2012</Card.Subtitle>
+        //             <hr/>
+        //             <Card.Text>
+        //                 <span className="mb-2 font-weight-bold">
+        //                   Projection times: 
+        //                 </span>
+        //             </Card.Text>
+        //                 {projectionTimes}
+        //         </Card.Body>
+        //       </Card>
+        //     </Col>
+        //   </Row>
+        // </Container>
+        <h1>Success!</h1>
       );
     }
 }
