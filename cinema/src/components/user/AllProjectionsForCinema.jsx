@@ -13,7 +13,6 @@ class AllProjectionsForCinema extends Component {
       super(props);
       this.state = {
           movies: null,
-          //movie: null,
           cinemas: [],
           auditoriums: [],
           projections: [],
@@ -30,16 +29,11 @@ class AllProjectionsForCinema extends Component {
       };
 
       this.handleChange = this.handleChange.bind(this);
-      //added 
       this.getProjectionsForAuditorium = this.getProjectionsForAuditorium.bind(this);
     }
 
     componentDidMount() {
       this.getCinemas();
-      //if(this.state.movies === null) {
-        
-       // this.getProjections();
-      //}
     }
 
     handleChange(e) {
@@ -112,8 +106,6 @@ class AllProjectionsForCinema extends Component {
         })
         .then(data => {
           if (data) {
-              console.log("GetProjectionsData: ");
-              console.log(data);
             this.setState({ projections: data, isLoading: false });
             }
         })
@@ -189,8 +181,7 @@ class AllProjectionsForCinema extends Component {
     }
 
     getProjectionsForAuditorium(auditoriumId) {
-      console.log("AuditId state in start getProj.For...");
-      console.log(this.state.auditoriumId);
+
       const requestOptions = {
         method: 'GET',
         headers: {'Content-Type': 'application/json',
@@ -206,14 +197,9 @@ class AllProjectionsForCinema extends Component {
         })
         .then(data => {
             if(data) {
-              console.log ("getProjectionsForAuditorium data: ");
-              console.log(data);
               NotificationManager.success('Successfuly fetched data!');
               this.setState({ movies: data, isLoading: false});  
             }
-            this.forceUpdate();
-            console.log("this,state.movies from proj.for audit. ");
-            console.log(this.state.movies.movie);
         }) 
         .catch(response => {
             NotificationManager.error(response.message || response.statusText);
@@ -224,15 +210,12 @@ class AllProjectionsForCinema extends Component {
     
     
     fillListWithData(movies) {
-      console.log("fillList:");
-      console.log(movies);
+;
       if(movies) {
         return movies.map((movie, index) => {
           return <Projection key={index} movie={movie}></Projection>
         })
-      }
-      
-      //return this.fillTableWithData();  
+      } 
     }
 
     fillTableWithData() {
@@ -302,7 +285,6 @@ class AllProjectionsForCinema extends Component {
                 </form>
               </Row>
               <Row className="no-gutters set-overflow-y mt-3">
-                {/* <Projection></Projection> */}
                  {list} 
               </Row>
             </Container>

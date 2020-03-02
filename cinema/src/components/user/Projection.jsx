@@ -12,8 +12,7 @@ class Projection extends Component {
   }
 
   componentDidMount() {
-    console.log("Prosledjeno childu: ");
-    console.log(this.state.movie);
+  
   }
   
   getRoundedRating(rating) {
@@ -21,41 +20,53 @@ class Projection extends Component {
       return <span className="float-right">Rating: {result}/10</span>
   }
 
-  navigateToProjectionDetails() {
-    this.props.history.push('projectiondetails/1')
+  navigateToProjectionDetails(id) {
+    this.props.history.push(`projectiondetails/${id}`);
   }
 
   getProjections() {
-    const projectionTimes = ['11:45', '12:25', '14:52', '17:30', '12:25', '14:52', '17:30', '12:25', '14:52', '17:30', '12:25', '14:52', '17:30', '12:25', '14:52', '17:30', '12:25', '14:52', '17:30'];
+    const projectionTimes = [];
+    let projectionId = '';
+    for(let i = 0; i < this.state.movie.projections.length; i++) {
+      projectionTimes.push(this.state.movie.projections[i].projectionTime);
+      projectionId = this.state.movie.projections[i].id;
+      console.log("ProjectionId: ");
+    console.log(projectionId);
+    }
+    console.log("List of projectiontimes: ");
+    console.log(projectionTimes);
+    
     return projectionTimes.map((time, index) => {
-      return <Button key={index} onClick={() => this.navigateToProjectionDetails()} className="mr-1 mb-2">{time}</Button>
+      return <Button key={index} onClick={() => this.navigateToProjectionDetails(projectionId)} className="mr-1 mb-2">{time}</Button>
     })
   }
+
   render() {
       const rating = this.getRoundedRating(5.9);
       const projectionTimes = this.getProjections();
       return (
-        // <Container>
-        //   <Row className="justify-content-center">
-        //     <Col>
-        //       <Card className="mt-5 card-width">
-        //         <Card.Body>
-        //             <Card.Title><span className="card-title-font">Star Wars: Last jedi</span> {rating}</Card.Title>
-        //             <hr/>
-        //             <Card.Subtitle className="mb-2 text-muted">Year of production: 2012</Card.Subtitle>
-        //             <hr/>
-        //             <Card.Text>
-        //                 <span className="mb-2 font-weight-bold">
-        //                   Projection times: 
-        //                 </span>
-        //             </Card.Text>
-        //                 {projectionTimes}
-        //         </Card.Body>
-        //       </Card>
-        //     </Col>
-        //   </Row>
-        // </Container>
-        <h1>Success!</h1>
+        <React.Fragment>
+          <Container>
+            <Row className="justify-content-center">
+              <Col>
+                <Card className="mt-5 card-width">
+                  <Card.Body>
+                      <Card.Title><span className="card-title-font">{this.state.movie.movie.title}</span> {rating}</Card.Title>
+                      <hr/>
+                      <Card.Subtitle className="mb-2 text-muted">Year of production: {this.state.movie.movie.year}</Card.Subtitle>
+                      <hr/>
+                      <Card.Text>
+                          <span className="mb-2 font-weight-bold">
+                            Projection times: 
+                          </span>
+                      </Card.Text>
+                          {projectionTimes}
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </React.Fragment>
       );
     }
 }

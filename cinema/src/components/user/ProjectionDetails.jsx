@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import { Projection } from './Projection';
 
 class ProjectionDetails extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class ProjectionDetails extends Component {
         seat: null,
         submitted: false,
         canSubmit: true,
-        movies: []
+        movies: [],
     };
 
     for (var i = 0; i < 5; i++) {
@@ -26,6 +27,9 @@ class ProjectionDetails extends Component {
 
   componentDidMount() {
     //this.getMovie();
+    const { id } = this.props.match.params
+    console.log("ProjectionId in projectionDitails: ");
+    console.log(id);
   }
 
   handleClick(row, seat) {
