@@ -8,8 +8,14 @@ class NewCinema extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            cinemaName: '',
+            auditName: '',
+            seatRows: 0,
+            numberOfSeats: 0,
             titleError: '',
+            auditNameError: '',
+            seatRowsError: '',
+            numOfSeatsError: '',
             submitted: false,
             canSubmit: true
         };
@@ -21,17 +27,41 @@ class NewCinema extends React.Component {
         const { id, value } = e.target;
         this.setState({ [id]: value });
         this.validate(id, value);
-        console.log("1 ", value);
     }
 
     validate(id, value) {
-      console.log("2 ", id, value);
-        if (id === 'name') {
+        if (id === 'cinemaName') {
             if (value === '') {
                 this.setState({titleError: 'Fill in cinema name',
                                 canSubmit: false});
             } else {
                 this.setState({titleError: '',
+                                canSubmit: true});
+            }
+        } else if (id === 'auditName') {
+            if(value === ''){
+                this.setState({auditNameError: 'Fill in auditorium name',
+                                canSubmit: false})
+            } else {
+                this.setState({auditNameError: '',
+                                canSubmit: true});
+            }
+        } else if (id === 'numberOfSeats') {
+            const seatsNum = +value;
+            if (seatsNum > 20 || seatsNum < 1) {
+                this.setState({numOfSeatsError: 'Seats number can be in between 1 and 20',
+                                canSubmit: false})
+            } else {
+                this.setState({numOfSeatsError: '',
+                                canSubmit: true});
+            }
+        } else if (id === 'seatRows') {
+            const seatsNum = +value;
+            if (seatsNum > 20 || seatsNum < 1) {
+                this.setState({seatRowsError: 'Seats number can be in between 1 and 20',
+                                canSubmit: false})
+            } else {
+                this.setState({seatRowsError: '',
                                 canSubmit: true});
             }
         }
@@ -41,9 +71,8 @@ class NewCinema extends React.Component {
         e.preventDefault();
 
         this.setState({ submitted: true });
-        const { name } = this.state;
-        console.log("3 ", name);
-        if (name) {
+        const { cinemaName, auditName, numberOfSeats, seatRows } = this.state;
+        if (cinemaName && auditName && numberOfSeats && seatRows) {
             this.addCinema();
         } else {
             NotificationManager.error('Please fill in data');
@@ -52,14 +81,15 @@ class NewCinema extends React.Component {
     }
 
     addCinema() {
-        const { name } = this.state;
+        const { cinemaName, auditName, numberOfSeats, seatRows } = this.state;
 
         const data = {
-            Name: name
+            cinemaName: cinemaName,
+            auditName: auditName,
+            seatRows: +seatRows,
+            numberOfSeats: +numberOfSeats
         };
-
-        console.log("request method ", data)
-
+        console.log({data})
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json',
@@ -67,8 +97,9 @@ class NewCinema extends React.Component {
             body: JSON.stringify(data)
         };
 
-        fetch(`${serviceConfig.baseURL}/api/cinemas/create`, requestOptions)
+        fetch(`${serviceConfig.baseURL}/api/Cinemas/createwithauditorium`, requestOptions)
             .then(response => {
+                console.log(response)
                 if (!response.ok) {
                     return Promise.reject(response);
                 }
@@ -84,8 +115,26 @@ class NewCinema extends React.Component {
             });
     }
 
+    renderRows(rows, seats) {
+        const rowsRendered = [];
+        for (let i = 0; i < rows; i++) {
+            rowsRendered.push( <tr key={i}>
+                {this.renderSeats(seats, i)}
+            </tr>);
+        }
+        return rowsRendered;
+    }
+
+    renderSeats(seats, row) {
+        let renderedSeats = [];
+        for (let i = 0; i < seats; i++) {
+            renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}></td>);
+        }
+        return renderedSeats;
+    }
+
     render() {
-        const { name, submitted, titleError, canSubmit } = this.state;
+        const { cinemaName, auditName, numberOfSeats, seatRows, auditNameError ,seatRowsError, numOfSeatsError, submitted, titleError, canSubmit } = this.state;
         return (
             <Container>
                 <Row>
@@ -94,13 +143,44 @@ class NewCinema extends React.Component {
                         <form onSubmit={this.handleSubmit}>
                             <FormGroup>
                                 <FormControl
-                                    id="name"
+                                    id="cinemaName"
                                     type="text"
                                     placeholder="Cinema name"
-                                    value={name}
+                                    value={cinemaName}
                                     onChange={this.handleChange}
                                 />
                                 <FormText className="text-danger">{titleError}</FormText>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormControl
+                                    id="auditName"
+                                    type="text"
+                                    placeholder="Auditorium Name"
+                                    value={auditName}
+                                    onChange={this.handleChange}
+                                />
+                                <FormText className="text-danger">{auditNameError}</FormText>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormControl
+                                    id="seatRows"
+                                    type="number"
+                                    placeholder="Number Of Rows"
+                                    value={seatRows}
+                                    onChange={this.handleChange}
+                                />
+                                <FormText className="text-danger">{seatRowsError}</FormText>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormControl
+                                    id="numberOfSeats"
+                                    type="number"
+                                    placeholder="Number Of Seats"
+                                    value={numberOfSeats}
+                                    onChange={this.handleChange}
+                                    max="36"
+                                />
+                                <FormText className="text-danger">{numOfSeatsError}</FormText>
                             </FormGroup>
                             <Button type="submit" disabled={submitted || !canSubmit} block>Add Cinema</Button>
                         </form>
