@@ -12,7 +12,8 @@ class Projection extends Component {
   }
 
   componentDidMount() {
-  
+  console.log("Movie: ");
+  console.log(this.state.movie);
   }
   
   getRoundedRating(rating) {
@@ -42,7 +43,7 @@ class Projection extends Component {
   }
 
   render() {
-      const rating = this.getRoundedRating(5.9);
+      const rating = this.getRoundedRating(this.state.movie.movie.rating);
       const projectionTimes = this.getProjections();
       return (
         <React.Fragment>
