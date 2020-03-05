@@ -8,7 +8,7 @@ class ProjectionDetails extends Component {
     super(props);
     this.state = {
         auditorium: [],
-        seat: null,
+        seat: [],
         submitted: false,
         canSubmit: true,
         projection: [],
@@ -29,15 +29,12 @@ class ProjectionDetails extends Component {
   componentDidMount() {
     const { id } = this.props.match.params
     this.getProjection(id);
-    
   }
 
   handleClick(seat) {
     // e.preventDefault();
     //seats.forEach(seat => {
       // seatId = seat.id;
-      console.log("seat from click funct:");
-      console.log(seat);
       seat.clicked = !seat.clicked;
     //});
     //this.state.auditorium.seatsList[id].clicked = !this.state.auditorium.seatsList[id].clicked;
@@ -85,11 +82,8 @@ class ProjectionDetails extends Component {
                               movieTitle: data.projection.movieTitle,
                               movieYear: data.movie.year,
                               movieRating: data.movie.rating,
-                              auditorium: data.auditorium });
-              console.log("Projection from fetch: ");
-              console.log(this.state.projection);
-              console.log("Auditorium from fetch: ");
-              console.log(this.state.auditorium);
+                              auditorium: data.auditorium,
+                              seat: data.auditorium.seatsList });
           }
       })
       .catch(response => {
@@ -105,11 +99,7 @@ class ProjectionDetails extends Component {
         rowsRendered.push( <tr key={i}>
             {this.renderSeats(seats, i)}
         </tr>);
-        console.log(seats);
-        console.log(i);
     }
-    console.log("rowsRendered");
-    console.log(rowsRendered);
     let allSeats = [];
     for(let i = 0; i < rows; i++) {
       for(let j = 0; j < seats; j++) {
@@ -117,29 +107,34 @@ class ProjectionDetails extends Component {
       }
     }
 
-    for(let i = 0; i < allSeats.length; i++) {
-      console.log(this.state.auditorium.seatsList[i].id);
-    }
-
     return rowsRendered;
   }
 
   renderSeats(seats, row) {
       let renderedSeats = [];
-      
-      console.log('this.state.auditorium.seatsList =================');
-      console.log(this.state.auditorium.seatsList);
-      for (let i = 0; i < seats; i++) {        
-        
+      for (let i = 0; i < seats; i++) {   
+        let k = 0;
+        for(let j = 0; j < this.state.auditorium.seatsList.length; j ++) {
+
+            console.log(this.state.auditorium.seatsList[j].number + " -numb " + this.state.auditorium.seatsList[j].row + " -row")
+            console.log(i + 1 + " -i " + row + 1 + " -r")
+            if(this.state.auditorium.seatsList[j].number == i + 1 && this.state.auditorium.seatsList[j].row == row + 1)
+            {
+              console.log(j)
+              k = j;
+            }
+        }  
+        console.log(k + " -k")
           renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
-                                className={this.state.auditorium.seatsList[i].clicked === true ? "want-to-reserve" : "is-not-reserved"}
-                                onClick={this.handleClick.bind(this, this.state.auditorium.seatsList[i])}
+                                className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
+                                onClick={this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
                                 ></td>);
       }
     
       return renderedSeats;
      
-  }
+
+    }
 
   getRoundedRating(rating) {
     const result = Math.round(rating);
@@ -149,12 +144,8 @@ class ProjectionDetails extends Component {
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear } = this.state;
+  const { submitted, canSubmit, movieTitle, movieYear, seat } = this.state;
   const rating = this.getRoundedRating(this.state.movieRating);
-  
-  console.log("Auditorium: ");
-  console.log(auditorium);
-
       return (
         <Container>
           <Row className="justify-content-center">
