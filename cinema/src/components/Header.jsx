@@ -25,6 +25,7 @@ handleSubmit(e) {
 
     this.setState({ submitted: true });
     const { username } = this.state;
+    localStorage.setItem('username', this.state.username);
     if (username) {
         this.login();
     } else {
