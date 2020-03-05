@@ -15,7 +15,7 @@ import FilterProjections from './components/user/FilterProjections';
 import MovieSearch from './components/user/MovieSearch';
 
 // higher order component
-import { PrivateRouteAdmin } from './components/hoc/privateRouteAdmin';
+import { SuperUserRoute } from './components/hoc/SuperUserRoute';
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
         <Route path="/topten" component={TopMovies} />
         <Route path="/FilterProjections" component={FilterProjections} />
         <Route path="/MovieSearch" component={MovieSearch} />
-        <PrivateRouteAdmin path="/dashboard" component={Dashboard} />
+        <SuperUserRoute path="/dashboard" component={Dashboard} />
       </Switch>
       <NotificationContainer />
       </div>
