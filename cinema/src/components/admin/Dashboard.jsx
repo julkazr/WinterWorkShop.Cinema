@@ -20,6 +20,7 @@ import EditProjection from './ProjectionActions/EditProjection'
 
 // higher order component
 import { PrivateRouteAdmin } from '../hoc/privateRouteAdmin';
+import { SuperUserRoute } from '../hoc/SuperUserRoute';
 
 class Dashboard extends Component {
     render() {
@@ -75,9 +76,9 @@ class Dashboard extends Component {
                         <PrivateRouteAdmin path="/dashboard/NewAuditorium" component={NewAuditorium} />
                         <PrivateRouteAdmin path="/dashboard/AllAuditoriums" component={ShowAllAuditoriums} />
                         <PrivateRouteAdmin path="/dashboard/EditAuditorium/:id" component={EditAuditorium} />
-                        <PrivateRouteAdmin path="/dashboard/AllProjections" component={ShowAllProjections} />
-                        <PrivateRouteAdmin path="/dashboard/EditProjection/:id" component={EditProjection} />
-                        <PrivateRouteAdmin path="/dashboard/NewProjection" component={NewProjection} />
+                        <SuperUserRoute path="/dashboard/AllProjections" component={ShowAllProjections} />
+                        <SuperUserRoute path="/dashboard/EditProjection/:id" component={EditProjection} />
+                        <SuperUserRoute path="/dashboard/NewProjection" component={NewProjection} />
                     </Switch>
                 </Col>
             </Row>
