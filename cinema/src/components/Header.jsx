@@ -39,7 +39,7 @@ login() {
         method: 'GET'
     };
 
-    fetch(`${serviceConfig.baseURL}/get-token?name=${username}&admin=true`, requestOptions)
+    fetch(`${serviceConfig.baseURL}/get-token?name=${username}`, requestOptions)
         .then(response => {
           if (!response.ok) {
             return Promise.reject(response);
