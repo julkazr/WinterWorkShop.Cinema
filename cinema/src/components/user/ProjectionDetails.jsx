@@ -7,14 +7,16 @@ class ProjectionDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        auditorium: [],
         seats: [],
+        auditorium: [],
         submitted: false,
         canSubmit: true,
         projection: [],
         movieTitle: '',
         movieYear: null,
-        movieRating: null
+        movieRating: null,
+        user: [],
+        seatsWantToReserve: []
     };
 
     for (var i = 0; i < this.state.projection.auditoriumRowNumber; i++) {
@@ -24,66 +26,48 @@ class ProjectionDetails extends Component {
       }
     }
 
-    //username se moze dobiti kao :
-    //username = localStorage.getItem('username');
-
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
     this.getProjection(id);
+    this.getUser();
    
   }
 
   handleClick(seat) {
-    // e.preventDefault();
-    //seats.forEach(seat => {
-      // seatId = seat.id;
-      seat.clicked = !seat.clicked;
-      console.log("kliknuto");
-        console.log(seat);
-    //});
-    //this.state.auditorium.seatsList[id].clicked = !this.state.auditorium.seatsList[id].clicked;
+    seat.clicked = !seat.clicked;
     this.forceUpdate();
+    let seatToReserve = this.state.seatWantToReserve;
+    if(seat.clicked) {
+      
+      if(seatToReserve === undefined) {
+        seatToReserve = [seat.id]
+      } else {
+        seatToReserve.push(seat.id);
+      }
+      
+      
+    } else {
+      let index = seatToReserve.indexOf(seat.id);
+      seatToReserve.splice(index, 1);
+    }
+    console.log("seats u varijabli");
+    console.log(seatToReserve);
+    this.setState({seatWantToReserve: seatToReserve});
+    this.checkForReservation(seatToReserve);
   }
 
   handleSubmit(e) {
     e.preventDefault();
-
-    for (var i = 0; i < this.state.projection.auditoriumRowNumber; i++) {
-      for (var j = 0; j < this.state.projection.auditoriumSeatNumber; j++) {
-        console.log("kliknuto");
-        console.log(this.state.auditorium.seatsList[i][j].clicked);
-        if (this.state.auditorium.seatsList[i][j].clicked === true) {
-          this.makePayment();
-        }
-        else {
-          this.setState({ submitted: false });
-        }
-        this.setState({ submitted: true });
-      }
+    this.setState({ submitted: true });
+    if(this.state.seatsWantToReserve) {
+      this.reserveSeats();
+    } else {
+      NotificationManager.error('Please click on seats...');
+      this.setState({ submitted: false });
     }
-    if(this.state.submitted === false) {
-      NotificationManager.error('Please, choose seats by clicking on them.');
-    }
-  }
-
-  checkIfCanBeReserved(seat) {
-    let clickedSeats = [];
-    for (var i = 0; i < this.state.projection.auditoriumRowNumber; i++) {
-      for (var j = 0; j < this.state.projection.auditoriumSeatNumber; j++) {
-        console.log("KLIKNUTO sediste");
-        console.log(seat);
-        console.log("kliknuto");
-        console.log(this.state.auditorium.seatsList[i][j].clicked);
-        if (seat.clicked === true) {
-          clickedSeats.push(seat);
-        }
-      }
-    }
-    console.log("KLIKNUTA sedista");
-        console.log(clickedSeats);
   }
 
   getProjection(projectionId) {
@@ -107,13 +91,106 @@ class ProjectionDetails extends Component {
                               movieTitle: data.projection.movieTitle,
                               movieYear: data.movie.year,
                               movieRating: data.movie.rating,
-                              auditorium: data.auditorium,
-                              seats: data.auditorium.seatsList });
+                              auditorium: data.auditorium });
           }
+          console.log("data");
+          console.log(data);
       })
       .catch(response => {
           NotificationManager.error(response.message || response.statusText);
           this.setState({ submitted: false });
+      });
+  }
+
+  getUser() {
+    const username = localStorage.getItem('username');
+    console.log("User: ");
+    console.log(username);
+
+    const requestOptions = {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
+        };
+
+    fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
+        .then(response => {
+          if(!response.ok) {
+            return Promise.reject(response);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if(data) {
+            this.setState({user: data});
+          }
+          console.log("User data:");
+          console.log(this.state.user);
+        })
+        .catch(response => {
+          NotificationManager.error(response.message || response.statusText);
+        });
+  }
+
+  checkForReservation(seatIds) {
+    const data = {
+      listOfSeatsId: seatIds
+    }
+    console.log("data from check method:");
+    console.log(data);
+    const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
+          body: JSON.stringify(data)
+        };
+    console.log("rekvest opsns");
+    console.log(requestOptions.body);
+    fetch(`${serviceConfig.baseURL}/api/Reservations/check`, requestOptions)
+        .then(response => {
+          console.log("response");
+          console.log(response);
+          if(!response.ok) {
+            return Promise.reject(response);
+          }
+          return response.statusText;
+        })
+        .then(result => {
+            NotificationManager.success('Seat can be reserved!');
+        })
+        .catch(response => {
+          NotificationManager.error(response.message || response.statusText);
+        });
+  }
+
+  reserveSeats() {
+    console.log("Sedista za rezervaciju");
+    console.log(this.state.seatWantToReserve);
+    const data = {
+      projectionId: this.state.projection.projection.id,
+      userId: this.state.user.id,
+      seatsToReserveID: this.state.seatWantToReserve
+    }
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
+      body: JSON.stringify(data)
+    };
+    fetch(`${serviceConfig.baseURL}/api/Reservations/reserve`, requestOptions)
+      .then(response => {
+        if(!response.ok) {
+          return Promise.reject(response);
+        }
+        return response.statusText;
+      })
+      .then(result => {
+        NotificationManager.success('Your seats are reserved!');
+        window.location.reload(true);
+      })
+      .catch(response => {
+        NotificationManager.error(response.message || response.statusText);
       });
   }
   
@@ -143,7 +220,6 @@ class ProjectionDetails extends Component {
           renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
                                 className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
                                 onClick={this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
-                                onChange={this.checkIfCanBeReserved.bind(this, this.state.auditorium.seatsList[k])}
                                 ></td>);
       }
     
@@ -160,7 +236,7 @@ class ProjectionDetails extends Component {
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear, seat } = this.state;
+  const { submitted, canSubmit, movieTitle, movieYear, seats } = this.state;
   const rating = this.getRoundedRating(this.state.movieRating);
   console.log("Auditorium renderovan:");
   console.log(auditorium);
@@ -203,12 +279,16 @@ class ProjectionDetails extends Component {
                   <Row className="justify-content-center font-weight-bold">
                     Price for reserved seats:  800 RSD
                   </Row>
-                  <Row className="pt-2">
-                    <form onSubmit={this.handleSubmit}>
-                      {/* <Button  onClick={this.checkIfCanBeReserved.bind} className="font-weight-bold" block>Pay for tickets and make reservations</Button> */}
-                      <Button type="submit" disabled={submitted || !canSubmit} className="font-weight-bold" block>Pay for tickets and make reservations</Button>
-                    </form>
-                  </Row>
+                  <form onSubmit={this.handleSubmit}>
+                    <Row className="pt-2">
+                      {/* <Col sm={6}>
+                        <Button  onClick={this.checkForReservation} className="font-weight-bold" block>Check if seats can be reserved</Button>
+                      </Col> */}
+                      <Col sm={12}>
+                        <Button type="submit" disabled={submitted || !canSubmit} className="font-weight-bold" block>Pay for tickets and make reservations</Button>
+                      </Col> 
+                    </Row> 
+                  </form>
                 </Card.Body>
               </Card>
             </Col>
