@@ -260,7 +260,7 @@ class EditProjection extends React.Component {
                                         showTimeInput
                                         customTimeInput={<ExampleCustomTimeInput />}
                                         onChange={this.onDateChange}
-                                        value={projectionTime}
+                                        value={projectionTime && new Date(projectionTime) || null}
                                         />
                                 </FormGroup>
                                 <Button type="submit">Edit Projections</Button>
