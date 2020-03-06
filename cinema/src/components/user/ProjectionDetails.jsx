@@ -212,7 +212,7 @@ class ProjectionDetails extends Component {
         let k = 0;
         for(let j = 0; j < this.state.auditorium.seatsList.length; j ++) {
 
-            if(this.state.auditorium.seatsList[j].number == i + 1 && this.state.auditorium.seatsList[j].row == row + 1)
+            if(this.state.auditorium.seatsList[j].number === i + 1 && this.state.auditorium.seatsList[j].row === row + 1)
             {
               k = j;
             }

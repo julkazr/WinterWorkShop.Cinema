@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
+import { FormGroup, Button, Container, Row, Col, } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import DateTimePicker from 'react-datetime-picker';
@@ -17,7 +17,7 @@ class EditProjection extends React.Component {
             auditoriumId: '',
             submitted: false,
             canSubmit: true,
-            projectionTime: new Date(),
+            projectionTime: null,
             movies: [],
             auditoriums: [],
             movieError: '',
@@ -58,15 +58,14 @@ class EditProjection extends React.Component {
             })
             .then(data => {
                 if (data) {
-                    console.log({data})
+                    console.log(data.projectionTime)
                     this.setState({id: data.id,
                                    movieId: data.movieId,
                                    auditoriumId: data.auditoriumId,
                                    movieTitle: data.movieTitle,
                                    auditoriumName: data.aditoriumName,
-                                   projectionTime: data.projectionTime});
+                                   projectionTime:  data.projectionTime});
                 }
-                console.log(this.state.id)
             })
             .catch(response => {
                 NotificationManager.error(response.message || response.statusText);
@@ -125,14 +124,19 @@ class EditProjection extends React.Component {
         }
 
         updateProjection() {
-            console.log(this.state.projectionTime)
             const {id, movieId, auditoriumId, projectionTime} = this.state;
+            // Before: JSON.stringify apply timezone offset
+            var date = new Date()
+            var h = projectionTime.getHours();
+            projectionTime.setHours(h + 1);
+            console.log(projectionTime)
+            date = projectionTime.toISOString();
             const data = {
                 auditoriumId: auditoriumId,
                 movieId: movieId,
-                projectionTime: projectionTime
+                projectionTime: date
             };
-    
+            console.log(data)
             const requestOptions = {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json',
@@ -216,7 +220,14 @@ class EditProjection extends React.Component {
         onDateChange = date => this.setState({ projectionTime: date})
 
         render() {
-            const {id, movieId, movieTitle, auditoriumId, auditoriums, auditoriumName, projectionTime, movies} = this.state;
+            const { movieTitle, auditoriums, auditoriumName, movies, projectionTime} = this.state;
+            const ExampleCustomTimeInput = ({ value, onChange }) => (
+                <input
+                  value={value}
+                  onChange={e => onChange(e.target.value)}
+                  style={{ border: "solid 1px pink" }}
+                />
+              );
             return (
                 <Container>
                     <Row>
@@ -244,8 +255,12 @@ class EditProjection extends React.Component {
                                 <FormGroup>
                                     <DateTimePicker 
                                         className="form-control"
+                                        format = "dd/MM/yyyy h:mm aa"
+                                        locale="sr"
+                                        showTimeInput
+                                        customTimeInput={<ExampleCustomTimeInput />}
                                         onChange={this.onDateChange}
-                                        value={""}
+                                        value={projectionTime && new Date(projectionTime) || null}
                                         />
                                 </FormGroup>
                                 <Button type="submit">Edit Projections</Button>

@@ -110,7 +110,7 @@ class EditAuditorium extends React.Component {
         }
 
         updateAuditorium() {
-            const { name, id, seatRows, numberOfSeats, seatsList } = this.state;
+            const { name, id, seatRows, numberOfSeats } = this.state;
             const data = {
                 name: name,
                 numberOfSeats: +numberOfSeats,
@@ -181,7 +181,7 @@ class EditAuditorium extends React.Component {
                                     />
                                     <FormText className="text-danger">{numOfSeatsError}</FormText>
                                 </FormGroup>
-                                <Button type="submit" disabled={submitted || !canSubmit} block>Edit Cinema</Button>
+                                <Button type="submit" disabled={submitted || !canSubmit} block>Edit Auditorium</Button>
                             </form>
                         </Col>
                     </Row>

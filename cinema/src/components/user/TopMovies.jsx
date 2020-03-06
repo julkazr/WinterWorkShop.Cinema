@@ -122,7 +122,7 @@ class TopMovies extends Component {
     }
 
     render() {
-        const {isLoading, Year, submitted, canSubmit, yearError} = this.state;
+        const {isLoading, Year, yearError} = this.state;
         const rowsData = this.fillTableWithDaata();
         const table = (<Table striped bordered hover size="sm" variant="dark">
                             <thead>

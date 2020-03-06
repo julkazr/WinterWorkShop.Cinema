@@ -167,7 +167,8 @@ class NewAuditorium extends React.Component {
     renderSeats(seats, row) {
         let renderedSeats = [];
         for (let i = 0; i < seats; i++) {
-            renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}></td>);
+            renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
+                                   className="is-not-reserved"></td>);
         }
         return renderedSeats;
     }
@@ -176,6 +177,7 @@ class NewAuditorium extends React.Component {
         const { cinemas, numberOfSeats, submitted, seatRows, auditName, auditNameError, numOfSeatsError,
                 seatRowsError, cinemaIdError, canSubmit } = this.state;
         const auditorium = this.renderRows(seatRows, numberOfSeats);
+        console.log(auditorium)
         return (
             <Container>
                 <Row>
@@ -219,11 +221,11 @@ class NewAuditorium extends React.Component {
                                     placeholder="Number Of Seats"
                                     value={numberOfSeats}
                                     onChange={this.handleChange}
-                                    max="36"
+                                    max="20"
                                 />
                                 <FormText className="text-danger">{numOfSeatsError}</FormText>
                             </FormGroup>
-                            <Button type="submit" disabled={submitted || !canSubmit} block>Add Projection</Button>
+                            <Button type="submit" disabled={submitted || !canSubmit} block>Add Auditorium</Button>
                         </form>
                     </Col>
                 </Row>
