@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
+import { FormGroup, Button, Container, Row, Col, } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import DateTimePicker from 'react-datetime-picker';
@@ -216,7 +216,7 @@ class EditProjection extends React.Component {
         onDateChange = date => this.setState({ projectionTime: date})
 
         render() {
-            const {id, movieId, movieTitle, auditoriumId, auditoriums, auditoriumName, projectionTime, movies} = this.state;
+            const { movieTitle, auditoriums, auditoriumName, movies} = this.state;
             return (
                 <Container>
                     <Row>

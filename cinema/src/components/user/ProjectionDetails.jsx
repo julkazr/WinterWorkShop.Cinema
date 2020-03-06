@@ -135,7 +135,7 @@ class ProjectionDetails extends Component {
         let k = 0;
         for(let j = 0; j < this.state.auditorium.seatsList.length; j ++) {
 
-            if(this.state.auditorium.seatsList[j].number == i + 1 && this.state.auditorium.seatsList[j].row == row + 1)
+            if(this.state.auditorium.seatsList[j].number === i + 1 && this.state.auditorium.seatsList[j].row === row + 1)
             {
               k = j;
             }
@@ -160,7 +160,7 @@ class ProjectionDetails extends Component {
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear, seat } = this.state;
+  const { submitted, canSubmit, movieTitle, movieYear } = this.state;
   const rating = this.getRoundedRating(this.state.movieRating);
   console.log("Auditorium renderovan:");
   console.log(auditorium);

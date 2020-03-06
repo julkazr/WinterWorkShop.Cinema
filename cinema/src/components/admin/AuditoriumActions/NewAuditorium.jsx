@@ -176,6 +176,7 @@ class NewAuditorium extends React.Component {
         const { cinemas, numberOfSeats, submitted, seatRows, auditName, auditNameError, numOfSeatsError,
                 seatRowsError, cinemaIdError, canSubmit } = this.state;
         const auditorium = this.renderRows(seatRows, numberOfSeats);
+        console.log(auditorium)
         return (
             <Container>
                 <Row>

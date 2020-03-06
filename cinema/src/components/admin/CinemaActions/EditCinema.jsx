@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
-import { YearPicker } from 'react-dropdown-date';
 
 class EditCinema extends React.Component {
     constructor(props) {

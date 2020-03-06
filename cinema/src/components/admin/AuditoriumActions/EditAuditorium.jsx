@@ -110,7 +110,7 @@ class EditAuditorium extends React.Component {
         }
 
         updateAuditorium() {
-            const { name, id, seatRows, numberOfSeats, seatsList } = this.state;
+            const { name, id, seatRows, numberOfSeats } = this.state;
             const data = {
                 name: name,
                 numberOfSeats: +numberOfSeats,

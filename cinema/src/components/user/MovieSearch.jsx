@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
-import { Row, Table, Container, Col, FormGroup, FormText, Button, FormControl } from 'react-bootstrap';
-import {Typeahead} from 'react-bootstrap-typeahead';
-import DateTimePicker from 'react-datetime-picker';
+import { Row, Table, Container, Col, FormGroup, Button, FormControl } from 'react-bootstrap';
 
 class MovieSearch extends Component {
     constructor(props) {
@@ -54,10 +52,6 @@ class MovieSearch extends Component {
     }
 
     getMovies() {
-        const {tag} = this.state;
-        const data = {
-            tag: tag
-        }
         const requestOptions = {
             method: 'GET',
             headers: {'Content-Type': 'application/json',
@@ -83,9 +77,6 @@ class MovieSearch extends Component {
 
     getMoviesByTag() {
         const {tag} = this.state;
-        const data = {
-            tag: tag
-        }
         const requestOptions = {
             method: 'GET',
             headers: {'Content-Type': 'application/json',
@@ -121,7 +112,7 @@ class MovieSearch extends Component {
     }
 
     render() {
-        const {tag, submitted, canSubmit} = this.state;
+        const {tag} = this.state;
         const rowsData = this.fillTableWithData();
         const table = (<Table striped bordered hover size="sm" variant="dark">
                             <thead>
