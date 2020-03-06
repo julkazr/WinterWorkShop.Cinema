@@ -181,7 +181,7 @@ class EditAuditorium extends React.Component {
                                     />
                                     <FormText className="text-danger">{numOfSeatsError}</FormText>
                                 </FormGroup>
-                                <Button type="submit" disabled={submitted || !canSubmit} block>Edit Cinema</Button>
+                                <Button type="submit" disabled={submitted || !canSubmit} block>Edit Auditorium</Button>
                             </form>
                         </Col>
                     </Row>
