@@ -102,10 +102,11 @@ class MovieSearch extends Component {
 
     fillTableWithData() {
         return this.state.movies.map(movie => {
+            const result = Math.round(movie.rating);
             return <tr key={movie.id}>                     
                         <td>{movie.title}</td>
                         <td>{movie.year}</td>
-                        <td>{movie.rating}/10</td>
+                        <td>{result}/10</td>
                         <td>{movie.current ? 'Yes' : 'No'}</td>
                     </tr>
         })
