@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import classNames from 'classnames';
 
 class ProjectionDetails extends Component {
   constructor(props) {
@@ -16,15 +17,24 @@ class ProjectionDetails extends Component {
         movieYear: null,
         movieRating: null,
         user: [],
-        seatsWantToReserve: []
+        seatsWantToReserve: [],
+        reservedSeats: []
     };
 
-    for (var i = 0; i < this.state.projection.auditoriumRowNumber; i++) {
-      this.state.auditorium.seatsList.push([]);
-      for (var j = 0; j < this.state.projection.auditoriumSeatNumber; j++) {
-        this.state.auditorium.seatsList[i][j].push({clicked: false});
-      }
-    }
+    // for (var i = 0; i < this.state.projection.auditoriumRowNumber; i++) {
+    //   this.state.auditorium.seatsList.push([]);
+    //   for (var j = 0; j < this.state.projection.auditoriumSeatNumber; j++) {
+    //     this.state.auditorium.seatsList[i][j].push({clicked: false});
+    //     this.state.reservedSeats.forEach(seat => {
+    //       if(seat.row === i && seat.number === j) {
+    //         this.state.auditorium.seatsList[i][j].push({reserved: true});
+    //       } 
+    //       // else {
+    //       //   this.state.auditorium.seatsList[i][j].push({reserved: false});
+    //       // }
+    //     });
+    //   }
+    // }
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -86,15 +96,18 @@ class ProjectionDetails extends Component {
       return response.json();
       })
       .then(data => {
+        console.log("data from getProjections:");
+        console.log(data);
           if (data) {
               this.setState({ projection: data,
                               movieTitle: data.projection.movieTitle,
                               movieYear: data.movie.year,
                               movieRating: data.movie.rating,
-                              auditorium: data.auditorium });
+                              auditorium: data.auditorium,
+                              reservedSeats: data.listOfReservedSeats });
           }
-          console.log("data");
-          console.log(data);
+          console.log("this.state.reservedSeats after setState in get projection");
+        console.log(this.state.reservedSeats);
       })
       .catch(response => {
           NotificationManager.error(response.message || response.statusText);
@@ -104,8 +117,6 @@ class ProjectionDetails extends Component {
 
   getUser() {
     const username = localStorage.getItem('username');
-    console.log("User: ");
-    console.log(username);
 
     const requestOptions = {
           method: 'GET',
@@ -136,20 +147,16 @@ class ProjectionDetails extends Component {
     const data = {
       listOfSeatsId: seatIds
     }
-    console.log("data from check method:");
-    console.log(data);
+
     const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json',
                       'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
           body: JSON.stringify(data)
         };
-    console.log("rekvest opsns");
-    console.log(requestOptions.body);
+
     fetch(`${serviceConfig.baseURL}/api/Reservations/check`, requestOptions)
         .then(response => {
-          console.log("response");
-          console.log(response);
           if(!response.ok) {
             return Promise.reject(response);
           }
@@ -164,8 +171,6 @@ class ProjectionDetails extends Component {
   }
 
   reserveSeats() {
-    console.log("Sedista za rezervaciju");
-    console.log(this.state.seatWantToReserve);
     const data = {
       projectionId: this.state.projection.projection.id,
       userId: this.state.user.id,
@@ -208,6 +213,15 @@ class ProjectionDetails extends Component {
 
   renderSeats(seats, row) {
       let renderedSeats = [];
+      let reservedSeatsIds = [];
+      let reserved;
+      let disabled;
+      this.state.reservedSeats.forEach(seat => {
+        reservedSeatsIds.push(seat.id);
+        
+      });
+      console.log("reservedSeatsIds");
+        console.log(reservedSeatsIds);
       for (let i = 0; i < seats; i++) {   
         let k = 0;
         for(let j = 0; j < this.state.auditorium.seatsList.length; j ++) {
@@ -215,11 +229,28 @@ class ProjectionDetails extends Component {
             if(this.state.auditorium.seatsList[j].number === i + 1 && this.state.auditorium.seatsList[j].row === row + 1)
             {
               k = j;
+              if (reservedSeatsIds.includes(this.state.auditorium.seatsList[k].id)) {
+                reserved = true;
+                disabled = true;
+              } else {
+                reserved = false;
+                disabled = false;
+              }
+              console.log("disabled iz renderseats");
+            console.log(disabled);
             }
+            console.log("reservedSeatsIds iz renderseats");
+            console.log(reservedSeatsIds);
+            console.log("(this.state.auditorium.seatsList[j].id) iz renderseats");
+            console.log((this.state.auditorium.seatsList[j].id));
         }  
           renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
-                                className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
-                                onClick={this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
+                                //disabled={this.state.disabledSeat}
+                                //className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
+                                className={classNames({'is-not-reserved': !this.state.auditorium.seatsList[k].clicked && !reserved,
+                                                        'is-reserved': reserved,
+                                                        'want-to-reserve': this.state.auditorium.seatsList[k].clicked})}
+                                onClick={disabled ? '' : this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
                                 ></td>);
       }
     

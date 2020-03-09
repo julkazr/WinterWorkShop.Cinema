@@ -58,6 +58,7 @@
   border: 1px solid black;
   padding: 15px !important;
   background-color: #ffc107;
+  cursor: not-allowed !important;
 }
 
 .table-cinema-auditorium td:hover {
