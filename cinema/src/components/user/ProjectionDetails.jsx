@@ -63,8 +63,6 @@ class ProjectionDetails extends Component {
       let index = seatToReserve.indexOf(seat.id);
       seatToReserve.splice(index, 1);
     }
-    console.log("seats u varijabli");
-    console.log(seatToReserve);
     this.setState({seatWantToReserve: seatToReserve});
     this.checkForReservation(seatToReserve);
   }
@@ -95,9 +93,7 @@ class ProjectionDetails extends Component {
       }
       return response.json();
       })
-      .then(data => {
-        console.log("data from getProjections:");
-        console.log(data);
+      .then(data => {;
           if (data) {
               this.setState({ projection: data,
                               movieTitle: data.projection.movieTitle,
@@ -106,8 +102,6 @@ class ProjectionDetails extends Component {
                               auditorium: data.auditorium,
                               reservedSeats: data.listOfReservedSeats });
           }
-          console.log("this.state.reservedSeats after setState in get projection");
-        console.log(this.state.reservedSeats);
       })
       .catch(response => {
           NotificationManager.error(response.message || response.statusText);
@@ -135,8 +129,6 @@ class ProjectionDetails extends Component {
           if(data) {
             this.setState({user: data});
           }
-          console.log("User data:");
-          console.log(this.state.user);
         })
         .catch(response => {
           NotificationManager.error(response.message || response.statusText);
@@ -220,8 +212,6 @@ class ProjectionDetails extends Component {
         reservedSeatsIds.push(seat.id);
         
       });
-      console.log("reservedSeatsIds");
-        console.log(reservedSeatsIds);
       for (let i = 0; i < seats; i++) {   
         let k = 0;
         for(let j = 0; j < this.state.auditorium.seatsList.length; j ++) {
@@ -236,18 +226,12 @@ class ProjectionDetails extends Component {
                 reserved = false;
                 disabled = false;
               }
-              console.log("disabled iz renderseats");
-            console.log(disabled);
             }
-            console.log("reservedSeatsIds iz renderseats");
-            console.log(reservedSeatsIds);
-            console.log("(this.state.auditorium.seatsList[j].id) iz renderseats");
-            console.log((this.state.auditorium.seatsList[j].id));
         }  
           renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
                                 //disabled={this.state.disabledSeat}
                                 //className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
-                                className={classNames({'is-not-reserved': !this.state.auditorium.seatsList[k].clicked && !reserved,
+                                className={classNames({'is-not-reserved': true,
                                                         'is-reserved': reserved,
                                                         'want-to-reserve': this.state.auditorium.seatsList[k].clicked})}
                                 onClick={disabled ? '' : this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
@@ -267,10 +251,8 @@ class ProjectionDetails extends Component {
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear, seats } = this.state;
+  const { submitted, canSubmit, movieTitle, movieYear, seats, loop } = this.state;
   const rating = this.getRoundedRating(this.state.movieRating);
-  console.log("Auditorium renderovan:");
-  console.log(auditorium);
       return (
         <Container>
           <Row className="justify-content-center">

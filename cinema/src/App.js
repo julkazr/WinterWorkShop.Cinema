@@ -13,6 +13,7 @@ import TopMovies from './components/user/TopMovies'
 import Dashboard from './components/admin/Dashboard';
 import FilterProjections from './components/user/FilterProjections';
 import MovieSearch from './components/user/MovieSearch';
+import UserProfile from './components/user/UserProfile';
 
 // higher order component
 import { SuperUserRoute } from './components/hoc/SuperUserRoute';
@@ -24,6 +25,7 @@ function App() {
       <div className="set-overflow-y">
       <Switch>
         <Redirect exact from="/" to="projectionlist" />
+        <Route path="/UserProfile" component={UserProfile} />
         <Route path="/projectiondetails/:id" component={ProjectionDetails} />
         <Route path="/projectionlist" component={AllProjectionsForCinema} />
         <Route path="/topten" component={TopMovies} />
