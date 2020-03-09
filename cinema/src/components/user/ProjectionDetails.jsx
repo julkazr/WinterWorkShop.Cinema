@@ -89,9 +89,7 @@ class ProjectionDetails extends Component {
       }
       return response.json();
       })
-      .then(data => {
-        console.log("data from getProjections:");
-        console.log(data);
+      .then(data => {;
           if (data) {
               this.setState({ projection: data,
                               movieTitle: data.projection.movieTitle,
@@ -127,8 +125,6 @@ class ProjectionDetails extends Component {
           if(data) {
             this.setState({user: data});
           }
-          console.log("User data:");
-          console.log(this.state.user);
         })
         .catch(response => {
           NotificationManager.error(response.message || response.statusText);
@@ -245,7 +241,9 @@ class ProjectionDetails extends Component {
             }
         }  
           renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
-                                 className={classNames({'is-not-reserved': !this.state.auditorium.seatsList[k].clicked && !reserved,
+                                //disabled={this.state.disabledSeat}
+                                //className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
+                                className={classNames({'is-not-reserved': true,
                                                         'is-reserved': reserved,
                                                         'want-to-reserve': this.state.auditorium.seatsList[k].clicked})}
                                  onClick={disabled ? '' : this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
