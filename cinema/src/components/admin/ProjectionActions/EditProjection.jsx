@@ -126,11 +126,12 @@ class EditProjection extends React.Component {
         updateProjection() {
             const {id, movieId, auditoriumId, projectionTime} = this.state;
             // Before: JSON.stringify apply timezone offset
-            var date = new Date()
-            var h = projectionTime.getHours();
-            projectionTime.setHours(h + 1);
-            console.log(projectionTime)
-            date = projectionTime.toISOString();
+            var date = new Date(projectionTime);
+            var h = date.getTimezoneOffset()/60;
+            var hour = date.getHours();
+            hour += (-1 * h);
+            date.setHours(hour);
+            console.log(hour)
             const data = {
                 auditoriumId: auditoriumId,
                 movieId: movieId,

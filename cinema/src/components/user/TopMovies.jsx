@@ -113,9 +113,10 @@ class TopMovies extends Component {
 
     fillTableWithDaata() {
         return this.state.movies.map(movie => {
+            const result = Math.round(movie.rating);
             return <tr key={movie.id}>
                         <td>{movie.title}</td>
-                        <td>{movie.rating}/10</td>
+                        <td>{result}/10</td>
                         <td>{movie.year}</td>
                     </tr>
         })

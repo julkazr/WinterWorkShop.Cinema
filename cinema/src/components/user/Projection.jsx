@@ -12,8 +12,6 @@ class Projection extends Component {
   }
 
   componentDidMount() {
-  console.log("Movie: ");
-  console.log(this.state.movie);
   }
   
   getRoundedRating(rating) {
@@ -38,7 +36,39 @@ class Projection extends Component {
     console.log(projectionTimes);
     
     return projectionTimes.map((time, index) => {
-      return <Button key={index} onClick={() => this.navigateToProjectionDetails(projectionId)} className="mr-1 mb-2">{time}</Button>
+      var date = new Date(time);
+      var year = date.getFullYear();
+      var mounth = date.getMonth();
+      var day = date.getDate();
+      var hour = date.getHours()
+      var min = date.getMinutes()
+      var s = "";
+      if(day < 10)
+      {
+        s = "0";
+      }
+      s += day.toString() + "/";
+      if(mounth < 10)
+      {
+        s += "0";
+      }
+      s += mounth.toString() + "/" + year.toString() + " ";
+      if(hour < 10)
+      {
+        s += "0";
+      }
+      s += hour.toString() + ":";
+      if(min < 10 && min > 0)
+      {
+        s += "0";
+      }
+      s += min.toString();
+      if(min === 0)
+      {
+        s += '0';
+      }
+      console.log(date.getUTCDay())
+      return <Button key={index} onClick={() => this.navigateToProjectionDetails(projectionId)} className="mr-1 mb-2">{s}</Button>
     })
   }
 
@@ -51,7 +81,7 @@ class Projection extends Component {
             <Row className="justify-content-center">
               <Col>
                 <Card className="mt-5 card-width">
-                  <Card.Body>
+                  <Card.Body format>
                       <Card.Title><span className="card-title-font">{this.state.movie.movie.title}</span> {rating}</Card.Title>
                       <hr/>
                       <Card.Subtitle className="mb-2 text-muted">Year of production: {this.state.movie.movie.year}</Card.Subtitle>
@@ -61,7 +91,7 @@ class Projection extends Component {
                             Projection times: 
                           </span>
                       </Card.Text>
-                          {projectionTimes}
+                            {projectionTimes}
                   </Card.Body>
                 </Card>
               </Col>
