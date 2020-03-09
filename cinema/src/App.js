@@ -17,6 +17,7 @@ import MovieSearch from './components/user/MovieSearch';
 // higher order component
 import { SuperUserRoute } from './components/hoc/SuperUserRoute';
 
+
 function App() {
   return (
     <React.Fragment>
