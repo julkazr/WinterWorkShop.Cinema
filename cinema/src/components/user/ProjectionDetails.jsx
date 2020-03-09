@@ -195,13 +195,10 @@ class ProjectionDetails extends Component {
   }
 
   ticketInfoForUser(user, seat) {
-
       const username = `${user.firstName} ${user.lastName}`;
       let ticketsInfo = { username, seat}
       this.setState({tickets: ticketsInfo});
   }
-
-  // fillTicketInfo()
   
   renderRows(rows, seats) {
     const rowsRendered = [];
@@ -241,8 +238,6 @@ class ProjectionDetails extends Component {
             }
         }  
           renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
-                                //disabled={this.state.disabledSeat}
-                                //className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
                                 className={classNames({'is-not-reserved': true,
                                                         'is-reserved': reserved,
                                                         'want-to-reserve': this.state.auditorium.seatsList[k].clicked})}
@@ -258,13 +253,41 @@ class ProjectionDetails extends Component {
   getRoundedRating(rating) {
     const result = Math.round(rating);
     return <span className="float-right">Rating: {result}/10</span>
-}
+  }
+
+  getSeatNumberForTicket() {
+    let seatNumbers = [];
+    
+    if(this.state.ticketsInfo !== []) {
+      this.state.ticketsInfo.forEach(seat => {
+        seatNumbers.push(seat.number);
+      });
+      return seatNumbers.map((seat) => {
+        return ` ${seat}, `;
+      });
+    }
+    
+  }
+  
+  getSeatsRowForTicket() {
+    let seatRow;
+    if(this.state.ticketsInfo !== []) {
+      this.state.ticketsInfo.forEach(seat => {
+        if(seatRow !== seat.row) {
+          seatRow = seat.row;
+        }      
+      });
+    }
+    return seatRow;
+  }
 
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
   const { submitted, canSubmit, movieTitle, movieYear, tickets } = this.state;
   const rating = this.getRoundedRating(this.state.movieRating);
+  const row = this.getSeatsRowForTicket();
+  const seatNumbers = this.getSeatNumberForTicket();
 
       return (
         <React.Fragment>
@@ -313,33 +336,36 @@ class ProjectionDetails extends Component {
                         </Col> 
                       </Row> 
                     </form>
+                    { tickets.seat &&
                     <Row className="justify-content-center">
                       <Col>
                         <Card className="mt-5 card-width">
                           <Card.Body format>
-
+                          
+                            <h3>You reservation was success!</h3> 
+                          
                             <hr/>
                             <Card.Subtitle className="mb-2 text-muted">Tickets info:</Card.Subtitle>
                               <hr/>
                             <Card.Text>
-                                  <span className="mb-2 font-weight-bold">
-                                Username:    
+                                <span className="mb-2 font-weight-bold">
+                                Username: {tickets.username} 
                                 </span>
-                                {tickets.username}
+                                
                             </Card.Text>
                             <Card.Text>
                               <span className="mb-2 font-weight-bold">
-                                Seats: 
-                                </span>
-                                <span className="mb-2 font-weight-bold">
-                                Row
-                                {/* {tickets.resSeats} */}
-                                </span>
+                                Row: {row}
+                              </span><br/>
+                              <span className="mb-2 font-weight-bold">
+                                Seats: {seatNumbers} 
+                              </span><br/>
                             </Card.Text>
                           </Card.Body>
                         </Card>
                       </Col>
                     </Row>
+                    } 
                   </Card.Body>
                 </Card>
               </Col>
