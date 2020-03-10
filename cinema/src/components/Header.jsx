@@ -9,10 +9,16 @@ class Header extends Component {
     super(props);
     this.state = {
         username: '',
-        submitted: false
+        submitted: false,
+        user: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.getUser = this.getUser.bind(this);
+}
+
+componentDidMount() {
+  this.getUser();       
 }
 
 handleChange(e) {
@@ -28,6 +34,7 @@ handleSubmit(e) {
     localStorage.setItem('username', this.state.username);
     if (username) {
         this.login();
+        this.getUser();
     } else {
         this.setState({ submitted: false });
     }
@@ -59,8 +66,40 @@ login() {
             this.setState({ submitted: false });
         });
 }
+getUser() {
+  const username = localStorage.getItem('username');
+
+  const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
+      };
+
+  fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
+      .then(response => {
+        if(!response.ok) {
+          return Promise.reject(response);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if(data) {
+          this.setState({user: data});
+        }
+      })
+      .catch(response => {
+        NotificationManager.error(response.message || response.statusText);
+      });
+}
+
+    renderdasboard(user)
+    {
+        return (user.isAdmin ? <Nav.Link href="/dashboard" className={"text-white"}>Dashboard</Nav.Link> : null)
+    }
     render() {
-      const { username } = this.state;
+      const { username, user } = this.state;
+      console.log(user.isAdmin)
+      let dasboard = this.renderdasboard(user);
         return (
             <Navbar bg="dark" expand="lg">
             <Navbar.Brand className="text-info font-weight-bold text-capitalize"><Link className="text-decoration-none" to='/projectionlist'>Cinema 9</Link></Navbar.Brand>
@@ -71,6 +110,7 @@ login() {
               <Nav.Link href="/topten" className="text-white">Top 10 Movies</Nav.Link>
               <Nav.Link href="/FilterProjections" className="text-white">Filter Projections</Nav.Link>
               <Nav.Link href="/MovieSearch" className="text-white">Movies Search</Nav.Link>
+              {dasboard}
               </Nav>
               <Form inline onSubmit={this.handleSubmit}>
                 <FormControl type="text" placeholder="Username"
