@@ -6,7 +6,7 @@ import { Row, Col, Container, FormText, Button, Table } from 'react-bootstrap';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandPointRight } from '@fortawesome/free-solid-svg-icons';
-//import Spinner from '../Spinner';
+import { sharedGetRequestOptions } from './../helpers/shared';
 
 class AllProjectionsForCinema extends Component {
     constructor(props) {
@@ -90,11 +90,7 @@ class AllProjectionsForCinema extends Component {
     }
 
     getProjections() {
-      const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-      };
+      const requestOptions = sharedGetRequestOptions;
 
       this.setState({isLoading: true});
       fetch(`${serviceConfig.baseURL}/api/Projections/all`, requestOptions)
@@ -116,13 +112,7 @@ class AllProjectionsForCinema extends Component {
     }
 
     getCinemas() {
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('jwt')
-        }
-      };
+      const requestOptions = sharedGetRequestOptions;
 
       fetch(`${serviceConfig.baseURL}/api/cinemas/all`, requestOptions)
         .then(response => {
@@ -143,11 +133,7 @@ class AllProjectionsForCinema extends Component {
     }
 
     getAuditoriums(cinemaId) {
-      const requestOptions = {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-      };
+      const requestOptions = sharedGetRequestOptions;
 
       fetch(`${serviceConfig.baseURL}/api/Auditoriums/all`, requestOptions)
           .then(response => {
@@ -182,11 +168,7 @@ class AllProjectionsForCinema extends Component {
 
     getProjectionsForAuditorium(auditoriumId) {
       this.setState({ movies: null, isLoading: false});
-      const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-      };
+      const requestOptions = sharedGetRequestOptions;
 
       fetch(`${serviceConfig.baseURL}/api/Movies/movieprojections/` + auditoriumId, requestOptions)
         .then(response => {

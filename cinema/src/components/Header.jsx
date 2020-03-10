@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../appSettings';
+import { sharedGetRequestOptions } from './helpers/shared';
 
 class Header extends Component {
   constructor(props) {
@@ -69,11 +70,7 @@ login() {
 getUser() {
   const username = localStorage.getItem('username');
 
-  const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
-      };
+  const requestOptions = sharedGetRequestOptions;
 
   fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
       .then(response => {

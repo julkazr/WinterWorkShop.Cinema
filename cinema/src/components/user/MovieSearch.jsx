@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Row, Table, Container, Col, FormGroup, Button, FormControl } from 'react-bootstrap';
+import { sharedGetRequestOptions } from './../helpers/shared';
 
 class MovieSearch extends Component {
     constructor(props) {
@@ -52,14 +53,10 @@ class MovieSearch extends Component {
     }
 
     getMovies() {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
         fetch(`${serviceConfig.getAllMoivies}`, requestOptions)
             .then(response => {
-                if(!response.ok) {
+                if (!response.ok) {
                     return Promise.reject(response);
                 }
                 return response.json();
@@ -77,14 +74,10 @@ class MovieSearch extends Component {
 
     getMoviesByTag() {
         const {tag} = this.state;
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
         fetch(`${serviceConfig.getMoviesByTag}/${tag}`, requestOptions)
             .then(response => {
-                if(!response.ok) {
+                if (!response.ok) {
                     return Promise.reject(response);
                 }
                 return response.json();

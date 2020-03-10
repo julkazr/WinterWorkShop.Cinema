@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge, Table } from 'react-bootstrap';
-import classNames from 'classnames';
+import { sharedGetRequestOptions } from './../helpers/shared';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -21,11 +21,7 @@ class UserProfile extends Component {
       getUser() {
         const username = localStorage.getItem('username');
     
-        const requestOptions = {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
-            };
+        const requestOptions = sharedGetRequestOptions;
     
         fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
             .then(response => {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { getRoundedRating } from './../helpers/shared';
 
 class Projection extends Component {
   constructor(props) {
@@ -12,11 +13,6 @@ class Projection extends Component {
   }
 
   componentDidMount() {
-  }
-  
-  getRoundedRating(rating) {
-      const result = Math.round(rating);
-      return <span className="float-right">Rating: {result}/10</span>
   }
 
   navigateToProjectionDetails(id) {
@@ -73,7 +69,7 @@ class Projection extends Component {
   }
 
   render() {
-      const rating = this.getRoundedRating(this.state.movie.movie.rating);
+      const rating = getRoundedRating(this.state.movie.movie.rating);
       const projectionTimes = this.getProjections();
       return (
         <React.Fragment>

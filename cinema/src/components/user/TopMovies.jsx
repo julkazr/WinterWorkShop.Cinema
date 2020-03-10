@@ -3,6 +3,7 @@ import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Row, Table, Col, FormControl, FormGroup, Button, FormText } from 'react-bootstrap';
 import Spinner from '../Spinner';
+import { sharedGetRequestOptions } from './../helpers/shared';
 
 class TopMovies extends Component {
     constructor(props) {
@@ -57,19 +58,15 @@ class TopMovies extends Component {
     }
 
     getTopMovies() {
-      const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-      };
+      const requestOptions = sharedGetRequestOptions;
 
       this.setState({isLoading: true});
       fetch(`${serviceConfig.baseURL}/api/movies/tops`, requestOptions)
         .then(response => {
-          if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
+            if (!response.ok) {
+                return Promise.reject(response);
+            }
+            return response.json();
         })
         .then(data => {
           if (data) {
@@ -85,19 +82,15 @@ class TopMovies extends Component {
 
     getTopMoviesByYear() {
         const {Year} = this.state;
-        const requestOptions = {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
   
         this.setState({isLoading: true});
         fetch(`${serviceConfig.baseURL}/api/movies/tops/${Year}`, requestOptions)
           .then(response => {
             if (!response.ok) {
-              return Promise.reject(response);
-          }
-          return response.json();
+                return Promise.reject(response);
+            }
+            return response.json();
           })
           .then(data => {
             if (data) {

@@ -3,6 +3,7 @@ import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import classNames from 'classnames';
+import { getRoundedRating, sharedGetRequestOptions } from './../helpers/shared';
 
 class ProjectionDetails extends Component {
   constructor(props) {
@@ -102,11 +103,7 @@ class ProjectionDetails extends Component {
 
   getProjection(projectionId) {
     // TO DO: here you need to fetch movie with projection details using ID from router
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
-    };
+    const requestOptions = sharedGetRequestOptions;
 
     fetch(`${serviceConfig.baseURL}/api/projections/getwithauditorium/` + projectionId, requestOptions)
       .then(response => {
@@ -134,18 +131,14 @@ class ProjectionDetails extends Component {
   getUser() {
     const username = localStorage.getItem('username');
 
-    const requestOptions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
-        };
+    const requestOptions = sharedGetRequestOptions;
 
     fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
         .then(response => {
-          if(!response.ok) {
+          if (!response.ok) {
             return Promise.reject(response);
-          }
-          return response.json();
+        }
+        return response.json();
         })
         .then(data => {
           if(data) {
@@ -168,7 +161,7 @@ class ProjectionDetails extends Component {
           headers: { 'Content-Type': 'application/json',
                       'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
           body: JSON.stringify(data)
-        };
+      };
 
     fetch(`${serviceConfig.baseURL}/api/Reservations/check`, requestOptions)
         .then(response => {
@@ -278,11 +271,6 @@ class ProjectionDetails extends Component {
 
     }
 
-  getRoundedRating(rating) {
-    const result = Math.round(rating);
-    return <span className="float-right">Rating: {result}/10</span>
-  }
-
   getSeatNumberForTicket() {
     let seatNumbers = [];
     
@@ -313,7 +301,7 @@ class ProjectionDetails extends Component {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
   const { submitted, canSubmit, movieTitle, movieYear, tickets } = this.state;
-  const rating = this.getRoundedRating(this.state.movieRating);
+  const rating = getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
 

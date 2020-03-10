@@ -4,6 +4,7 @@ import { serviceConfig } from '../../appSettings';
 import { Row, Table, Container, Col, FormGroup, FormText, Button } from 'react-bootstrap';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import DateTimePicker from 'react-datetime-picker';
+import { sharedGetRequestOptions } from './../helpers/shared';
 
 class FilterProjections extends Component {
     constructor(props) {
@@ -30,7 +31,6 @@ class FilterProjections extends Component {
             disabledAuditorium: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.filterProjections = this.filterProjections.bind(this);
     }
 
@@ -42,15 +42,11 @@ class FilterProjections extends Component {
     }
 
     getCinemas() {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
 
         fetch(`${serviceConfig.baseURL}/api/Cinemas/all`, requestOptions)
             .then(response => {
-                if(!response.ok) {
+                if (!response.ok) {
                     return Promise.reject(response);
                 }
                 return response.json();
@@ -67,15 +63,11 @@ class FilterProjections extends Component {
     }
 
     getAuditoriums() {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
 
         fetch(`${serviceConfig.baseURL}/api/Auditoriums/all`, requestOptions)
             .then(response => {
-                if(!response.ok) {
+                if (!response.ok) {
                     return Promise.reject(response);
                 }
                 return response.json();
@@ -92,15 +84,11 @@ class FilterProjections extends Component {
     }
 
     getMovies() {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
 
         fetch(`${serviceConfig.baseURL}/api/movies/all`, requestOptions)
             .then(response => {
-                if(!response.ok) {
+                if (!response.ok) {
                     return Promise.reject(response);
                 }
                 return response.json();
@@ -121,11 +109,11 @@ class FilterProjections extends Component {
         this.setState({ submitted: true });
     }
 
-    handleChange(e) {
-        const { id, value } = e.target;
-        this.setState({ [id]: value });
-        this.validate(id, value);
-    }
+    // handleChange(e) {
+    //     const { id, value } = e.target;
+    //     this.setState({ [id]: value });
+    //     this.validate(id, value);
+    // }
 
     onCinemaChange(cinema) {
         if(cinema[0]) {
@@ -219,19 +207,14 @@ class FilterProjections extends Component {
             toTime: finishProjectionTime
         }
 
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-            body: JSON.stringify(data)
-          };
+        const requestOptions = sharedGetRequestOptions;
 
           fetch(`${serviceConfig.baseURL}/api/Projections/filter`, requestOptions)
             .then(response => {
                 if (!response.ok) {
                     return Promise.reject(response);
-            }
-            return response.json();
+                }
+                return response.json();
             })
             .then(data => {
                 if (data) {
