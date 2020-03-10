@@ -29,7 +29,7 @@ class ShowAllMovies extends Component {
       };
 
       this.setState({isLoading: true});
-      fetch(`${serviceConfig.baseURL}/api/Movies/current`, requestOptions)
+      fetch(`${serviceConfig.getAllMoivies}`, requestOptions)
         .then(response => {
           if (!response.ok) {
             return Promise.reject(response);

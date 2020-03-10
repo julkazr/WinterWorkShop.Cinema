@@ -57,7 +57,7 @@ class MovieSearch extends Component {
             headers: {'Content-Type': 'application/json',
                       'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
         };
-        fetch(`${serviceConfig.baseURL}/api/Movies/all`, requestOptions)
+        fetch(`${serviceConfig.getAllMoivies}`, requestOptions)
             .then(response => {
                 if(!response.ok) {
                     return Promise.reject(response);
@@ -82,7 +82,7 @@ class MovieSearch extends Component {
             headers: {'Content-Type': 'application/json',
                       'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
         };
-        fetch(`${serviceConfig.baseURL}/api/Movies/getByTag/${tag}`, requestOptions)
+        fetch(`${serviceConfig.getMoviesByTag}/${tag}`, requestOptions)
             .then(response => {
                 if(!response.ok) {
                     return Promise.reject(response);
