@@ -94,7 +94,8 @@ getUser() {
 
     renderdasboard(user)
     {
-        return (user.isAdmin ? <Nav.Link href="/dashboard" className={"text-white"}>Dashboard</Nav.Link> : null)
+        console.log(user);
+        return ((user.isAdmin || user.isSuperUser) ? <Nav.Link href="/dashboard" className={"text-white"}>Dashboard</Nav.Link> : null)
     }
     render() {
       const { username, user } = this.state;
