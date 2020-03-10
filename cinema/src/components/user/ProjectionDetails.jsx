@@ -49,6 +49,33 @@ class ProjectionDetails extends Component {
       } else {
         seatToReserve.push(seat.id);
         seatTicket.push(seat);
+        for(let i = 0; i < seatToReserve.length; i ++)
+        {
+          for(let j = 0; j < this.state.auditorium.seatsList.length; j ++)
+          {
+            if(seatToReserve[i] === this.state.auditorium.seatsList[j].id)
+            {
+              for(let k = i+1; k < seatToReserve.length; k ++)
+              {
+                for(let t = 0; t < this.state.auditorium.seatsList.length; t ++)
+                {
+                  if(seatToReserve[k] === this.state.auditorium.seatsList[t].id)
+                  {
+                      if(this.state.auditorium.seatsList[t].number < this.state.auditorium.seatsList[j].number)
+                      {
+                        let sw = seatToReserve[k];
+                        seatToReserve[k] = seatToReserve[i];
+                        seatToReserve[i] = sw;
+                        sw = seatTicket[k];
+                        seatTicket[k] = seatTicket[i];
+                        seatTicket[i] = sw;
+                      }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
  
     } else {
