@@ -18,23 +18,10 @@ class ProjectionDetails extends Component {
         movieRating: null,
         user: [],
         seatsWantToReserve: [],
-        reservedSeats: []
+        reservedSeats: [],
+        tickets: [],
+        ticketsInfo: []
     };
-
-    // for (var i = 0; i < this.state.projection.auditoriumRowNumber; i++) {
-    //   this.state.auditorium.seatsList.push([]);
-    //   for (var j = 0; j < this.state.projection.auditoriumSeatNumber; j++) {
-    //     this.state.auditorium.seatsList[i][j].push({clicked: false});
-    //     this.state.reservedSeats.forEach(seat => {
-    //       if(seat.row === i && seat.number === j) {
-    //         this.state.auditorium.seatsList[i][j].push({reserved: true});
-    //       } 
-    //       // else {
-    //       //   this.state.auditorium.seatsList[i][j].push({reserved: false});
-    //       // }
-    //     });
-    //   }
-    // }
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -50,20 +37,28 @@ class ProjectionDetails extends Component {
     seat.clicked = !seat.clicked;
     this.forceUpdate();
     let seatToReserve = this.state.seatWantToReserve;
+    let seatTicket = this.state.ticketsInfo;
     if(seat.clicked) {
       
       if(seatToReserve === undefined) {
-        seatToReserve = [seat.id]
+        seatToReserve = [seat.id];
+        seatTicket = [seat];
       } else {
         seatToReserve.push(seat.id);
+        seatTicket.push(seat);
       }
-      
-      
+ 
     } else {
       let index = seatToReserve.indexOf(seat.id);
       seatToReserve.splice(index, 1);
+      seatTicket.splice(index, 1);
     }
-    this.setState({seatWantToReserve: seatToReserve});
+    console.log("seatTicket");
+    console.log(seatTicket);
+    console.log("seats u varijabli");
+    console.log(seatToReserve);
+    this.setState({seatWantToReserve: seatToReserve,
+                    ticketsInfo: seatTicket});
     this.checkForReservation(seatToReserve);
   }
 
@@ -72,6 +67,7 @@ class ProjectionDetails extends Component {
     this.setState({ submitted: true });
     if(this.state.seatsWantToReserve) {
       this.reserveSeats();
+      // this.ticketInfoForUser();
     } else {
       NotificationManager.error('Please click on seats...');
       this.setState({ submitted: false });
@@ -150,6 +146,7 @@ class ProjectionDetails extends Component {
     fetch(`${serviceConfig.baseURL}/api/Reservations/check`, requestOptions)
         .then(response => {
           if(!response.ok) {
+            NotificationManager.error('Seats can not be reserved.');
             return Promise.reject(response);
           }
           return response.statusText;
@@ -158,7 +155,7 @@ class ProjectionDetails extends Component {
             NotificationManager.success('Seat can be reserved!');
         })
         .catch(response => {
-          NotificationManager.error(response.message || response.statusText);
+          NotificationManager.error('Seats must be next to eachother. Please uncheck it and try again.');
         });
   }
 
@@ -184,11 +181,23 @@ class ProjectionDetails extends Component {
       })
       .then(result => {
         NotificationManager.success('Your seats are reserved!');
-        window.location.reload(true);
+        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);
+        console.log("this.state.user from reservation");
+        console.log(this.state.user);
+        console.log("this.state.seat from reservation");
+        console.log(this.state.ticketsInfo);
+        //window.location.reload(true);
+        
       })
       .catch(response => {
         NotificationManager.error(response.message || response.statusText);
       });
+  }
+
+  ticketInfoForUser(user, seat) {
+      const username = `${user.firstName} ${user.lastName}`;
+      let ticketsInfo = { username, seat}
+      this.setState({tickets: ticketsInfo});
   }
   
   renderRows(rows, seats) {
@@ -229,13 +238,11 @@ class ProjectionDetails extends Component {
             }
         }  
           renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}
-                                //disabled={this.state.disabledSeat}
-                                //className={this.state.auditorium.seatsList[k].clicked === true ? "want-to-reserve" : "is-not-reserved"}
                                 className={classNames({'is-not-reserved': true,
                                                         'is-reserved': reserved,
                                                         'want-to-reserve': this.state.auditorium.seatsList[k].clicked})}
-                                onClick={disabled ? '' : this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
-                                ></td>);
+                                 onClick={disabled ? '' : this.handleClick.bind(this, this.state.auditorium.seatsList[k])}
+                                 ></td>);
       }
     
       return renderedSeats;
@@ -246,67 +253,125 @@ class ProjectionDetails extends Component {
   getRoundedRating(rating) {
     const result = Math.round(rating);
     return <span className="float-right">Rating: {result}/10</span>
-}
+  }
+
+  getSeatNumberForTicket() {
+    let seatNumbers = [];
+    
+    if(this.state.ticketsInfo !== []) {
+      this.state.ticketsInfo.forEach(seat => {
+        seatNumbers.push(seat.number);
+      });
+      return seatNumbers.map((seat) => {
+        return ` ${seat}, `;
+      });
+    }
+    
+  }
+  
+  getSeatsRowForTicket() {
+    let seatRow;
+    if(this.state.ticketsInfo !== []) {
+      this.state.ticketsInfo.forEach(seat => {
+        if(seatRow !== seat.row) {
+          seatRow = seat.row;
+        }      
+      });
+    }
+    return seatRow;
+  }
 
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear, seats, loop } = this.state;
+  const { submitted, canSubmit, movieTitle, movieYear, tickets } = this.state;
   const rating = this.getRoundedRating(this.state.movieRating);
+  const row = this.getSeatsRowForTicket();
+  const seatNumbers = this.getSeatNumberForTicket();
+
       return (
-        <Container>
-          <Row className="justify-content-center">
-            <Col>
-              <Card className="mt-5 card-width">
-                <Card.Body>
-                <Card.Title><span className="card-title-font">{movieTitle}</span> <span className="float-right"> {rating}</span></Card.Title>
+        <React.Fragment>
+          <Container>
+            <Row className="justify-content-center">
+              <Col>
+                <Card className="mt-5 card-width">
+                  <Card.Body>
+                  <Card.Title><span className="card-title-font">{movieTitle}</span> <span className="float-right"> {rating}</span></Card.Title>
+                      <hr/>
+                      <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: 18.10.2020 15:25</span></Card.Subtitle>
+                      <hr/>
+                    <Card.Text>
+                    <Row className="mt-2">
+                      <Col className="justify-content-center align-content-center">
+                          <h4>Chose your seat(s)</h4>
+                          <div>
+                          <Row className="justify-content-center mb-4">
+                              <div className="text-center text-white font-weight-bold cinema-screen">
+                                  CINEMA SCREEN
+                              </div>
+                          </Row>
+                          <Row>
+                            <Badge variant="primary" className="mx-2">Available seats</Badge>
+                            <Badge variant="warning" className="mx-2">Reserved seats</Badge>
+                          </Row>
+                          <Row className="justify-content-center">
+                              <table className="table-cinema-auditorium">
+                              <tbody>
+                              {auditorium}
+                              </tbody>
+                              </table>
+                          </Row>
+                          </div>
+                      </Col>
+                    </Row>
                     <hr/>
-                    <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: 18.10.2020 15:25</span></Card.Subtitle>
-                    <hr/>
-                  <Card.Text>
-                  <Row className="mt-2">
-                    <Col className="justify-content-center align-content-center">
-                        <h4>Chose your seat(s)</h4>
-                        <div>
-                        <Row className="justify-content-center mb-4">
-                            <div className="text-center text-white font-weight-bold cinema-screen">
-                                CINEMA SCREEN
-                            </div>
-                        </Row>
-                        <Row>
-                          <Badge variant="primary" className="mx-2">Available seats</Badge>
-                          <Badge variant="warning" className="mx-2">Reserved seats</Badge>
-                        </Row>
-                        <Row className="justify-content-center">
-                            <table className="table-cinema-auditorium">
-                            <tbody>
-                            {auditorium}
-                            </tbody>
-                            </table>
-                        </Row>
-                        </div>
-                    </Col>
-                  </Row>
-                  <hr/>
-                  </Card.Text>
-                  <Row className="justify-content-center font-weight-bold">
-                    Price for reserved seats:  800 RSD
-                  </Row>
-                  <form onSubmit={this.handleSubmit}>
-                    <Row className="pt-2">
-                      {/* <Col sm={6}>
-                        <Button  onClick={this.checkForReservation} className="font-weight-bold" block>Check if seats can be reserved</Button>
-                      </Col> */}
-                      <Col sm={12}>
-                        <Button type="submit" disabled={submitted || !canSubmit} className="font-weight-bold" block>Pay for tickets and make reservations</Button>
-                      </Col> 
-                    </Row> 
-                  </form>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+                    </Card.Text>
+                    <Row className="justify-content-center font-weight-bold">
+                      Price for reserved seats:  800 RSD
+                    </Row>
+                    <form onSubmit={this.handleSubmit}>
+                      <Row className="pt-2">
+                        <Col sm={12}>
+                          <Button type="submit" disabled={submitted || !canSubmit} className="font-weight-bold" block>Pay for tickets and make reservations</Button>
+                        </Col> 
+                      </Row> 
+                    </form>
+                    { tickets.seat &&
+                    <Row className="justify-content-center">
+                      <Col>
+                        <Card className="mt-5 card-width">
+                          <Card.Body format>
+                          
+                            <h3>You reservation was success!</h3> 
+                          
+                            <hr/>
+                            <Card.Subtitle className="mb-2 text-muted">Tickets info:</Card.Subtitle>
+                              <hr/>
+                            <Card.Text>
+                                <span className="mb-2 font-weight-bold">
+                                Username: {tickets.username} 
+                                </span>
+                                
+                            </Card.Text>
+                            <Card.Text>
+                              <span className="mb-2 font-weight-bold">
+                                Row: {row}
+                              </span><br/>
+                              <span className="mb-2 font-weight-bold">
+                                Seats: {seatNumbers} 
+                              </span><br/>
+                            </Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                    } 
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </React.Fragment>
       );
     }
 }
