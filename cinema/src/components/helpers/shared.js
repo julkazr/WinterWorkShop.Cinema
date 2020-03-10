@@ -1,4 +1,5 @@
 import React from 'react';
+import { NotificationManager } from 'react-notifications';
 
 export const getRoundedRating = (rating) => {
     const result = Math.round(rating);
@@ -11,6 +12,42 @@ export const sharedGetRequestOptions = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('jwt')
     }
+};
+
+export const sharedPostRequestOptions = (data) => {
+  return {method: 'POST',
+  headers: { 'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
+  body: JSON.stringify(data)};
+  
+};
+
+export const sharedPutRequestOptions = (data) => {
+  return {method: 'PUT',
+  headers: { 'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
+  body: JSON.stringify(data)};
+  
+};
+
+export const sharedDeleteRequestOptions = {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+  }
+};
+
+export const sharedResponse = response => {
+  if (!response.ok) {
+    return Promise.reject(response);
+}
+return response.json();
+};
+
+export const catchResponse = response => {
+  this.setState({isLoading: false});
+  NotificationManager.error(response.message || response.statusText);
 };
 
 

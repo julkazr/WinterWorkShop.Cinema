@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../appSettings';
-import { sharedGetRequestOptions } from './helpers/shared';
+import { sharedGetRequestOptions, sharedResponse } from './helpers/shared';
 
 class Header extends Component {
   constructor(props) {
@@ -49,12 +49,7 @@ login() {
     };
 
     fetch(`${serviceConfig.baseURL}/get-token?name=${username}`, requestOptions)
-        .then(response => {
-          if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
-        })
+        .then(sharedResponse)
         .then(data => {
           NotificationManager.success('Successfuly signed in!');
           if (data.token) {
@@ -73,12 +68,7 @@ getUser() {
   const requestOptions = sharedGetRequestOptions;
 
   fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
-      .then(response => {
-        if(!response.ok) {
-          return Promise.reject(response);
-        }
-        return response.json();
-      })
+      .then(sharedResponse)
       .then(data => {
         if(data) {
           this.setState({user: data});

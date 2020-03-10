@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge, Table } from 'react-bootstrap';
-import { sharedGetRequestOptions } from './../helpers/shared';
+import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -24,12 +24,7 @@ class UserProfile extends Component {
         const requestOptions = sharedGetRequestOptions;
     
         fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
-            .then(response => {
-              if(!response.ok) {
-                return Promise.reject(response);
-              }
-              return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
               if(data) {
                 this.setState({user: data});

@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from '
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import {Typeahead} from 'react-bootstrap-typeahead';
+import { sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class NewAuditorium extends React.Component {
     constructor(props) {
@@ -96,20 +97,10 @@ class NewAuditorium extends React.Component {
             auditName: auditName
         };
 
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-            body: JSON.stringify(data)
-        };
+        const requestOptions = sharedPostRequestOptions(data);
 
         fetch(`${serviceConfig.baseURL}/api/auditoriums`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.statusText;
-            })
+            .then(sharedResponse)
             .then(result => {
                 NotificationManager.success('Successfuly added new auditorium!');
                 this.props.history.push('AllAuditoriums');
@@ -121,19 +112,10 @@ class NewAuditorium extends React.Component {
     }
 
     getCinemas() {
-        const requestOptions = {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
   
         fetch(`${serviceConfig.baseURL}/api/Cinemas/all`, requestOptions)
-          .then(response => {
-            if (!response.ok) {
-              return Promise.reject(response);
-          }
-          return response.json();
-          })
+          .then(sharedResponse)
           .then(data => {
             if (data) {
               this.setState({ cinemas: data });

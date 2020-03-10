@@ -3,7 +3,7 @@ import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import classNames from 'classnames';
-import { getRoundedRating, sharedGetRequestOptions } from './../helpers/shared';
+import { getRoundedRating, sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse, catchResponse } from './../helpers/shared';
 
 class ProjectionDetails extends Component {
   constructor(props) {
@@ -94,7 +94,6 @@ class ProjectionDetails extends Component {
     this.setState({ submitted: true });
     if(this.state.seatsWantToReserve && this.state.canReserved) {
       this.reserveSeats();
-      // this.ticketInfoForUser();
     } else if(this.state.seatsWantToReserve && !this.state.canReserved){
       NotificationManager.error('Please, select correct seat(s)');
       this.setState({ submitted: false });
@@ -106,12 +105,7 @@ class ProjectionDetails extends Component {
     const requestOptions = sharedGetRequestOptions;
 
     fetch(`${serviceConfig.baseURL}/api/projections/getwithauditorium/` + projectionId, requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          return Promise.reject(response);
-      }
-      return response.json();
-      })
+      .then(sharedResponse)
       .then(data => {;
           if (data) {
               this.setState({ projection: data,
@@ -134,20 +128,13 @@ class ProjectionDetails extends Component {
     const requestOptions = sharedGetRequestOptions;
 
     fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
-        .then(response => {
-          if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
-        })
+        .then(sharedResponse)
         .then(data => {
           if(data) {
             this.setState({user: data});
           }
         })
-        .catch(response => {
-          NotificationManager.error(response.message || response.statusText);
-        });
+        .catch(catchResponse);
   }
 
   checkForReservation(seatIds) {
@@ -156,12 +143,7 @@ class ProjectionDetails extends Component {
       listOfSeatsId: seatIds
     }
 
-    const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
-          body: JSON.stringify(data)
-      };
+    const requestOptions = sharedPostRequestOptions(data);
 
     fetch(`${serviceConfig.baseURL}/api/Reservations/check`, requestOptions)
         .then(response => {
@@ -188,12 +170,7 @@ class ProjectionDetails extends Component {
       seatsToReserveID: this.state.seatWantToReserve
     }
 
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
-      body: JSON.stringify(data)
-    };
+    const requestOptions = sharedPostRequestOptions(data);
     fetch(`${serviceConfig.baseURL}/api/Reservations/reserve`, requestOptions)
       .then(response => {
         if(!response.ok) {
@@ -205,13 +182,9 @@ class ProjectionDetails extends Component {
       })
       .then(result => {
         NotificationManager.success('Your seats are reserved!');
-        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);
-        //window.location.reload(true);
-        
+        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);  
       })
-      .catch(response => {
-        NotificationManager.error(response.message || response.statusText);
-      });
+      .catch(catchResponse);
   }
 
   ticketInfoForUser(user, seat) {

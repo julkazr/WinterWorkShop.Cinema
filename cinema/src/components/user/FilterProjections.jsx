@@ -4,7 +4,7 @@ import { serviceConfig } from '../../appSettings';
 import { Row, Table, Container, Col, FormGroup, FormText, Button } from 'react-bootstrap';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import DateTimePicker from 'react-datetime-picker';
-import { sharedGetRequestOptions } from './../helpers/shared';
+import { sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse } from './../helpers/shared';
 
 class FilterProjections extends Component {
     constructor(props) {
@@ -45,12 +45,7 @@ class FilterProjections extends Component {
         const requestOptions = sharedGetRequestOptions;
 
         fetch(`${serviceConfig.baseURL}/api/Cinemas/all`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if(data) {
                     this.setState({cinemas: data});
@@ -66,12 +61,7 @@ class FilterProjections extends Component {
         const requestOptions = sharedGetRequestOptions;
 
         fetch(`${serviceConfig.baseURL}/api/Auditoriums/all`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if(data) {
                     this.setState({auditoriums: data});
@@ -87,12 +77,7 @@ class FilterProjections extends Component {
         const requestOptions = sharedGetRequestOptions;
 
         fetch(`${serviceConfig.baseURL}/api/movies/all`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if(data) {
                     this.setState({movies: data});
@@ -108,13 +93,7 @@ class FilterProjections extends Component {
         e.preventDefault();
         this.setState({ submitted: true });
     }
-
-    // handleChange(e) {
-    //     const { id, value } = e.target;
-    //     this.setState({ [id]: value });
-    //     this.validate(id, value);
-    // }
-
+    
     onCinemaChange(cinema) {
         if(cinema[0]) {
             this.setState({cinemaId: cinema[0].id, disabledAuditorium: true, disabledMovie: true});
@@ -207,15 +186,15 @@ class FilterProjections extends Component {
             toTime: finishProjectionTime
         }
 
-        const requestOptions = sharedGetRequestOptions;
+        const requestOptions = 
+        // {method: 'POST',
+        // headers: { 'Content-Type': 'application/json',
+        //             'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
+        // body: JSON.stringify(data)};
+        sharedPostRequestOptions(data);
 
           fetch(`${serviceConfig.baseURL}/api/Projections/filter`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if (data) {
                     this.setState({ projections: data, isLoading: false });

@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
+import { sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class NewCinema extends React.Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class NewCinema extends React.Component {
         } else if (id === 'seatRows') {
             const seatsNum = +value;
             if (seatsNum > 20 || seatsNum < 1) {
-                this.setState({seatRowsError: 'Seats number can be in between 1 and 20',
+                this.setState({seatRowsError: 'Rows number can be in between 1 and 20',
                                 canSubmit: false})
             } else {
                 this.setState({seatRowsError: '',
@@ -90,21 +91,10 @@ class NewCinema extends React.Component {
             numberOfSeats: +numberOfSeats
         };
         console.log({data})
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-            body: JSON.stringify(data)
-        };
+        const requestOptions = sharedPostRequestOptions(data);
 
         fetch(`${serviceConfig.baseURL}/api/Cinemas/createwithauditorium`, requestOptions)
-            .then(response => {
-                console.log(response)
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.statusText;
-            })
+            .then(sharedResponse)
             .then(result => {
                 NotificationManager.success('Successfuly added cinemas!');
                 this.props.history.push(`AllCinemas`);
@@ -113,24 +103,6 @@ class NewCinema extends React.Component {
                 NotificationManager.error(response.message || response.statusText);
                 this.setState({ submitted: false });
             });
-    }
-
-    renderRows(rows, seats) {
-        const rowsRendered = [];
-        for (let i = 0; i < rows; i++) {
-            rowsRendered.push( <tr key={i}>
-                {this.renderSeats(seats, i)}
-            </tr>);
-        }
-        return rowsRendered;
-    }
-
-    renderSeats(seats, row) {
-        let renderedSeats = [];
-        for (let i = 0; i < seats; i++) {
-            renderedSeats.push(<td key={'row: ' + row + ', seat: ' + i}></td>);
-        }
-        return renderedSeats;
     }
 
     render() {

@@ -6,7 +6,7 @@ import { Row, Col, Container, FormText, Button, Table } from 'react-bootstrap';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandPointRight } from '@fortawesome/free-solid-svg-icons';
-import { sharedGetRequestOptions } from './../helpers/shared';
+import { sharedGetRequestOptions, sharedResponse, catchResponse } from './../helpers/shared';
 
 class AllProjectionsForCinema extends Component {
     constructor(props) {
@@ -89,59 +89,25 @@ class AllProjectionsForCinema extends Component {
       }
     }
 
-    getProjections() {
-      const requestOptions = sharedGetRequestOptions;
-
-      this.setState({isLoading: true});
-      fetch(`${serviceConfig.baseURL}/api/Projections/all`, requestOptions)
-        .then(response => {
-          if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
-        })
-        .then(data => {
-          if (data) {
-            this.setState({ projections: data, isLoading: false });
-            }
-        })
-        .catch(response => {
-            this.setState({isLoading: false});
-            NotificationManager.error(response.message || response.statusText);
-        });
-    }
-
     getCinemas() {
       const requestOptions = sharedGetRequestOptions;
 
       fetch(`${serviceConfig.baseURL}/api/cinemas/all`, requestOptions)
-        .then(response => {
-          if(!response.ok) {
-            return Promise.reject(response);
-          }
-          return response.json();
-        })
+        .then(sharedResponse
+        )
         .then(data => {
           if(data) {
             this.setState({ cinemas: data, isLoading: false});
           }
         })
-        .catch(response => {
-          this.setState({isLoading: false});
-          NotificationManager.error(response.message || response.statusText);
-        })
+        .catch(catchResponse)
     }
 
     getAuditoriums(cinemaId) {
       const requestOptions = sharedGetRequestOptions;
 
       fetch(`${serviceConfig.baseURL}/api/Auditoriums/all`, requestOptions)
-          .then(response => {
-              if(!response.ok) {
-                  return Promise.reject(response);
-              }
-              return response.json();
-          })
+          .then(sharedResponse)
           .then(data => {
               if(data) {
                 let auditoriumsForCinema = [];
@@ -161,9 +127,7 @@ class AllProjectionsForCinema extends Component {
                 this.setState({auditoriums: auditoriumsForCinema, isLoading: false});
               }
           })
-          .catch(response => {
-              NotificationManager.error(response.message || response.statusText);
-          });
+          .catch(catchResponse);
     }
 
     getProjectionsForAuditorium(auditoriumId) {
@@ -171,21 +135,14 @@ class AllProjectionsForCinema extends Component {
       const requestOptions = sharedGetRequestOptions;
 
       fetch(`${serviceConfig.baseURL}/api/Movies/movieprojections/` + auditoriumId, requestOptions)
-        .then(response => {
-            if(!response.ok) {
-                return Promise.reject(response);
-            }
-            return response.json();
-        })
+        .then(sharedResponse)
         .then(data => {
             if(data) {
               NotificationManager.success('Successfuly fetched data!');
               this.setState({ movies: data, isLoading: false});  
             }
         }) 
-        .catch(response => {
-            NotificationManager.error(response.message || response.statusText);
-        });
+        .catch(catchResponse);
     }
 
 
@@ -198,28 +155,6 @@ class AllProjectionsForCinema extends Component {
           return <Projection key={index} movie={movie}></Projection>
         })
       } 
-    }
-
-    fillTableWithData() {
-      let rows = this.state.projections.map(projection => {
-        return (<tr key={projection.id}>
-          <td width="40%">{projection.movieTitle}</td>
-          <td width="40%">{projection.aditoriumName}</td>
-          <td width="20%">{projection.projectionTime}</td>
-        </tr>);
-        })
-      return <Table striped bordered hover size="sm" variant="dark">
-                <thead>
-                  <tr>
-                      <th>Movie Title</th>
-                      <th>Auditorium Name</th>
-                      <th>Projection Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows}
-                </tbody>
-              </Table>
     }
 
     render() {

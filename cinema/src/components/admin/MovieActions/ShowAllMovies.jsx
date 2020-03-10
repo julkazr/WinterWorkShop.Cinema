@@ -5,6 +5,7 @@ import { Row, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '../../Spinner';
+import { sharedGetRequestOptions, sharedDeleteRequestOptions, sharedResponse, sharedPostRequestOptions } from './../../helpers/shared';
 
 class ShowAllMovies extends Component {
     constructor(props) {
@@ -22,20 +23,11 @@ class ShowAllMovies extends Component {
     }
 
     getProjections() {
-      const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-      };
+      const requestOptions = sharedGetRequestOptions;
 
       this.setState({isLoading: true});
       fetch(`${serviceConfig.getAllMoivies}`, requestOptions)
-        .then(response => {
-          if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
-        })
+        .then(sharedResponse)
         .then(data => {
           if (data) {
             this.setState({ movies: data, isLoading: false });

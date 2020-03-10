@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
+import { sharedGetRequestOptions, sharedPutRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class EditAuditorium extends React.Component {
     constructor(props) {
@@ -31,10 +32,6 @@ class EditAuditorium extends React.Component {
         const { id, value } = e.target;
         this.setState({ [id]: value });
         this.validate(id, value);
-    }
-
-    createRows(row) {
-
     }
 
     validate(id, value) {
@@ -82,18 +79,9 @@ class EditAuditorium extends React.Component {
     }
 
     getAuditorium(id) {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
         fetch(`${serviceConfig.baseURL}/api/auditoriums/${id}`, requestOptions)
-            .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response);
-            }
-            return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if (data) {
                     this.setState({name: data.name, 
@@ -116,21 +104,10 @@ class EditAuditorium extends React.Component {
                 numberOfSeats: +numberOfSeats,
                 numberOfRows: +seatRows
             };
-            const requestOptions = {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-                body: JSON.stringify(data)
-                
-            };
+            const requestOptions = sharedPutRequestOptions(data);
     
             fetch(`${serviceConfig.baseURL}/api/auditoriums/update/${id}`, requestOptions)
-                .then(response => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-                    return response.statusText;
-                })
+                .then(sharedResponse)
                 .then(result => {
                     this.props.history.goBack();
                     NotificationManager.success('Successfuly edited auditorium!');

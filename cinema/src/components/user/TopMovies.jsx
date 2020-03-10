@@ -3,7 +3,7 @@ import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Row, Table, Col, FormControl, FormGroup, Button, FormText } from 'react-bootstrap';
 import Spinner from '../Spinner';
-import { sharedGetRequestOptions } from './../helpers/shared';
+import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
 class TopMovies extends Component {
     constructor(props) {
@@ -62,12 +62,7 @@ class TopMovies extends Component {
 
       this.setState({isLoading: true});
       fetch(`${serviceConfig.baseURL}/api/movies/tops`, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response);
-            }
-            return response.json();
-        })
+        .then(sharedResponse)
         .then(data => {
           if (data) {
             this.setState({ movies: data, isLoading: false });
@@ -86,12 +81,7 @@ class TopMovies extends Component {
   
         this.setState({isLoading: true});
         fetch(`${serviceConfig.baseURL}/api/movies/tops/${Year}`, requestOptions)
-          .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response);
-            }
-            return response.json();
-          })
+          .then(sharedResponse)
           .then(data => {
             if (data) {
               this.setState({ movies: data, isLoading: false });

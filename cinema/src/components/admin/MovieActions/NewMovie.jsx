@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from '
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import { YearPicker } from 'react-dropdown-date';
+import { sharedPostRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class NewMovie extends React.Component {
     constructor(props) {
@@ -77,20 +78,10 @@ class NewMovie extends React.Component {
             Rating: +rating
         };
 
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-            body: JSON.stringify(data)
-        };
+        const requestOptions = sharedPostRequestOptions(data);
 
         fetch(`${serviceConfig.baseURL}/api/movies`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.statusText;
-            })
+            .then(sharedResponse)
             .then(result => {
                 NotificationManager.success('Successfuly added movie!');
                 this.props.history.push(`AllMovies`);

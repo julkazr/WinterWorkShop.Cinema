@@ -5,6 +5,7 @@ import { Row, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '../../Spinner';
+import { sharedGetRequestOptions, sharedDeleteRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class ShowAllAuditoriums extends Component {
     constructor(props) {
@@ -22,20 +23,11 @@ class ShowAllAuditoriums extends Component {
     }
 
     getAuditoriums() {
-      const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-      };
+      const requestOptions = sharedGetRequestOptions;
 
       this.setState({isLoading: true});
       fetch(`${serviceConfig.baseURL}/api/Auditoriums/all`, requestOptions)
-        .then(response => {
-          if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
-        })
+        .then(sharedResponse)
         .then(data => {
           if (data) {
             this.setState({ auditoriums: data, isLoading: false });
@@ -48,19 +40,10 @@ class ShowAllAuditoriums extends Component {
     }
 
     removeAuditorium(id) {
-        const requestOptions = {
-          method: 'DELETE',
-          headers: {'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedDeleteRequestOptions;
 
         fetch(`${serviceConfig.baseURL}/api/Auditoriums/delete/${id}`, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response);
-            }
-            return response.statusText;
-        })
+        .then(sharedResponse)
         .then(result => {
             NotificationManager.success('Successfuly removed auditorium with id:', id);
             const newState = this.state.auditoriums.filter(auditorium => {

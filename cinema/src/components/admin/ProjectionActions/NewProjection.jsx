@@ -5,6 +5,7 @@ import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import DateTimePicker from 'react-datetime-picker';
+import { sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class NewProjection extends React.Component {
     constructor(props) {
@@ -86,20 +87,10 @@ class NewProjection extends React.Component {
             projectionTime
         };
 
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-            body: JSON.stringify(data)
-        };
+        const requestOptions = sharedPostRequestOptions(data);
 
         fetch(`${serviceConfig.baseURL}/api/projections`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.statusText;
-            })
+            .then(sharedResponse)
             .then(result => {
                 NotificationManager.success('New projection added!');
                 this.props.history.push(`AllProjections`);
@@ -111,19 +102,10 @@ class NewProjection extends React.Component {
     }
     
     getProjections() {
-        const requestOptions = {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
   
         fetch(`${serviceConfig.baseURL}/api/Movies/current`, requestOptions)
-          .then(response => {
-            if (!response.ok) {
-              return Promise.reject(response);
-          }
-          return response.json();
-          })
+          .then(sharedResponse)
           .then(data => {
             if (data) {
               this.setState({ movies: data });
@@ -136,19 +118,10 @@ class NewProjection extends React.Component {
       }
 
       getAuditoriums() {
-        const requestOptions = {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
   
         fetch(`${serviceConfig.baseURL}/api/Auditoriums/all`, requestOptions)
-          .then(response => {
-            if (!response.ok) {
-              return Promise.reject(response);
-          }
-          return response.json();
-          })
+          .then(sharedResponse)
           .then(data => {
             if (data) {
               this.setState({ auditoriums: data });

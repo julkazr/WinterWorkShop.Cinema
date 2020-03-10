@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
+import { sharedGetRequestOptions, sharedPutRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class EditCinema extends React.Component {
     constructor(props) {
@@ -55,18 +56,9 @@ class EditCinema extends React.Component {
     }
 
     getCinema(id) {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
         fetch(`${serviceConfig.baseURL}/api/cinemas/${id}`, requestOptions)
-            .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response);
-            }
-            return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if (data) {
                     console.log({data})
@@ -85,21 +77,10 @@ class EditCinema extends React.Component {
                 name: name
             };
             console.log({data},{id})
-            const requestOptions = {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-                body: JSON.stringify(data)
-                
-            };
+            const requestOptions = sharedPutRequestOptions(data);
     
             fetch(`${serviceConfig.baseURL}/api/Cinemas/update/${id}`, requestOptions)
-                .then(response => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-                    return response.statusText;
-                })
+                .then(sharedResponse)
                 .then(result => {
                     this.props.history.goBack();
                     NotificationManager.success('Successfuly edited cinema!');

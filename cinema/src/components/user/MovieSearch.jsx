@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Row, Table, Container, Col, FormGroup, Button, FormControl } from 'react-bootstrap';
-import { sharedGetRequestOptions } from './../helpers/shared';
+import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
 class MovieSearch extends Component {
     constructor(props) {
@@ -55,12 +55,7 @@ class MovieSearch extends Component {
     getMovies() {
         const requestOptions = sharedGetRequestOptions;
         fetch(`${serviceConfig.getAllMoivies}`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if(data) {
                     this.setState({movies: data});
@@ -76,12 +71,7 @@ class MovieSearch extends Component {
         const {tag} = this.state;
         const requestOptions = sharedGetRequestOptions;
         fetch(`${serviceConfig.getMoviesByTag}/${tag}`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if(data) {
                     this.setState({movies: data});

@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from '
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import { YearPicker } from 'react-dropdown-date';
+import { sharedGetRequestOptions, sharedPutRequestOptions, sharedResponse } from './../../helpers/shared';
 
 class EditMovie extends React.Component {
     constructor(props) {
@@ -78,19 +79,10 @@ class EditMovie extends React.Component {
     }
 
     getMovie(movieId) {
-    const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-    };
+    const requestOptions = sharedGetRequestOptions;
 
     fetch(`${serviceConfig.baseURL}/api/movies/` + movieId, requestOptions)
-        .then(response => {
-        if (!response.ok) {
-            return Promise.reject(response);
-        }
-        return response.json();
-        })
+        .then(sharedResponse)
         .then(data => {
             if (data) {
                 this.setState({title: data.title,
@@ -117,21 +109,11 @@ class EditMovie extends React.Component {
         };
         console.log(data);
 
-        const requestOptions = {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-            body: JSON.stringify(data)
-        };
+        const requestOptions = sharedPutRequestOptions(data);
         console.log(requestOptions.body);
 
         fetch(`${serviceConfig.baseURL}/api/movies/${id}`, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.statusText;
-            })
+            .then(sharedResponse)
             .then(result => {
                 this.props.history.goBack();
                 NotificationManager.success('Successfuly edited movie!');
