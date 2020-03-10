@@ -20,7 +20,8 @@ class ProjectionDetails extends Component {
         seatsWantToReserve: [],
         reservedSeats: [],
         tickets: [],
-        ticketsInfo: []
+        ticketsInfo: [],
+        canReserved: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,6 +39,8 @@ class ProjectionDetails extends Component {
     this.forceUpdate();
     let seatToReserve = this.state.seatWantToReserve;
     let seatTicket = this.state.ticketsInfo;
+    let seats = this.state.auditorium.seatsList;
+    console.log(seats);
     if(seat.clicked) {
       
       if(seatToReserve === undefined) {
@@ -53,10 +56,6 @@ class ProjectionDetails extends Component {
       seatToReserve.splice(index, 1);
       seatTicket.splice(index, 1);
     }
-    console.log("seatTicket");
-    console.log(seatTicket);
-    console.log("seats u varijabli");
-    console.log(seatToReserve);
     this.setState({seatWantToReserve: seatToReserve,
                     ticketsInfo: seatTicket});
     this.checkForReservation(seatToReserve);
@@ -65,13 +64,13 @@ class ProjectionDetails extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.setState({ submitted: true });
-    if(this.state.seatsWantToReserve) {
+    if(this.state.seatsWantToReserve && this.state.canReserved) {
       this.reserveSeats();
       // this.ticketInfoForUser();
-    } else {
-      NotificationManager.error('Please click on seats...');
+    } else if(this.state.seatsWantToReserve && !this.state.canReserved){
+      NotificationManager.error('Please, select correct seat(s)');
       this.setState({ submitted: false });
-    }
+    } 
   }
 
   getProjection(projectionId) {
@@ -132,6 +131,7 @@ class ProjectionDetails extends Component {
   }
 
   checkForReservation(seatIds) {
+    const {canReserved} = this.state;
     const data = {
       listOfSeatsId: seatIds
     }
@@ -146,12 +146,14 @@ class ProjectionDetails extends Component {
     fetch(`${serviceConfig.baseURL}/api/Reservations/check`, requestOptions)
         .then(response => {
           if(!response.ok) {
+            this.setState({canReserved: false});
             NotificationManager.error('Seats can not be reserved.');
             return Promise.reject(response);
           }
           return response.statusText;
         })
         .then(result => {
+            this.setState({canReserved: true});
             NotificationManager.success('Seat can be reserved!');
         })
         .catch(response => {
@@ -287,8 +289,6 @@ class ProjectionDetails extends Component {
   const rating = this.getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
-  console.log("tickets from render");
-  console.log(tickets);
 
       return (
         <React.Fragment>
