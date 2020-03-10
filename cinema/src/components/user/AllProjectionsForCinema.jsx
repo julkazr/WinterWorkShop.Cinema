@@ -181,7 +181,7 @@ class AllProjectionsForCinema extends Component {
     }
 
     getProjectionsForAuditorium(auditoriumId) {
-
+      this.setState({ movies: null, isLoading: false});
       const requestOptions = {
         method: 'GET',
         headers: {'Content-Type': 'application/json',
