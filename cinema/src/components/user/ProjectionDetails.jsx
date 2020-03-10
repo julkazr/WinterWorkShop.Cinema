@@ -175,6 +175,8 @@ class ProjectionDetails extends Component {
     fetch(`${serviceConfig.baseURL}/api/Reservations/reserve`, requestOptions)
       .then(response => {
         if(!response.ok) {
+          NotificationManager.error('Insuficient fonds or error conection');
+          window.location.reload(true);
           return Promise.reject(response);
         }
         return response.statusText;
@@ -182,10 +184,6 @@ class ProjectionDetails extends Component {
       .then(result => {
         NotificationManager.success('Your seats are reserved!');
         this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);
-        console.log("this.state.user from reservation");
-        console.log(this.state.user);
-        console.log("this.state.seat from reservation");
-        console.log(this.state.ticketsInfo);
         //window.location.reload(true);
         
       })
@@ -196,7 +194,8 @@ class ProjectionDetails extends Component {
 
   ticketInfoForUser(user, seat) {
       const username = `${user.firstName} ${user.lastName}`;
-      let ticketsInfo = { username, seat}
+      const bonus = user.bonus;
+      let ticketsInfo = { username, bonus, seat}
       this.setState({tickets: ticketsInfo});
   }
   
@@ -288,6 +287,8 @@ class ProjectionDetails extends Component {
   const rating = this.getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
+  console.log("tickets from render");
+  console.log(tickets);
 
       return (
         <React.Fragment>
@@ -359,6 +360,9 @@ class ProjectionDetails extends Component {
                               </span><br/>
                               <span className="mb-2 font-weight-bold">
                                 Seats: {seatNumbers} 
+                              </span><br/>
+                              <span className="mb-2 font-weight-bold">
+                                Bonus: {tickets.bonus}
                               </span><br/>
                             </Card.Text>
                           </Card.Body>

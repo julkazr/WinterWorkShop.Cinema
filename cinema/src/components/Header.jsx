@@ -52,6 +52,7 @@ login() {
           if (data.token) {
             localStorage.setItem("jwt", data.token);
             }
+            window.location.reload(true);
         })
         .catch(response => {
             NotificationManager.error(response.message || response.statusText);
