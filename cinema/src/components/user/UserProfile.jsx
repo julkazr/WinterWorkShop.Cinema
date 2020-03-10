@@ -49,21 +49,29 @@ class UserProfile extends Component {
           console.log({user})
           return (
               <Table>
-                <thead >
+                <thead>
+                  <tr>
                     <th>First Name</th>
                     <th>{user.firstName}</th>
+                    </tr>
                 </thead>
-                <thead >
+                <thead>
+                  <tr>
                     <th>Last Name</th>
                     <th>{user.lastName}</th>
+                    </tr>
                 </thead>
-                <thead >
+                <thead>
+                  <tr>
                     <th>Username</th>
                     <th>{user.userName}</th>
+                    </tr>
                 </thead>
-                <thead  >
+                <thead>
+                  <tr>
                     <th>Bonus</th>
                     <th>{user.bonus}</th>
+                  </tr>
                 </thead>
               </Table>
           );
