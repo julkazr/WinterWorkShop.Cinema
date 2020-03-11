@@ -26,7 +26,7 @@ class ProjectionDetails extends Component {
         ProjectionTime: '',
         errorMsg : []
     };
-
+    this.reloadPage = this.reloadPage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -103,7 +103,6 @@ class ProjectionDetails extends Component {
   }
 
   getProjection(projectionId) {
-    // TO DO: here you need to fetch movie with projection details using ID from router
     const requestOptions = sharedGetRequestOptions;
 
     fetch(`${serviceConfig.baseURL}/api/projections/getwithauditorium/` + projectionId, requestOptions)
@@ -144,7 +143,6 @@ class ProjectionDetails extends Component {
   }
 
   checkForReservation(seatIds) {
-    const {canReserved} = this.state;
     const data = {
       listOfSeatsId: seatIds
     }
@@ -290,6 +288,9 @@ class ProjectionDetails extends Component {
     }
     return seatRow;
   }
+  reloadPage() {
+    window.location.reload(true);
+  }
 
   render() {
   
@@ -310,7 +311,7 @@ class ProjectionDetails extends Component {
                   <Card.Body>
                   <Card.Title><span className="card-title-font">{movieTitle}</span> <span className="float-right"> {rating}</span></Card.Title>
                       <hr/>
-      <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: {Time}</span></Card.Subtitle>
+                    <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: {Time}</span></Card.Subtitle>
                       <hr/>
                     <Card.Text>
                     <Row className="mt-2">
@@ -348,6 +349,11 @@ class ProjectionDetails extends Component {
                         </Col> 
                       </Row> 
                     </form>
+                    <Row className="pt-2">
+                        <Col sm={12}>
+                          <Button onClick={this.reloadPage} className="font-weight-bold" block>Make another reservations</Button>
+                        </Col> 
+                      </Row>
                     { tickets.seat &&
                     <Row className="justify-content-center">
                       <Col>

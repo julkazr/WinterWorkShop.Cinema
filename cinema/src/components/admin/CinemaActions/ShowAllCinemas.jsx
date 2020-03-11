@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
-import { Row, Table } from 'react-bootstrap';
+import { Row, Table, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '../../Spinner';
@@ -94,12 +94,14 @@ class ShowAllCinemas extends Component {
 
         return (
             <React.Fragment>
-                <Row className="no-gutters pt-2">
-                    <h1 className="form-header ml-2">All Cinemas</h1>
-                </Row>
-                <Row className="no-gutters pr-5 pl-5">
-                    {showTable}
-                </Row>
+                <Container>
+                    <Row className="no-gutters pt-2">
+                        <h1 className="form-header ml-2">All Cinemas</h1>
+                    </Row>
+                    <Row className="no-gutters pr-5 pl-5">
+                        {showTable}
+                    </Row>
+                </Container>
             </React.Fragment>
         );
       }

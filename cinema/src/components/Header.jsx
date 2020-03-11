@@ -102,8 +102,7 @@ getUser() {
 
     renderdasboard(user)
     {
-        console.log(user);
-        return ((user.isAdmin || user.isSuperUser) ? <Nav.Link href="/dashboard" className={"text-white"}>Dashboard</Nav.Link> : null)
+        return ((user.isAdmin || user.isSuperUser) ? <Nav.Link href="/dashboard" className={"text-white px-3"}>Dashboard</Nav.Link> : null)
     }
 
     renderLoginLogoutButton(username, user)
@@ -130,7 +129,6 @@ getUser() {
 
     render() {
       const { username, user } = this.state;
-      console.log(user.isAdmin)
       let dasboard = this.renderdasboard(user);
       let loginLogout = this.renderLoginLogoutButton(username, user);
         return (
@@ -138,11 +136,11 @@ getUser() {
             <Navbar.Brand className="text-info font-weight-bold text-capitalize"><Link className="text-decoration-none" to='/projectionlist'>Cinema 9</Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-white" />
             <Navbar.Collapse id="basic-navbar-nav" className="text-white">
-              <Nav className="mr-auto text-white" >
-              <Nav.Link href="/UserProfile" className="text-white">User</Nav.Link>
-              <Nav.Link href="/topten" className="text-white">Top 10 Movies</Nav.Link>
-              <Nav.Link href="/FilterProjections" className="text-white">Filter Projections</Nav.Link>
-              <Nav.Link href="/MovieSearch" className="text-white">Movies Search</Nav.Link>
+              <Nav className="mr-auto" >
+              <Nav.Link href="/UserProfile" className="text-white px-3">User</Nav.Link>
+              <Nav.Link href="/topten" className="text-white px-3">Top 10 Movies</Nav.Link>
+              <Nav.Link href="/FilterProjections" className="text-white px-3">Filter Projections</Nav.Link>
+              <Nav.Link href="/MovieSearch" className="text-white px-3">Movies Search</Nav.Link>
               {dasboard}
               </Nav>
               {loginLogout}

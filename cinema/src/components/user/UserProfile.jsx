@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
-import { Container, Row, Col, Card, Button, Badge, Table } from 'react-bootstrap';
+import { Card, Container } from 'react-bootstrap';
 import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
 class UserProfile extends Component {
@@ -39,32 +39,31 @@ class UserProfile extends Component {
           const {user} = this.state;
           console.log({user})
           return (
-              <Table>
-                <thead>
-                  <tr>
-                    <th>First Name</th>
-                    <th>{user.firstName}</th>
-                    </tr>
-                </thead>
-                <thead>
-                  <tr>
-                    <th>Last Name</th>
-                    <th>{user.lastName}</th>
-                    </tr>
-                </thead>
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>{user.userName}</th>
-                    </tr>
-                </thead>
-                <thead>
-                  <tr>
-                    <th>Bonus</th>
-                    <th>{user.bonus}</th>
-                  </tr>
-                </thead>
-              </Table>
+            <React.Fragment>
+              <Container>
+                <Card className="mt-5 central-position">
+                  <Card.Img variant="top" src="/Images/user.png" className="user-img" />
+                  <Card.Body>
+                    <Card.Title className="text-center">User info</Card.Title>
+                    <Card.Text>
+                      <p className="float-left font-weight-bold">First name:</p><span className="float-right">{user.firstName}</span>
+                      <div className="clearfix"></div>
+                      <hr />
+                      
+                      <p className="float-left font-weight-bold">Last name:</p><span className="float-right">{user.lastName}</span>
+                      <div className="clearfix"></div>
+                      <hr />
+                      <p className="float-left font-weight-bold">Username:</p><span className="float-right">{user.userName}</span>
+                      <div className="clearfix"></div>
+                      <hr />
+                      <p className="float-left font-weight-bold">Bonus:</p><span className="float-right">{user.bonus}</span>
+                      <div className="clearfix"></div>
+                      <hr />
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Container>
+            </React.Fragment>
           );
       }
 }
