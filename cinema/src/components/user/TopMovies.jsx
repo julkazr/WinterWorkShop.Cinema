@@ -32,8 +32,8 @@ class TopMovies extends Component {
         e.preventDefault();
 
         this.setState({ submitted: true });
-        const { Year } = this.state;
-        if (Year) {
+        const { Year, canSubmit } = this.state;
+        if (Year && canSubmit) {
             this.getTopMoviesByYear();
         } else {
             NotificationManager.error('Please fill form with data.');

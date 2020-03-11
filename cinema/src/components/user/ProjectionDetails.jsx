@@ -22,7 +22,9 @@ class ProjectionDetails extends Component {
         reservedSeats: [],
         tickets: [],
         ticketsInfo: [],
-        canReserved: false
+        canReserved: false,
+        ProjectionTime: '',
+        errorMsg : []
     };
     this.reloadPage = this.reloadPage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -108,6 +110,7 @@ class ProjectionDetails extends Component {
       .then(data => {;
           if (data) {
               this.setState({ projection: data,
+                              ProjectionTime: data.projection.projectionTime,
                               movieTitle: data.projection.movieTitle,
                               movieYear: data.movie.year,
                               movieRating: data.movie.rating,
@@ -175,15 +178,29 @@ class ProjectionDetails extends Component {
     fetch(`${serviceConfig.baseURL}/api/Reservations/reserve`, requestOptions)
       .then(response => {
         if(!response.ok) {
-          NotificationManager.error('Insuficient fonds or error conection');
-          window.location.reload(true);
+          if(response.status == 400){
+            return response.json();
+          }
           return Promise.reject(response);
         }
         return response.statusText;
       })
       .then(result => {
-        NotificationManager.success('Your seats are reserved!');
-        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);  
+        if(result) {
+          this.setState({errorMsg: result});
+        }
+        //console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        //console.log(this.state.errorMsg.errorMessage);
+        //console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        if(this.state.errorMsg.errorMessage == null){
+          NotificationManager.success("Reservation successful!");
+        }else{
+          NotificationManager.error(this.state.errorMsg.errorMessage);
+          setTimeout(function(){ window.location.reload(true); }, 4000);
+          NotificationManager.info("Page will be reloaded in a moment so you can try again!")
+        }
+        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);
+        //window.location.reload(true);  
       })
       .catch(response => {
         this.setState({isLoading: false});
@@ -280,10 +297,12 @@ class ProjectionDetails extends Component {
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear, tickets } = this.state;
+  const { submitted, canSubmit, movieTitle, movieYear, tickets, projection, ProjectionTime } = this.state;
   const rating = getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
+  const pr = projection.projection;
+  let Time = new Date(ProjectionTime).toLocaleString();
 
       return (
         <React.Fragment>
@@ -294,7 +313,7 @@ class ProjectionDetails extends Component {
                   <Card.Body>
                   <Card.Title><span className="card-title-font">{movieTitle}</span> <span className="float-right"> {rating}</span></Card.Title>
                       <hr/>
-                      <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: 18.10.2020 15:25</span></Card.Subtitle>
+      <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: {Time}</span></Card.Subtitle>
                       <hr/>
                     <Card.Text>
                     <Row className="mt-2">

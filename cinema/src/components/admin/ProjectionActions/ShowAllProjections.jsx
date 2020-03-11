@@ -60,6 +60,7 @@ class ShowAllProjections extends Component {
 
     fillTableWithDaata() {
         return this.state.projections.map(projection => {
+            let Time = new Date(projection.projectionTime).toLocaleString();
             return <tr key={projection.id}>
                         <td width="18%">{projection.id}</td>
                         <td width="18%">{projection.movieId}</td>

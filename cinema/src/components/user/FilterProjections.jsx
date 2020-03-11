@@ -205,8 +205,9 @@ class FilterProjections extends Component {
 
     fillTableWithData() {
         return this.state.projections.map(projection => {
+            let Time = new Date(projection.projectionTime).toLocaleString();       
             return <tr key={projection.id}>                     
-                        <td>{projection.projectionTime}</td>
+                        <td>{Time}</td>
                         <td>{projection.movieTitle}</td>
                         <td>{projection.aditoriumName}</td>
                     </tr>
