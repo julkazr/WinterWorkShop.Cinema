@@ -191,9 +191,7 @@ class ProjectionDetails extends Component {
         if(result) {
           this.setState({errorMsg: result});
         }
-        //console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-        //console.log(this.state.errorMsg.errorMessage);
-        //console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        
         if(this.state.errorMsg.errorMessage == null){
           NotificationManager.success("Reservation successful!");
         }else{

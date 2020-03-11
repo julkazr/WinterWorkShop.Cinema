@@ -27,18 +27,31 @@ handleChange(e) {
     this.setState({ [id]: value });
 }
 
+
 handleSubmit(e) {
     e.preventDefault();
 
     this.setState({ submitted: true });
     const { username } = this.state;
-    localStorage.setItem('username', this.state.username);
+    //localStorage.setItem('username', this.state.username);
+    
     if (username) {
         this.login();
         this.getUser();
     } else {
         this.setState({ submitted: false });
     }
+}
+
+handleLogout(e) {
+  e.preventDefault();
+
+  localStorage.removeItem("username");
+  let conf = window.confirm("CONFIRM LOGUT!");
+  if(conf){
+    window.location.reload(true);
+  }
+  
 }
 
 login() {
@@ -51,14 +64,22 @@ login() {
     fetch(`${serviceConfig.baseURL}/get-token?name=${username}`, requestOptions)
         .then(sharedResponse)
         .then(data => {
-          NotificationManager.success('Successfuly signed in!');
+          NotificationManager.success('Successfuly logged in!');
           if (data.token) {
             localStorage.setItem("jwt", data.token);
+            localStorage.setItem('username', this.state.username);
             }
-            window.location.reload(true);
+            setTimeout(function(){ window.location.reload(true); }, 1000);
         })
         .catch(response => {
-            NotificationManager.error(response.message || response.statusText);
+            console.log(response.statusText=="");
+            if(response.message==undefined || response.statusText==""){
+              
+              NotificationManager.error("There is no user with that username!");
+            }else{
+              NotificationManager.error(response.message && response.statusText);
+            }
+
             this.setState({ submitted: false });
         });
 }
@@ -75,7 +96,7 @@ getUser() {
         }
       })
       .catch(response => {
-        NotificationManager.error(response.message || response.statusText);
+        //NotificationManager.error(response.message || response.statusText);
       });
 }
 
@@ -84,10 +105,34 @@ getUser() {
         console.log(user);
         return ((user.isAdmin || user.isSuperUser) ? <Nav.Link href="/dashboard" className={"text-white"}>Dashboard</Nav.Link> : null)
     }
+
+    renderLoginLogoutButton(username, user)
+    {
+      console.log(localStorage.getItem('username'));
+
+      if(!localStorage.getItem('username')){
+        return <Form inline onSubmit={this.handleSubmit}>
+                <FormControl type="text" placeholder="Username"
+                  id="username"
+                  value={username}
+                  onChange={this.handleChange}
+                  className="mr-sm-2" />
+                <Button type="submit" variant="outline-success" className="mr-1">Log In</Button>
+                </Form> 
+      }
+      //const { username, user } = this.state;
+      
+      
+      return <Form inline onSubmit={this.handleLogout}>
+               <Button type="submit" variant="outline-success" className="mr-1">Log Out</Button>
+             </Form>
+    }
+
     render() {
       const { username, user } = this.state;
       console.log(user.isAdmin)
       let dasboard = this.renderdasboard(user);
+      let loginLogout = this.renderLoginLogoutButton(username, user);
         return (
             <Navbar bg="dark" expand="lg">
             <Navbar.Brand className="text-info font-weight-bold text-capitalize"><Link className="text-decoration-none" to='/projectionlist'>Cinema 9</Link></Navbar.Brand>
@@ -100,14 +145,7 @@ getUser() {
               <Nav.Link href="/MovieSearch" className="text-white">Movies Search</Nav.Link>
               {dasboard}
               </Nav>
-              <Form inline onSubmit={this.handleSubmit}>
-                <FormControl type="text" placeholder="Username"
-                  id="username"
-                  value={username}
-                  onChange={this.handleChange}
-                  className="mr-sm-2" />
-                <Button type="submit" variant="outline-success" className="mr-1">Log In</Button>
-              </Form>
+              {loginLogout}
             </Navbar.Collapse>
           </Navbar>
         );
