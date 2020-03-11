@@ -119,7 +119,7 @@ class EditMovie extends React.Component {
                 NotificationManager.success('Successfuly edited movie!');
             })
             .catch(response => {
-                NotificationManager.error(response.message || response.statusText);
+                NotificationManager.error(response.message || response.statusText || "You cant change current for movie with projections in future");
                 this.setState({ submitted: false });
             });
     }

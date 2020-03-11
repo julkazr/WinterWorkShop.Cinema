@@ -12,7 +12,7 @@ class NewMovie extends React.Component {
         this.state = {
             title: '',
             year: 0,
-            rating: '',
+            rating: 1,
             current: false,
             titleError: '',
             submitted: false,
@@ -54,8 +54,8 @@ class NewMovie extends React.Component {
         e.preventDefault();
 
         this.setState({ submitted: true });
-        const { title, year, rating } = this.state;
-        if (title && year && rating) {
+        const { title, year } = this.state;
+        if (title && year) {
             this.addMovie();
         } else {
             NotificationManager.error('Please fill in data');
@@ -70,7 +70,7 @@ class NewMovie extends React.Component {
 
     addMovie() {
         const { title, year, current, rating } = this.state;
-
+        console.log(rating)
         const data = {
             Title: title,
             Year: +year,

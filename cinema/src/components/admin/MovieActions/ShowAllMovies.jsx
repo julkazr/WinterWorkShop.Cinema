@@ -62,7 +62,7 @@ class ShowAllMovies extends Component {
                 this.setState({movies: newState});
             })
             .catch(response => {
-                NotificationManager.error(response.message || response.statusText);
+                NotificationManager.error(response.message || response.statusText || "please, delete projections");
                 this.setState({ submitted: false });
             });
     }

@@ -32,6 +32,10 @@ class Dashboard extends Component {
         };
         this.getUser = this.getUser.bind(this);
     }
+    componentDidMount()
+    {
+      this.getUser();
+    }
     getUser() {
         const username = localStorage.getItem('username');
       
@@ -92,7 +96,6 @@ class Dashboard extends Component {
 
     render() {
         const { user } = this.state;
-        this.getUser();
         let Rendered = this.renderForAdmin(user);
         return (
             <Row className="justify-content-center no-gutters">
