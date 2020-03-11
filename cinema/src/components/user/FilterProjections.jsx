@@ -210,12 +210,7 @@ class FilterProjections extends Component {
 
     fillTableWithData() {
         return this.state.projections.map(projection => {
-            var date = new Date(projection.projectionTime);
-            var h = date.getTimezoneOffset()/60;
-            var hour = date.getHours();
-            hour += (-1 * h);
-            date.setHours(hour);
-            let Time = new Date(date).toGMTString();       
+            let Time = new Date(projection.projectionTime).toLocaleString();       
             return <tr key={projection.id}>                     
                         <td>{Time}</td>
                         <td>{projection.movieTitle}</td>

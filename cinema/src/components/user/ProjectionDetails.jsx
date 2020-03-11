@@ -22,7 +22,8 @@ class ProjectionDetails extends Component {
         reservedSeats: [],
         tickets: [],
         ticketsInfo: [],
-        canReserved: false
+        canReserved: false,
+        ProjectionTime: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -109,6 +110,7 @@ class ProjectionDetails extends Component {
       .then(data => {;
           if (data) {
               this.setState({ projection: data,
+                              ProjectionTime: data.projection.projectionTime,
                               movieTitle: data.projection.movieTitle,
                               movieYear: data.movie.year,
                               movieRating: data.movie.rating,
@@ -279,10 +281,12 @@ class ProjectionDetails extends Component {
   render() {
   
   const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear, tickets } = this.state;
+  const { submitted, canSubmit, movieTitle, movieYear, tickets, projection, ProjectionTime } = this.state;
   const rating = getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
+  const pr = projection.projection;
+  let Time = new Date(ProjectionTime).toLocaleString();
 
       return (
         <React.Fragment>
@@ -293,7 +297,7 @@ class ProjectionDetails extends Component {
                   <Card.Body>
                   <Card.Title><span className="card-title-font">{movieTitle}</span> <span className="float-right"> {rating}</span></Card.Title>
                       <hr/>
-                      <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: 18.10.2020 15:25</span></Card.Subtitle>
+      <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: {Time}</span></Card.Subtitle>
                       <hr/>
                     <Card.Text>
                     <Row className="mt-2">
