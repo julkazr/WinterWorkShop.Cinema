@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import {Typeahead} from 'react-bootstrap-typeahead';
@@ -188,6 +188,7 @@ class NewAuditorium extends React.Component {
                                         <FormText className="text-danger">{cinemaIdError}</FormText>
                                 </FormGroup>
                                 <FormGroup>
+                                    <Form.Label>Rows</Form.Label>
                                     <FormControl
                                         id="seatRows"
                                         type="number"
@@ -198,6 +199,7 @@ class NewAuditorium extends React.Component {
                                     <FormText className="text-danger">{seatRowsError}</FormText>
                                 </FormGroup>
                                 <FormGroup>
+                                    <Form.Label>Number of seats in row</Form.Label>
                                     <FormControl
                                         id="numberOfSeats"
                                         type="number"

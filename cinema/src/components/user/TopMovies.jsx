@@ -124,7 +124,7 @@ class TopMovies extends Component {
                             
         return (
             <React.Fragment>
-                <Row className="no-gutters pt-2">
+                <Row className="no-gutters pt-2 pr-5 pl-5">
                     <Col>
                         <form onSubmit={this.handleSubmit}>
                         <h1 className="form-header ml-2">Top 10 Movies</h1>

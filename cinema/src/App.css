@@ -14,11 +14,6 @@
   margin: 0 auto;
 }
 
-h1 {
-  background-color: white;
-  opacity: 0.8;
-}
-
 .dashboard-navigation{
   background-color: #3e444a;
 }
@@ -30,6 +25,7 @@ h1 {
 
 .bcg-image {
   /* must exist for background image opacity */
+  display: block;
 }
 
 .bcg-image::after {

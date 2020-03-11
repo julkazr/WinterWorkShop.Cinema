@@ -99,6 +99,7 @@ getUser() {
               {dasboard}
               </Nav>
               <Form inline onSubmit={this.handleSubmit}>
+                <h5 className="pr-3">Hello, {user.firstName}!</h5>
                 <FormControl type="text" placeholder="Username"
                   id="username"
                   value={username}

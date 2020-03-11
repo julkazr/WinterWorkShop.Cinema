@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { FormGroup, FormControl, Button, Container, Row, Col, FormText, } from 'react-bootstrap';
+import { FormGroup, FormControl, Button, Container, Row, Col, FormText, Form } from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../../appSettings';
 import { YearPicker } from 'react-dropdown-date';
@@ -163,6 +163,7 @@ class EditMovie extends React.Component {
                                     <FormText className="text-danger">{yearError}</FormText>
                                 </FormGroup>
                                 <FormGroup>
+                                    <Form.Label>Rating</Form.Label>
                                     <FormControl as="select" placeholder="Rating" id="rating" value={rating} onChange={this.handleChange}>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
