@@ -121,28 +121,38 @@ getUser() {
       }
       //const { username, user } = this.state;
       
-      
       return <Form inline onSubmit={this.handleLogout}>
                <Button type="submit" variant="outline-success" className="mr-1">Log Out</Button>
              </Form>
+    }
+
+    renderUserTab(username) {
+      if(localStorage.getItem('username')){
+        return <Nav.Link href="/UserProfile" className="text-white px-3">User</Nav.Link>
+      }
     }
 
     render() {
       const { username, user } = this.state;
       let dasboard = this.renderdasboard(user);
       let loginLogout = this.renderLoginLogoutButton(username, user);
+      let userTab = this.renderUserTab(username);
         return (
             <Navbar bg="dark" expand="lg">
             <Navbar.Brand className="text-info font-weight-bold text-capitalize"><Link className="text-decoration-none" to='/projectionlist'>Cinema 9</Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-white" />
             <Navbar.Collapse id="basic-navbar-nav" className="text-white">
               <Nav className="mr-auto" >
-              <Nav.Link href="/UserProfile" className="text-white px-3">User</Nav.Link>
+              
               <Nav.Link href="/topten" className="text-white px-3">Top 10 Movies</Nav.Link>
               <Nav.Link href="/FilterProjections" className="text-white px-3">Filter Projections</Nav.Link>
               <Nav.Link href="/MovieSearch" className="text-white px-3">Movies Search</Nav.Link>
               {dasboard}
               </Nav>
+              {/* {!localStorage.getItem('username') &&
+              <Nav.Link href="/UserProfile" className="text-white px-3">User</Nav.Link>
+              } */}
+              {userTab}
               {loginLogout}
             </Navbar.Collapse>
           </Navbar>
