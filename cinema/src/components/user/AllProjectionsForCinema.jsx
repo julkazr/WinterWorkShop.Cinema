@@ -6,7 +6,7 @@ import { Row, Col, Container, FormText, Button, Table } from 'react-bootstrap';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandPointRight } from '@fortawesome/free-solid-svg-icons';
-import { sharedGetRequestOptions, sharedResponse, catchResponse } from './../helpers/shared';
+import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
 class AllProjectionsForCinema extends Component {
     constructor(props) {
@@ -42,10 +42,10 @@ class AllProjectionsForCinema extends Component {
       this.validate(id, value);
     }
 
-    onAuditoriumChange(auditorium) {
-        if(auditorium[0]) {
-            this.setState({auditoriumId: auditorium[0].id});
-            this.validate('auditoriumId', auditorium[0].id);
+    onAuditoriumChange(auditoriums) {
+        if(auditoriums[0]) {
+            this.setState({auditoriumId: auditoriums[0].id});
+            this.validate('auditoriumId', auditoriums[0].id);
 
             
         } else {
@@ -55,10 +55,10 @@ class AllProjectionsForCinema extends Component {
 
     }
 
-    onCinemaChange(cinema) {
-        if(cinema[0]) {
-            this.setState({cinemaId: cinema[0].id});
-            this.validate('cinemaId', cinema[0].id);
+    onCinemaChange(cinemas) {
+        if(cinemas[0]) {
+            this.setState({cinemaId: cinemas[0].id});
+            this.validate('cinemaId', cinemas[0].id);
 
         } else {
             this.setState({cinemaId: ''});
@@ -100,7 +100,10 @@ class AllProjectionsForCinema extends Component {
             this.setState({ cinemas: data, isLoading: false});
           }
         })
-        .catch(catchResponse)
+        .catch(response => {
+          this.setState({isLoading: false});
+          NotificationManager.error(response.message || response.statusText);
+        })
     }
 
     getAuditoriums(cinemaId) {
@@ -127,7 +130,10 @@ class AllProjectionsForCinema extends Component {
                 this.setState({auditoriums: auditoriumsForCinema, isLoading: false});
               }
           })
-          .catch(catchResponse);
+          .catch(response => {
+            this.setState({isLoading: false});
+            NotificationManager.error(response.message || response.statusText);
+          });
     }
 
     getProjectionsForAuditorium(auditoriumId) {
@@ -142,7 +148,10 @@ class AllProjectionsForCinema extends Component {
               this.setState({ movies: data, isLoading: false});  
             }
         }) 
-        .catch(catchResponse);
+        .catch(response => {
+          this.setState({isLoading: false});
+          NotificationManager.error(response.message || response.statusText);
+        });
     }
 
 
@@ -175,7 +184,7 @@ class AllProjectionsForCinema extends Component {
                         labelKey="name"
                         options={cinemas}
                         placeholder="Choose a cinema..."
-                        id="cinemaId"
+                        id={'cinemaId'}
                         onChange={e => {this.onCinemaChange(e)}}
                         required={true}
                         />

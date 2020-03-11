@@ -3,7 +3,7 @@ import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import classNames from 'classnames';
-import { getRoundedRating, sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse, catchResponse } from './../helpers/shared';
+import { getRoundedRating, sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse } from './../helpers/shared';
 
 class ProjectionDetails extends Component {
   constructor(props) {
@@ -134,7 +134,10 @@ class ProjectionDetails extends Component {
             this.setState({user: data});
           }
         })
-        .catch(catchResponse);
+        .catch(response => {
+          this.setState({isLoading: false});
+          NotificationManager.error(response.message || response.statusText);
+        });
   }
 
   checkForReservation(seatIds) {
@@ -184,7 +187,10 @@ class ProjectionDetails extends Component {
         NotificationManager.success('Your seats are reserved!');
         this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);  
       })
-      .catch(catchResponse);
+      .catch(response => {
+        this.setState({isLoading: false});
+        NotificationManager.error(response.message || response.statusText);
+      });
   }
 
   ticketInfoForUser(user, seat) {

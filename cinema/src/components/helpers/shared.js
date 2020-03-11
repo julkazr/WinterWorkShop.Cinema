@@ -45,9 +45,5 @@ export const sharedResponse = response => {
 return response.json();
 };
 
-export const catchResponse = response => {
-  this.setState({isLoading: false});
-  NotificationManager.error(response.message || response.statusText);
-};
 
 
