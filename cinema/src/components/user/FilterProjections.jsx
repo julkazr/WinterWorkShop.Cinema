@@ -186,12 +186,7 @@ class FilterProjections extends Component {
             toTime: finishProjectionTime
         }
 
-        const requestOptions = 
-        // {method: 'POST',
-        // headers: { 'Content-Type': 'application/json',
-        //             'Authorization': 'Bearer ' + localStorage.getItem('jwt') },
-        // body: JSON.stringify(data)};
-        sharedPostRequestOptions(data);
+        const requestOptions = sharedPostRequestOptions(data);
 
           fetch(`${serviceConfig.baseURL}/api/Projections/filter`, requestOptions)
             .then(sharedResponse)
@@ -237,75 +232,77 @@ class FilterProjections extends Component {
 
     const showTable = table;
         return (
-            <Container>
-                <Row>
-                    <Col>
-                    <h1 className="form-header">Filter Projections</h1>
-                    <form  onSubmit={this.handleSubmit}>
-                        <FormGroup>
-                                <Typeahead
-                                    labelKey="name"
-                                    options={cinemas}
-                                    placeholder="Choose a cinema..."
-                                    id="browser"
-                                    disabled={disabledCinema}
-                                    onChange={e => {this.onCinemaChange(e)}}
-                                    />
-                                    <FormText className="text-danger">{cinemaIdError}</FormText>
-                        </FormGroup>
-                        <FormGroup>
-                                <Typeahead
-                                    labelKey="name"
-                                    options={auditoriums}
-                                    placeholder="Choose a auditorium..."
-                                    id="browser"
-                                    disabled={disabledAuditorium}
-                                    onChange={e => {this.onAuditoriumChange(e)}}
-                                    />
-                                    <FormText className="text-danger">{auditoriumIdError}</FormText>
-                        </FormGroup>
-                        <FormGroup>
-                                <Typeahead
-                                    labelKey="title"
-                                    options={movies}
-                                    placeholder="Choose a movie..."
-                                    id="browser"
-                                    disabled={disabledMovie}
-                                    onChange={e => {this.onMovieChange(e)}}
-                                    />
-                                    <FormText className="text-danger">{movieIdError}</FormText>
-                        </FormGroup>
-                        <FormGroup>
-                                <h2 className="form-header">start data</h2>
-                                <DateTimePicker format="y-MM-dd"
-                                    className="form-control"
-                                    onChange={this.onStartDateChange}
-                                    value={this.state.startProjectionTime}
-                                    />
-                                <FormText className="text-danger">{projectionTimeError}</FormText>
-                        </FormGroup>
-                        <FormGroup>
-                                <h3 className="form-header">finish data</h3>
-                                <DateTimePicker format="y-MM-dd"
-                                    className="form-control"
-                                    onChange={this.onFinishDateChange}
-                                    value={this.state.finishProjectionTime}
-                                    />
-                                <FormText className="text-danger">{projectionTimeError}</FormText>
+            <React.Fragment>
+                <Container>
+                    <Row>
+                        <Col>
+                        <h1 className="form-header">Filter Projections</h1>
+                        <form  onSubmit={this.handleSubmit}>
+                            <FormGroup>
+                                    <Typeahead
+                                        labelKey="name"
+                                        options={cinemas}
+                                        placeholder="Choose a cinema..."
+                                        id="browser"
+                                        disabled={disabledCinema}
+                                        onChange={e => {this.onCinemaChange(e)}}
+                                        />
+                                        <FormText className="text-danger">{cinemaIdError}</FormText>
+                            </FormGroup>
+                            <FormGroup>
+                                    <Typeahead
+                                        labelKey="name"
+                                        options={auditoriums}
+                                        placeholder="Choose a auditorium..."
+                                        id="browser"
+                                        disabled={disabledAuditorium}
+                                        onChange={e => {this.onAuditoriumChange(e)}}
+                                        />
+                                        <FormText className="text-danger">{auditoriumIdError}</FormText>
+                            </FormGroup>
+                            <FormGroup>
+                                    <Typeahead
+                                        labelKey="title"
+                                        options={movies}
+                                        placeholder="Choose a movie..."
+                                        id="browser"
+                                        disabled={disabledMovie}
+                                        onChange={e => {this.onMovieChange(e)}}
+                                        />
+                                        <FormText className="text-danger">{movieIdError}</FormText>
+                            </FormGroup>
+                            <FormGroup>
+                                    <h2 className="form-header">start data</h2>
+                                    <DateTimePicker format="y-MM-dd"
+                                        className="form-control"
+                                        onChange={this.onStartDateChange}
+                                        value={this.state.startProjectionTime}
+                                        />
+                                    <FormText className="text-danger">{projectionTimeError}</FormText>
+                            </FormGroup>
+                            <FormGroup>
+                                    <h3 className="form-header">finish data</h3>
+                                    <DateTimePicker format="y-MM-dd"
+                                        className="form-control"
+                                        onChange={this.onFinishDateChange}
+                                        value={this.state.finishProjectionTime}
+                                        />
+                                    <FormText className="text-danger">{projectionTimeError}</FormText>
 
-                        </FormGroup>
-                        <Button type="submit" onClick={this.filterProjections}>Filter Projections</Button>
-                    </form>
-                    </Col>
-                </Row>
-                <Row className="no-gutters pr-5 pl-5">
-                    <Col>
-                        <form style={{margin: 20}}>
-                            {showTable}
+                            </FormGroup>
+                            <Button type="submit" onClick={this.filterProjections}>Filter Projections</Button>
                         </form>
-                    </Col>
-                </Row>
-            </Container>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters pr-5 pl-5">
+                        <Col>
+                            <form style={{margin: 20}}>
+                                {showTable}
+                            </form>
+                        </Col>
+                    </Row>
+                </Container>
+            </React.Fragment>
         );
     }
 }

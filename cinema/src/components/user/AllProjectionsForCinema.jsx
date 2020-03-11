@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import Projection from './Projection';
-import { Row, Col, Container, FormText, Button, Table } from 'react-bootstrap';
+import { Row, Col, Container, FormText, Button } from 'react-bootstrap';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandPointRight } from '@fortawesome/free-solid-svg-icons';
@@ -76,7 +76,6 @@ class AllProjectionsForCinema extends Component {
               this.setState({cinemaIdError: ''
                              });
           }
-        //  console.log('CinemaError: ' + this.state.cinemaIdError);
       }
       else if (id === 'auditoriumId') {
           if (!value) {
@@ -150,7 +149,7 @@ class AllProjectionsForCinema extends Component {
         }) 
         .catch(response => {
           this.setState({isLoading: false});
-          NotificationManager.error(response.message || response.statusText);
+          NotificationManager.error('Please choose auditorium!');
         });
     }
 
@@ -170,51 +169,86 @@ class AllProjectionsForCinema extends Component {
       const { cinemas, auditoriums, cinemaIdError, auditoriumIdError, movies } = this.state;
       
       const list = this.fillListWithData(movies);
-      
+
         return (
-          <div className="no-gutters">
-            <Row className="no-gutters">
-            </Row>
-            <Container className="min-container-height">
-              <Row>
-                <form onSubmit={this.handleSubmit} className="col-md-12 pt-4">
-                  <Row>
-                    <Col sm={3}>
-                      <Typeahead
-                        labelKey="name"
-                        options={cinemas}
-                        placeholder="Choose a cinema..."
-                        id={'cinemaId'}
-                        onChange={e => {this.onCinemaChange(e)}}
-                        required={true}
-                        />
-                        <FormText className="text-danger">{cinemaIdError}</FormText>
-                    </Col>
-                    <Col sm={3}>
-                      <Button onClick={this.getAuditoriums.bind(this, this.state.cinemaId)} className="primary">Press and go to auditoriums <FontAwesomeIcon icon={faHandPointRight}/></Button>
-                    </Col>
-                    <Col sm={4}>
-                      <Typeahead
-                        labelKey="name"
-                        options={auditoriums}
-                        placeholder="Choose a auditorium..."
-                        id="auditoriumId"
-                        onChange={e => {this.onAuditoriumChange(e)}}
-                        required={true}
-                        />
-                        <FormText className="text-danger">{auditoriumIdError}</FormText>
-                    </Col>
-                    <Col sm={2}>
-                      <Button onClick={() => this.getProjectionsForAuditorium(this.state.auditoriumId)} className="primary">Find projections</Button>
-                    </Col>    
-                  </Row>
-                </form>
-              </Row>
-              <Row className="no-gutters set-overflow-y mt-3">
-                 {list} 
-              </Row>
-            </Container>
-          </div>
+          <React.Fragment>
+            <div className="no-gutters">
+              <Container>
+                <Row>
+                  <form onSubmit={this.handleSubmit} className="col-md-12 pt-4">
+                    <Row>
+                      <Col sm={3}>
+                        <Typeahead
+                          labelKey="name"
+                          options={cinemas}
+                          placeholder="Choose a cinema..."
+                          id={'cinemaId'}
+                          onChange={e => {this.onCinemaChange(e)}}
+                          required={true}
+                          />
+                          <FormText className="text-danger">{cinemaIdError}</FormText>
+                      </Col>
+                      <Col sm={3}>
+                        <Button onClick={this.getAuditoriums.bind(this, this.state.cinemaId)} className="primary">Press and go to auditoriums <FontAwesomeIcon icon={faHandPointRight}/></Button>
+                      </Col>
+                      <Col sm={4}>
+                        <Typeahead
+                          labelKey="name"
+                          options={auditoriums}
+                          placeholder="Choose a auditorium..."
+                          id="auditoriumId"
+                          onChange={e => {this.onAuditoriumChange(e)}}
+                          required={true}
+                          />
+                          <FormText className="text-danger">{auditoriumIdError}</FormText>
+                      </Col>
+                      <Col sm={2}>
+                        <Button onClick={() => this.getProjectionsForAuditorium(this.state.auditoriumId)} className="primary">Find projections</Button>
+                      </Col>    
+                    </Row>
+                  </form>
+                </Row>
+                <Row className="no-gutters set-overflow-y mt-3">
+                  {list} 
+                </Row>
+                <Row>
+                  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img src="/Images/1.jpg" class="d-block w-100 img-fluid carousel-height" alt="First movie" />
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/Images/2.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/Images/3.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/Images/4.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/Images/5.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/Images/6.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/Images/7.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                      </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                </Row>
+              </Container>
+            </div>
+          </React.Fragment>
         );
       }
 }

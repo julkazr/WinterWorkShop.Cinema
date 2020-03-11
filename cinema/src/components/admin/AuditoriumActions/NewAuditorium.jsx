@@ -161,76 +161,78 @@ class NewAuditorium extends React.Component {
         const auditorium = this.renderRows(seatRows, numberOfSeats);
         console.log(auditorium)
         return (
-            <Container>
-                <Row>
-                    <Col>
-                        <h1 className="form-header">Add Auditorium</h1>
-                        <form onSubmit={this.handleSubmit}>
-                        <FormGroup>
-                                <FormControl
-                                    id="auditName"
-                                    type="text"
-                                    placeholder="Auditorium Name"
-                                    value={auditName}
-                                    onChange={this.handleChange}
-                                />
-                                <FormText className="text-danger">{auditNameError}</FormText>
-                            </FormGroup>
+            <React.Fragment>
+                <Container>
+                    <Row>
+                        <Col>
+                            <h1 className="form-header">Add Auditorium</h1>
+                            <form onSubmit={this.handleSubmit}>
                             <FormGroup>
-                                <Typeahead
-                                    labelKey="name"
-                                    options={cinemas}
-                                    placeholder="Choose a cinema..."
-                                    id="browser"
-                                    onChange={e => {this.onCinemaChange(e)}}
+                                    <FormControl
+                                        id="auditName"
+                                        type="text"
+                                        placeholder="Auditorium Name"
+                                        value={auditName}
+                                        onChange={this.handleChange}
                                     />
-                                    <FormText className="text-danger">{cinemaIdError}</FormText>
-                            </FormGroup>
-                            <FormGroup>
-                                <FormControl
-                                    id="seatRows"
-                                    type="number"
-                                    placeholder="Number Of Rows"
-                                    value={seatRows}
-                                    onChange={this.handleChange}
-                                />
-                                <FormText className="text-danger">{seatRowsError}</FormText>
-                            </FormGroup>
-                            <FormGroup>
-                                <FormControl
-                                    id="numberOfSeats"
-                                    type="number"
-                                    placeholder="Number Of Seats"
-                                    value={numberOfSeats}
-                                    onChange={this.handleChange}
-                                    max="20"
-                                />
-                                <FormText className="text-danger">{numOfSeatsError}</FormText>
-                            </FormGroup>
-                            <Button type="submit" disabled={submitted || !canSubmit} block>Add Auditorium</Button>
-                        </form>
-                    </Col>
-                </Row>
-                <Row className="mt-2">
-                    <Col className="justify-content-center align-content-center">
-                        <h1>Auditorium Preview</h1>
-                        <div>
-                        <Row className="justify-content-center mb-4">
-                            <div className="text-center text-white font-weight-bold cinema-screen">
-                                CINEMA SCREEN
+                                    <FormText className="text-danger">{auditNameError}</FormText>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Typeahead
+                                        labelKey="name"
+                                        options={cinemas}
+                                        placeholder="Choose a cinema..."
+                                        id="browser"
+                                        onChange={e => {this.onCinemaChange(e)}}
+                                        />
+                                        <FormText className="text-danger">{cinemaIdError}</FormText>
+                                </FormGroup>
+                                <FormGroup>
+                                    <FormControl
+                                        id="seatRows"
+                                        type="number"
+                                        placeholder="Number Of Rows"
+                                        value={seatRows}
+                                        onChange={this.handleChange}
+                                    />
+                                    <FormText className="text-danger">{seatRowsError}</FormText>
+                                </FormGroup>
+                                <FormGroup>
+                                    <FormControl
+                                        id="numberOfSeats"
+                                        type="number"
+                                        placeholder="Number Of Seats"
+                                        value={numberOfSeats}
+                                        onChange={this.handleChange}
+                                        max="20"
+                                    />
+                                    <FormText className="text-danger">{numOfSeatsError}</FormText>
+                                </FormGroup>
+                                <Button type="submit" disabled={submitted || !canSubmit} block>Add Auditorium</Button>
+                            </form>
+                        </Col>
+                    </Row>
+                    <Row className="mt-2">
+                        <Col className="justify-content-center align-content-center">
+                            <h1>Auditorium Preview</h1>
+                            <div>
+                            <Row className="justify-content-center mb-4">
+                                <div className="text-center text-white font-weight-bold cinema-screen">
+                                    CINEMA SCREEN
+                                </div>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <table className="table-cinema-auditorium">
+                                <tbody>
+                                {auditorium}
+                                </tbody>
+                                </table>
+                            </Row>
                             </div>
-                        </Row>
-                        <Row className="justify-content-center">
-                            <table className="table-cinema-auditorium">
-                            <tbody>
-                            {auditorium}
-                            </tbody>
-                            </table>
-                        </Row>
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
+                        </Col>
+                    </Row>
+                </Container>
+            </React.Fragment>
         );
     }
 }

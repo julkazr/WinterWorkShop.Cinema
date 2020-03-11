@@ -27,7 +27,7 @@ class MovieSearch extends Component {
         this.setState({ submitted: true });
         const {tag} = this.state;
         if (tag) {
-            //this.addMovie();
+
         } else {
             NotificationManager.error('Please fill in data');
             this.setState({ submitted: false });
@@ -114,31 +114,33 @@ class MovieSearch extends Component {
                         );
         const showTable = table;
 
-        return (         
-            <Container>
-                <Col>
-                    <h1 className="form-header" >Movie Search</h1>
-                    <form onSubmit={this.handleSubmit}>
-                        <FormGroup>
-                            <FormControl
-                                id="tag"
-                                type="text"
-                                placeholder="Movie tag"
-                                value={tag}
-                                onChange={this.handleChange}
-                            />
-                        </FormGroup>
-                        <Button type="submit" onClick ={() => this.getMoviesByTag()} block>Search</Button>
-                    </form>
-                </Col>
-                <Row> 
+        return (    
+            <React.Fragment>
+                 <Container>
                     <Col>
-                        <form style = {{margin: 20}}> 
-                            {showTable}
+                        <h1 className="form-header" >Movie Search</h1>
+                        <form onSubmit={this.handleSubmit}>
+                            <FormGroup>
+                                <FormControl
+                                    id="tag"
+                                    type="text"
+                                    placeholder="Movie tag"
+                                    value={tag}
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+                            <Button type="submit" onClick ={() => this.getMoviesByTag()} block>Search</Button>
                         </form>
                     </Col>
-                </Row>
-            </Container>
+                    <Row> 
+                        <Col>
+                            <form style = {{margin: 20}}> 
+                                {showTable}
+                            </form>
+                        </Col>
+                    </Row>
+                </Container>
+            </React.Fragment>     
         );
     }
 }

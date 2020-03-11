@@ -111,11 +111,9 @@ class TopMovies extends Component {
         const table = (<Table striped bordered hover size="sm" variant="dark">
                             <thead>
                             <tr>
-                                {/* <th>Id</th> */}
                                 <th>Title</th>
                                 <th>Rating</th>
                                 <th>Year</th>
-                                {/* <th>Is Current</th> */}
                             </tr>
                             </thead>
                             <tbody>

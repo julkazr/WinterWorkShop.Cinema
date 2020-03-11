@@ -127,65 +127,67 @@ class EditMovie extends React.Component {
     render() {
         const { title, year, current, rating, submitted, titleError, yearError, canSubmit } = this.state;
         return (
-            <Container>
-                <Row>
-                    <Col>
-                        <h1 className="form-header">Edit Existing Movie</h1>
-                        <form onSubmit={this.handleSubmit}>
-                            <FormGroup>
-                                <FormControl
-                                    id="title"
-                                    type="text"
-                                    placeholder="Movie Title"
-                                    value={title}
-                                    onChange={this.handleChange}
-                                />
-                                <FormText className="text-danger">{titleError}</FormText>
-                            </FormGroup>
-                            <FormGroup>
-                                <YearPicker
-                                    defaultValue={'Select Movie Year'}
-                                    start={1895}
-                                    end={2120}
-                                    reverse
-                                    required={true}
-                                    disabled={false}
-                                    value={year}
-                                    onChange={(year) => {
-                                        this.handleYearChange(year);
-                                    }}
-                                    id={'year'}
-                                    name={'year'}
-                                    classes={'form-control'}
-                                    optionClasses={'option classes'}
-                                />
-                                <FormText className="text-danger">{yearError}</FormText>
-                            </FormGroup>
-                            <FormGroup>
-                                <FormControl as="select" placeholder="Rating" id="rating" value={rating} onChange={this.handleChange}>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </FormControl>
-                            </FormGroup>
-                            <FormGroup>
-                                <FormControl as="select" placeholder="Current" id="current" value={current} onChange={this.handleChange}>
-                                <option value="true">Current</option>
-                                <option value="false">Not Current</option>
-                                </FormControl>
-                            </FormGroup>
-                            <Button type="submit" disabled={submitted || !canSubmit} block>Edit Movie</Button>
-                        </form>
-                    </Col>
-                </Row>
-            </Container>
+            <React.Fragment>
+                <Container>
+                    <Row>
+                        <Col>
+                            <h1 className="form-header">Edit Existing Movie</h1>
+                            <form onSubmit={this.handleSubmit}>
+                                <FormGroup>
+                                    <FormControl
+                                        id="title"
+                                        type="text"
+                                        placeholder="Movie Title"
+                                        value={title}
+                                        onChange={this.handleChange}
+                                    />
+                                    <FormText className="text-danger">{titleError}</FormText>
+                                </FormGroup>
+                                <FormGroup>
+                                    <YearPicker
+                                        defaultValue={'Select Movie Year'}
+                                        start={1895}
+                                        end={2120}
+                                        reverse
+                                        required={true}
+                                        disabled={false}
+                                        value={year}
+                                        onChange={(year) => {
+                                            this.handleYearChange(year);
+                                        }}
+                                        id={'year'}
+                                        name={'year'}
+                                        classes={'form-control'}
+                                        optionClasses={'option classes'}
+                                    />
+                                    <FormText className="text-danger">{yearError}</FormText>
+                                </FormGroup>
+                                <FormGroup>
+                                    <FormControl as="select" placeholder="Rating" id="rating" value={rating} onChange={this.handleChange}>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </FormControl>
+                                </FormGroup>
+                                <FormGroup>
+                                    <FormControl as="select" placeholder="Current" id="current" value={current} onChange={this.handleChange}>
+                                    <option value="true">Current</option>
+                                    <option value="false">Not Current</option>
+                                    </FormControl>
+                                </FormGroup>
+                                <Button type="submit" disabled={submitted || !canSubmit} block>Edit Movie</Button>
+                            </form>
+                        </Col>
+                    </Row>
+                </Container>
+            </React.Fragment>
         );
     }
 }

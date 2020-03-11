@@ -81,12 +81,10 @@ getUser() {
 
     renderdasboard(user)
     {
-        console.log(user);
         return ((user.isAdmin || user.isSuperUser) ? <Nav.Link href="/dashboard" className={"text-white"}>Dashboard</Nav.Link> : null)
     }
     render() {
       const { username, user } = this.state;
-      console.log(user.isAdmin)
       let dasboard = this.renderdasboard(user);
         return (
             <Navbar bg="dark" expand="lg">

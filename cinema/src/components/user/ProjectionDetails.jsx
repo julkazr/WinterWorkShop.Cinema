@@ -24,7 +24,7 @@ class ProjectionDetails extends Component {
         ticketsInfo: [],
         canReserved: false
     };
-
+    this.reloadPage = this.reloadPage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -101,7 +101,6 @@ class ProjectionDetails extends Component {
   }
 
   getProjection(projectionId) {
-    // TO DO: here you need to fetch movie with projection details using ID from router
     const requestOptions = sharedGetRequestOptions;
 
     fetch(`${serviceConfig.baseURL}/api/projections/getwithauditorium/` + projectionId, requestOptions)
@@ -141,7 +140,6 @@ class ProjectionDetails extends Component {
   }
 
   checkForReservation(seatIds) {
-    const {canReserved} = this.state;
     const data = {
       listOfSeatsId: seatIds
     }
@@ -275,6 +273,9 @@ class ProjectionDetails extends Component {
     }
     return seatRow;
   }
+  reloadPage() {
+    window.location.reload(true);
+  }
 
   render() {
   
@@ -331,6 +332,11 @@ class ProjectionDetails extends Component {
                         </Col> 
                       </Row> 
                     </form>
+                    <Row className="pt-2">
+                        <Col sm={12}>
+                          <Button onClick={this.reloadPage} className="font-weight-bold" block>Make another reservations</Button>
+                        </Col> 
+                      </Row>
                     { tickets.seat &&
                     <Row className="justify-content-center">
                       <Col>

@@ -94,26 +94,28 @@ class EditCinema extends React.Component {
         render() {
             const {name, nameError, submitted, canSubmit} = this.state;
             return (
-                <Container>
-                    <Row>
-                        <Col>
-                            <h1 className="form-header">Edit Existing Cinema</h1>
-                            <form onSubmit={this.handleSubmit}>
-                                <FormGroup>
-                                    <FormControl
-                                        id="name"
-                                        type="text"
-                                        placeholder="Cinema name"
-                                        value={name}
-                                        onChange={this.handleChange}
-                                    />
-                                    <FormText className="text-danger">{nameError}</FormText>
-                                </FormGroup>
-                                <Button type="submit" disabled={submitted || !canSubmit} block>Edit Cinema</Button>
-                            </form>
-                        </Col>
-                    </Row>
-                </Container>
+                <React.Fragment>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h1 className="form-header">Edit Existing Cinema</h1>
+                                <form onSubmit={this.handleSubmit}>
+                                    <FormGroup>
+                                        <FormControl
+                                            id="name"
+                                            type="text"
+                                            placeholder="Cinema name"
+                                            value={name}
+                                            onChange={this.handleChange}
+                                        />
+                                        <FormText className="text-danger">{nameError}</FormText>
+                                    </FormGroup>
+                                    <Button type="submit" disabled={submitted || !canSubmit} block>Edit Cinema</Button>
+                                </form>
+                            </Col>
+                        </Row>
+                    </Container>
+                </React.Fragment>
             );
         }
 

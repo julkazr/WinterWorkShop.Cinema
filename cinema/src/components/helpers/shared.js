@@ -1,5 +1,4 @@
 import React from 'react';
-import { NotificationManager } from 'react-notifications';
 
 export const getRoundedRating = (rating) => {
     const result = Math.round(rating);

@@ -121,48 +121,50 @@ class EditAuditorium extends React.Component {
         render() {
             const {name, nameError, submitted, canSubmit, seatRows, numberOfSeats, seatRowsError, numOfSeatsError} = this.state;
             return (
-                <Container>
-                    <Row>
-                        <Col>
-                            <h1 className="form-header">Edit Existing Auditorium</h1>
-                            <form onSubmit={this.handleSubmit}>
-                                <FormGroup>
-                                    <FormControl
-                                        id="name"
-                                        type="text"
-                                        placeholder="Auditorium name"
-                                        value={name}
-                                        onChange={this.handleChange}
-                                    />
-                                    <FormText className="text-danger">{nameError}</FormText>
-                                </FormGroup>
-                                <FormGroup>
-                                    <FormControl
-                                        id="seatRows"
-                                        type="number"
-                                        placeholder="Number Of Rows"
-                                        value={seatRows}
-                                        onChange={this.handleChange}
-                                        max="20"
-                                    />
-                                    <FormText className="text-danger">{seatRowsError}</FormText>
-                                </FormGroup>
-                                <FormGroup>
-                                    <FormControl
-                                        id="numberOfSeats"
-                                        type="number"
-                                        placeholder="Number Of Seats"
-                                        value={numberOfSeats}
-                                        onChange={this.handleChange}
-                                        max="20"
-                                    />
-                                    <FormText className="text-danger">{numOfSeatsError}</FormText>
-                                </FormGroup>
-                                <Button type="submit" disabled={submitted || !canSubmit} block>Edit Auditorium</Button>
-                            </form>
-                        </Col>
-                    </Row>
-                </Container>
+                <React.Fragment>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h1 className="form-header">Edit Existing Auditorium</h1>
+                                <form onSubmit={this.handleSubmit}>
+                                    <FormGroup>
+                                        <FormControl
+                                            id="name"
+                                            type="text"
+                                            placeholder="Auditorium name"
+                                            value={name}
+                                            onChange={this.handleChange}
+                                        />
+                                        <FormText className="text-danger">{nameError}</FormText>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <FormControl
+                                            id="seatRows"
+                                            type="number"
+                                            placeholder="Number Of Rows"
+                                            value={seatRows}
+                                            onChange={this.handleChange}
+                                            max="20"
+                                        />
+                                        <FormText className="text-danger">{seatRowsError}</FormText>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <FormControl
+                                            id="numberOfSeats"
+                                            type="number"
+                                            placeholder="Number Of Seats"
+                                            value={numberOfSeats}
+                                            onChange={this.handleChange}
+                                            max="20"
+                                        />
+                                        <FormText className="text-danger">{numOfSeatsError}</FormText>
+                                    </FormGroup>
+                                    <Button type="submit" disabled={submitted || !canSubmit} block>Edit Auditorium</Button>
+                                </form>
+                            </Col>
+                        </Row>
+                    </Container>
+                </React.Fragment>
             );
         }
 

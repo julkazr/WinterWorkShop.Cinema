@@ -23,6 +23,7 @@ import EditProjection from './ProjectionActions/EditProjection'
 // higher order component
 import { PrivateRouteAdmin } from '../hoc/privateRouteAdmin';
 import { SuperUserRoute } from '../hoc/SuperUserRoute';
+import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
 class Dashboard extends Component {
     constructor(props) {
@@ -39,19 +40,10 @@ class Dashboard extends Component {
     getUser() {
         const username = localStorage.getItem('username');
       
-        const requestOptions = {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt') }
-            };
+        const requestOptions = sharedGetRequestOptions;
       
         fetch(`${serviceConfig.baseURL}/api/users/byusername/` + username, requestOptions)
-            .then(response => {
-              if(!response.ok) {
-                return Promise.reject(response);
-              }
-              return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
               if(data) {
                 this.setState({user: data});

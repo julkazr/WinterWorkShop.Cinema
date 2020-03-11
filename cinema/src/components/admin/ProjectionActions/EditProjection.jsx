@@ -44,19 +44,10 @@ class EditProjection extends React.Component {
     }
 
     getProjection(id) {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-        };
+        const requestOptions = sharedGetRequestOptions;
     
         fetch(`${serviceConfig.baseURL}/api/projections/${id}`, requestOptions)
-            .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response);
-            }
-            return response.json();
-            })
+            .then(sharedResponse)
             .then(data => {
                 if (data) {
                     console.log(data.projectionTime)
@@ -75,19 +66,10 @@ class EditProjection extends React.Component {
         }
 
         getMovies() {
-            const requestOptions = {
-                method: 'GET',
-                headers: {'Content-Type': 'application/json',
-                              'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-            };
+            const requestOptions = sharedGetRequestOptions;
         
             fetch(`${serviceConfig.baseURL}/api/movies/all`, requestOptions)
-                .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-                })
+                .then(sharedResponse)
                 .then(data => {
                     if (data) {
                         this.setState({movies: data});
@@ -100,19 +82,10 @@ class EditProjection extends React.Component {
         }
 
         getAuditoriums() {
-            const requestOptions = {
-                method: 'GET',
-                headers: {'Content-Type': 'application/json',
-                              'Authorization': 'Bearer ' + localStorage.getItem('jwt')}
-            };
+            const requestOptions = sharedGetRequestOptions;
         
             fetch(`${serviceConfig.baseURL}/api/auditoriums/all`, requestOptions)
-                .then(response => {
-                if (!response.ok) {
-                    return Promise.reject(response);
-                }
-                return response.json();
-                })
+                .then(sharedResponse)
                 .then(data => {
                     if (data) {
                         this.setState({auditoriums: data});
@@ -139,20 +112,10 @@ class EditProjection extends React.Component {
                 projectionTime: date
             };
             console.log(data)
-            const requestOptions = {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem('jwt')},
-                body: JSON.stringify(data)
-            };
+            const requestOptions = sharedPutRequestOptions(data);
     
             fetch(`${serviceConfig.baseURL}/api/projections/update/${id}`, requestOptions)
-                .then(response => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-                    return response.statusText;
-                })
+                .then(sharedResponse)
                 .then(result => {
                     this.props.history.goBack();
                     NotificationManager.success('Successfuly edited projection!');
@@ -231,45 +194,47 @@ class EditProjection extends React.Component {
                 />
               );
             return (
-                <Container>
-                    <Row>
-                        <Col>
-                            <h1 className="form-header">Edit Existing Projection</h1>
-                            <form onSubmit={this.handleSubmit}>
-                                <FormGroup>
-                                    <Typeahead
-                                        labelKey="title"
-                                        options={movies}
-                                        placeholder={movieTitle}
-                                        id="browser"
-                                        onChange={e => {this.onMovieChange(e)}}
-                                    />
-                                </FormGroup>
-                                <FormGroup>
-                                    <Typeahead
-                                        labelKey="name"
-                                        options={auditoriums}
-                                        placeholder={auditoriumName}
-                                        id="browser"
-                                        onChange={e => {this.onAuditoriumChange(e)}}
-                                    />
-                                </FormGroup>
-                                <FormGroup>
-                                    <DateTimePicker 
-                                        className="form-control"
-                                        format = "dd/MM/yyyy h:mm aa"
-                                        locale="sr"
-                                        showTimeInput
-                                        customTimeInput={<ExampleCustomTimeInput />}
-                                        onChange={this.onDateChange}
-                                        value={projectionTime && new Date(projectionTime) || null}
+                <React.Fragment>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h1 className="form-header">Edit Existing Projection</h1>
+                                <form onSubmit={this.handleSubmit}>
+                                    <FormGroup>
+                                        <Typeahead
+                                            labelKey="title"
+                                            options={movies}
+                                            placeholder={movieTitle}
+                                            id="browser"
+                                            onChange={e => {this.onMovieChange(e)}}
                                         />
-                                </FormGroup>
-                                <Button type="submit">Edit Projections</Button>
-                            </form>
-                        </Col>
-                    </Row>
-                </Container>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Typeahead
+                                            labelKey="name"
+                                            options={auditoriums}
+                                            placeholder={auditoriumName}
+                                            id="browser"
+                                            onChange={e => {this.onAuditoriumChange(e)}}
+                                        />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <DateTimePicker 
+                                            className="form-control"
+                                            format = "dd/MM/yyyy h:mm aa"
+                                            locale="sr"
+                                            showTimeInput
+                                            customTimeInput={<ExampleCustomTimeInput />}
+                                            onChange={this.onDateChange}
+                                            value={projectionTime && new Date(projectionTime) || null}
+                                            />
+                                    </FormGroup>
+                                    <Button type="submit">Edit Projections</Button>
+                                </form>
+                            </Col>
+                        </Row>
+                    </Container>
+                </React.Fragment>
             );
         }
 }
