@@ -60,13 +60,19 @@ class ShowAllProjections extends Component {
 
     fillTableWithDaata() {
         return this.state.projections.map(projection => {
+            var date = new Date(projection.projectionTime);
+            var h = date.getTimezoneOffset()/60;
+            var hour = date.getHours();
+            hour += (-1 * h);
+            date.setHours(hour);
+            let Time = new Date(date).toGMTString();
             return <tr key={projection.id}>
                         <td width="18%">{projection.id}</td>
                         <td width="18%">{projection.movieId}</td>
                         <td width="15%">{projection.movieTitle}</td>
                         <td width="5%">{projection.auditoriumId}</td>
                         <td >{projection.aditoriumName}</td>
-                        <td width="18%">{projection.projectionTime}</td>
+                        <td width="18%">{Time}</td>
                         <td width="5%" className="text-center cursor-pointer" onClick={() => this.editProjection(projection.id)}><FontAwesomeIcon className="text-info mr-2 fa-1x" icon={faEdit}/></td>
                         <td width="5%" className="text-center cursor-pointer" onClick={() => this.removeProjection(projection.id)}><FontAwesomeIcon className="text-danger mr-2 fa-1x" icon={faTrash}/></td>
                     </tr>
