@@ -30,7 +30,6 @@ class ShowAllProjections extends Component {
         .then(sharedResponse)
         .then(data => {
           if (data) {
-              console.log(data)
             this.setState({ projections: data, isLoading: false });
             }
         })

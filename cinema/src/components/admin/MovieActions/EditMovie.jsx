@@ -107,10 +107,8 @@ class EditMovie extends React.Component {
             Current: currentt,
             Rating: +rating
         };
-        console.log(data);
 
         const requestOptions = sharedPutRequestOptions(data);
-        console.log(requestOptions.body);
 
         fetch(`${serviceConfig.baseURL}/api/movies/${id}`, requestOptions)
             .then(sharedResponse)

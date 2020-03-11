@@ -50,7 +50,6 @@ class EditProjection extends React.Component {
             .then(sharedResponse)
             .then(data => {
                 if (data) {
-                    console.log(data.projectionTime)
                     this.setState({id: data.id,
                                    movieId: data.movieId,
                                    auditoriumId: data.auditoriumId,
@@ -105,13 +104,11 @@ class EditProjection extends React.Component {
             var hour = date.getHours();
             hour += (-1 * h);
             date.setHours(hour);
-            console.log(hour)
             const data = {
                 auditoriumId: auditoriumId,
                 movieId: movieId,
                 projectionTime: date
             };
-            console.log(data)
             const requestOptions = sharedPutRequestOptions(data);
     
             fetch(`${serviceConfig.baseURL}/api/projections/update/${id}`, requestOptions)

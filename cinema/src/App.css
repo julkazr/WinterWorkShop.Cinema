@@ -40,8 +40,15 @@
   z-index: -1;
 }
 
-.carousel-height {
-  max-height: 80vh!important;
+.carousel-style {
+  min-width: 60vw;
+  background-color: #BDBDBD;
+}
+
+.img-style {
+  display: block;
+  max-width: 424px;
+  margin: 0 auto;
 }
 
 .cursor-pointer{

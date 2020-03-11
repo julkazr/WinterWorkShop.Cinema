@@ -61,7 +61,6 @@ class EditCinema extends React.Component {
             .then(sharedResponse)
             .then(data => {
                 if (data) {
-                    console.log({data})
                     this.setState({name: data.name, id: data.id});
                 }
             })
@@ -76,7 +75,6 @@ class EditCinema extends React.Component {
             const data = {
                 name: name
             };
-            console.log({data},{id})
             const requestOptions = sharedPutRequestOptions(data);
     
             fetch(`${serviceConfig.baseURL}/api/Cinemas/update/${id}`, requestOptions)

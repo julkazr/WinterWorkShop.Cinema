@@ -37,7 +37,6 @@ class NewProjection extends React.Component {
     }
 
     validate(id, value) {
-        console.log(id, value);
         if (id === 'projectionTime') {
             if (!value) {
                 this.setState({projectionTimeError: 'Chose projection time',

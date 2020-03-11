@@ -70,7 +70,6 @@ class NewMovie extends React.Component {
 
     addMovie() {
         const { title, year, current, rating } = this.state;
-        console.log(rating)
         const data = {
             Title: title,
             Year: +year,

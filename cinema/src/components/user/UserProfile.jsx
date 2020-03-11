@@ -31,13 +31,13 @@ class UserProfile extends Component {
               }
             })
             .catch(response => {
-              NotificationManager.error(response.message || response.statusText);
+              NotificationManager.error('You can not see info if you are not logged in!');
+              
             });
       }
 
       render() {
           const {user} = this.state;
-          console.log({user})
           return (
             <React.Fragment>
               <Container>

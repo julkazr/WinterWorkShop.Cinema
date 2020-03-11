@@ -29,7 +29,6 @@ class ShowAllCinemas extends Component {
       fetch(`${serviceConfig.baseURL}/api/Cinemas/all`, requestOptions)
         .then(sharedResponse)
         .then(data => {
-            console.log({data})
           if (data) {
             this.setState({ cinemas: data, isLoading: false });
             }
@@ -53,7 +52,6 @@ class ShowAllCinemas extends Component {
               this.setState({cinemas: newState});
           })
           .catch(response => {
-              console.log(requestOptions)
               NotificationManager.error(response.message || response.statusText);
               this.setState({ submitted: false });
           });

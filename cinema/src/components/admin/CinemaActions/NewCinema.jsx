@@ -90,7 +90,6 @@ class NewCinema extends React.Component {
             seatRows: +seatRows,
             numberOfSeats: +numberOfSeats
         };
-        console.log({data})
         const requestOptions = sharedPostRequestOptions(data);
 
         fetch(`${serviceConfig.baseURL}/api/Cinemas/createwithauditorium`, requestOptions)

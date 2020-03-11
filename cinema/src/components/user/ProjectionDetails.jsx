@@ -43,7 +43,6 @@ class ProjectionDetails extends Component {
     let seatToReserve = this.state.seatWantToReserve;
     let seatTicket = this.state.ticketsInfo;
     let seats = this.state.auditorium.seatsList;
-    console.log(seats);
     if(seat.clicked) {
       
       if(seatToReserve === undefined) {
@@ -197,8 +196,7 @@ class ProjectionDetails extends Component {
           setTimeout(function(){ window.location.reload(true); }, 4000);
           NotificationManager.info("Page will be reloaded in a moment so you can try again!")
         }
-        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);
-        //window.location.reload(true);  
+        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo); 
       })
       .catch(response => {
         this.setState({isLoading: false});
@@ -349,11 +347,13 @@ class ProjectionDetails extends Component {
                         </Col> 
                       </Row> 
                     </form>
+                    { tickets.seat &&
                     <Row className="pt-2">
                         <Col sm={12}>
                           <Button onClick={this.reloadPage} className="font-weight-bold" block>Make another reservations</Button>
                         </Col> 
                       </Row>
+                    }
                     { tickets.seat &&
                     <Row className="justify-content-center">
                       <Col>

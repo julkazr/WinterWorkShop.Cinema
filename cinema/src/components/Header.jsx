@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
@@ -33,7 +34,6 @@ handleSubmit(e) {
 
     this.setState({ submitted: true });
     const { username } = this.state;
-    //localStorage.setItem('username', this.state.username);
     
     if (username) {
         this.login();
@@ -72,7 +72,6 @@ login() {
             setTimeout(function(){ window.location.reload(true); }, 1000);
         })
         .catch(response => {
-            console.log(response.statusText=="");
             if(response.message==undefined || response.statusText==""){
               
               NotificationManager.error("There is no user with that username!");
@@ -96,7 +95,7 @@ getUser() {
         }
       })
       .catch(response => {
-        //NotificationManager.error(response.message || response.statusText);
+        //NotificationManager.error(response.message && response.statusText);
       });
 }
 
@@ -107,7 +106,6 @@ getUser() {
 
     renderLoginLogoutButton(username, user)
     {
-      console.log(localStorage.getItem('username'));
 
       if(!localStorage.getItem('username')){
         return <Form inline onSubmit={this.handleSubmit}>
@@ -119,7 +117,6 @@ getUser() {
                 <Button type="submit" variant="outline-success" className="mr-1">Log In</Button>
                 </Form> 
       }
-      //const { username, user } = this.state;
       
       return <Form inline onSubmit={this.handleLogout}>
                <Button type="submit" variant="outline-success" className="mr-1">Log Out</Button>
@@ -137,6 +134,7 @@ getUser() {
       let dasboard = this.renderdasboard(user);
       let loginLogout = this.renderLoginLogoutButton(username, user);
       let userTab = this.renderUserTab(username);
+
         return (
             <Navbar bg="dark" expand="lg">
             <Navbar.Brand className="text-info font-weight-bold text-capitalize"><Link className="text-decoration-none" to='/projectionlist'>Cinema 9</Link></Navbar.Brand>
@@ -149,9 +147,6 @@ getUser() {
               <Nav.Link href="/MovieSearch" className="text-white px-3">Movies Search</Nav.Link>
               {dasboard}
               </Nav>
-              {/* {!localStorage.getItem('username') &&
-              <Nav.Link href="/UserProfile" className="text-white px-3">User</Nav.Link>
-              } */}
               {userTab}
               {loginLogout}
             </Navbar.Collapse>

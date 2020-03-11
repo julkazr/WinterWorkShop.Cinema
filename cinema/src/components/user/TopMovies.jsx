@@ -22,7 +22,6 @@ class TopMovies extends Component {
 
     handleChange(e) {
         const { id, value } = e.target;
-        console.log(id + " " + value)
         this.setState({ [id]: value });
         this.validate(id, value);
     }

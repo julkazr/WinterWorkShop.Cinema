@@ -213,28 +213,28 @@ class AllProjectionsForCinema extends Component {
                 </Row>
                 <Row>
                   <h2 className="text-primary font-italic py-3">Comming soon in cinema near you...</h2>
-                  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                  <div id="carouselExampleControls" class="carousel slide carousel-style" data-ride="carousel">
                     <div class="carousel-inner">
                       <div class="carousel-item active">
-                        <img src="/Images/1.jpg" class="d-block w-100 img-fluid carousel-height" alt="First movie" />
+                        <img src="/Images/1.jpg" class="d-block w-100 img-style" alt="First movie" />
                       </div>
                       <div class="carousel-item">
-                        <img src="/Images/2.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                        <img src="/Images/2.jpg" class="d-block w-100 img-style" alt="..." />
                       </div>
                       <div class="carousel-item">
-                        <img src="/Images/3.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                        <img src="/Images/3.jpg" class="d-block w-100 img-style" alt="..." />
                       </div>
                       <div class="carousel-item">
-                        <img src="/Images/4.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                        <img src="/Images/4.jpg" class="d-block w-100 img-style" alt="..." />
                       </div>
                       <div class="carousel-item">
-                        <img src="/Images/5.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                        <img src="/Images/5.jpg" class="d-block w-100 img-style" alt="..." />
                       </div>
                       <div class="carousel-item">
-                        <img src="/Images/6.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                        <img src="/Images/6.jpg" class="d-block w-100 img-style" alt="..." />
                       </div>
                       <div class="carousel-item">
-                        <img src="/Images/7.jpg" class="d-block w-100 img-fluid carousel-height" alt="..." />
+                        <img src="/Images/7.jpg" class="d-block w-100 img-style" alt="..." />
                       </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">

@@ -52,7 +52,6 @@ class ShowAllAuditoriums extends Component {
             this.setState({auditoriums: newState});
         })
         .catch(response => {
-            console.log(requestOptions)
             NotificationManager.error(response.message || response.statusText);
             this.setState({ submitted: false });
         });
