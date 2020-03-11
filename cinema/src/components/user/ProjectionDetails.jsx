@@ -22,7 +22,8 @@ class ProjectionDetails extends Component {
         reservedSeats: [],
         tickets: [],
         ticketsInfo: [],
-        canReserved: false
+        canReserved: false,
+        errorMsg : []
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -177,15 +178,29 @@ class ProjectionDetails extends Component {
     fetch(`${serviceConfig.baseURL}/api/Reservations/reserve`, requestOptions)
       .then(response => {
         if(!response.ok) {
-          NotificationManager.error('Insuficient fonds or error conection');
-          window.location.reload(true);
+          if(response.status == 400){
+            return response.json();
+          }
           return Promise.reject(response);
         }
         return response.statusText;
       })
       .then(result => {
-        NotificationManager.success('Your seats are reserved!');
-        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);  
+        if(result) {
+          this.setState({errorMsg: result});
+        }
+        //console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        //console.log(this.state.errorMsg.errorMessage);
+        //console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        if(this.state.errorMsg.errorMessage == null){
+          NotificationManager.success("Reservation successful!");
+        }else{
+          NotificationManager.error(this.state.errorMsg.errorMessage);
+          setTimeout(function(){ window.location.reload(true); }, 4000);
+          NotificationManager.info("Page will be reloaded in a moment so you can try again!")
+        }
+        this.ticketInfoForUser(this.state.user, this.state.ticketsInfo);
+        //window.location.reload(true);  
       })
       .catch(response => {
         this.setState({isLoading: false});
