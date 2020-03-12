@@ -45,7 +45,6 @@ class ProjectionDetails extends Component {
     this.forceUpdate();
     let seatToReserve = this.state.seatWantToReserve;
     let seatTicket = this.state.ticketsInfo;
-    let seats = this.state.auditorium.seatsList;
     if(seat.clicked) {
       
       if(seatToReserve === undefined) {
@@ -181,7 +180,7 @@ class ProjectionDetails extends Component {
     fetch(`${serviceConfig.baseURL}/api/Reservations/reserve`, requestOptions)
       .then(response => {
         if(!response.ok) {
-          if(response.status == 400){
+          if(response.status === 400){
             return response.json();
           }
           return Promise.reject(response);
@@ -300,11 +299,10 @@ class ProjectionDetails extends Component {
   render() {
   
   const auditorium = !this.state.isLoading ? <Spinner></Spinner> : this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { submitted, canSubmit, movieTitle, movieYear, tickets, projection, ProjectionTime } = this.state;
+  const { movieTitle, movieYear, tickets, ProjectionTime } = this.state;
   const rating = getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
-  const pr = projection.projection;
   let Time = new Date(ProjectionTime).toLocaleString();
   const button = (!this.state.hideButton) ? <Button type="submit" className="font-weight-bold" block>Pay for tickets and make reservations</Button> : null;
 

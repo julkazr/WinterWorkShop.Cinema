@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
@@ -73,7 +72,7 @@ login() {
             setTimeout(function(){ window.location.reload(true); }, 1000);
         })
         .catch(response => {
-            if(response.message==undefined || response.statusText==""){
+            if(response.message === undefined || response.statusText === ""){
               
               NotificationManager.error("There is no user with that username!");
             }else{

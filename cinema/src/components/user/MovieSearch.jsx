@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
-import { Row, Table, Container, Col, FormGroup, Button, FormControl } from 'react-bootstrap';
+import { Row, Table, Container, Col, FormGroup, FormControl } from 'react-bootstrap';
 import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
 class MovieSearch extends Component {
