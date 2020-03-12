@@ -43,9 +43,11 @@ class MovieSearch extends Component {
     validate(id, value) {
         if (id === 'tag') {
             if (value === '') {
-                this.setState({titleError: 'Fill in tag',
-                                canSubmit: false});
+                this.getMovies();
+                this.setState({titleError: '',
+                                canSubmit: true});
             } else {
+                this.getMoviesByTag();
                 this.setState({titleError: '',
                                 canSubmit: true});
             }
@@ -78,7 +80,6 @@ class MovieSearch extends Component {
                 }
             })
             .catch(response => {
-                NotificationManager.error(response.message || response.statusText);
                 this.setState({submittes: false});
             });
     }
@@ -129,7 +130,7 @@ class MovieSearch extends Component {
                                     onChange={this.handleChange}
                                 />
                             </FormGroup>
-                            <Button type="submit" onClick ={() => this.getMoviesByTag()} block>Search</Button>
+                            
                         </form>
                     </Col>
                     <Row> 
