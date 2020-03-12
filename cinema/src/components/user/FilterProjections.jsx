@@ -239,6 +239,8 @@ class FilterProjections extends Component {
                         <Col>
                         <h1 className="form-header">Filter Projections</h1>
                         <form  onSubmit={this.handleSubmit}>
+                            <Row>
+                            <Col sm={4}>
                             <FormGroup>
                                     <Typeahead
                                         labelKey="name"
@@ -250,6 +252,8 @@ class FilterProjections extends Component {
                                         />
                                         <FormText className="text-danger">{cinemaIdError}</FormText>
                             </FormGroup>
+                            </Col>  
+                            <Col sm={4}>  
                             <FormGroup>
                                     <Typeahead
                                         labelKey="name"
@@ -261,37 +265,48 @@ class FilterProjections extends Component {
                                         />
                                         <FormText className="text-danger">{auditoriumIdError}</FormText>
                             </FormGroup>
+                            </Col>  
+                            <Col sm={4}>
                             <FormGroup>
-                                    <Typeahead
-                                        labelKey="title"
-                                        options={movies}
-                                        placeholder="Choose a movie..."
-                                        id="browser"
-                                        disabled={disabledMovie}
-                                        onChange={e => {this.onMovieChange(e)}}
-                                        />
-                                        <FormText className="text-danger">{movieIdError}</FormText>
+                                 <Typeahead
+                                    labelKey="title"
+                                    options={movies}
+                                    placeholder="Choose a movie..."
+                                    id="browser"
+                                    disabled={disabledMovie}
+                                    onChange={e => {this.onMovieChange(e)}}
+                                />
+                                <FormText className="text-danger">{movieIdError}</FormText>
                             </FormGroup>
-                            <FormGroup>
-                                    <h2 className="form-header">start date</h2>
-                                    <DateTimePicker format="y-MM-dd"
-                                        className="form-control"
-                                        onChange={this.onStartDateChange}
-                                        value={this.state.startProjectionTime}
+                            </Col>
+                            </Row>
+                            <Row>
+                                <Col sm={6}>
+                                    <FormGroup>
+                                        <h5 className="form-header">From date</h5>
+                                        <DateTimePicker format="y-MM-dd"
+                                            className="form-control"
+                                            onChange={this.onStartDateChange}
+                                            value={this.state.startProjectionTime}
                                         />
-                                    <FormText className="text-danger">{projectionTimeError}</FormText>
-                            </FormGroup>
-                            <FormGroup>
-                                    <h3 className="form-header">finish date</h3>
-                                    <DateTimePicker format="y-MM-dd"
-                                        className="form-control"
-                                        onChange={this.onFinishDateChange}
-                                        value={this.state.finishProjectionTime}
-                                        />
-                                    <FormText className="text-danger">{projectionTimeError}</FormText>
-
-                            </FormGroup>
-                            <Button type="submit" onClick={this.filterProjections}>Filter Projections</Button>
+                                        <FormText className="text-danger">{projectionTimeError}</FormText>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm={6}>
+                                    <FormGroup>
+                                        <h5 className="form-header">To date</h5>
+                                        <DateTimePicker format="y-MM-dd"
+                                            className="form-control"
+                                            onChange={this.onFinishDateChange}
+                                            value={this.state.finishProjectionTime}
+                                            />
+                                        <FormText className="text-danger">{projectionTimeError}</FormText>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <div class="text-center">
+                                <Button type="submit" className="button-position btn-lg" onClick={this.filterProjections}>Filter Projections   </Button>
+                            </div>
                         </form>
                         </Col>
                     </Row>

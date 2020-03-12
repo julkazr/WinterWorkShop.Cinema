@@ -143,7 +143,6 @@ class AllProjectionsForCinema extends Component {
         .then(sharedResponse)
         .then(data => {
             if(data) {
-              NotificationManager.success('Successfuly fetched data!');
               this.setState({ movies: data, isLoading: false});  
             }
         }) 

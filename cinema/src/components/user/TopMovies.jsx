@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
-import { Row, Table, Col, FormControl, FormGroup, Button, FormText } from 'react-bootstrap';
+import { Row, Table, Col, FormControl, FormGroup, Button, FormText, Container } from 'react-bootstrap';
 import Spinner from '../Spinner';
 import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
@@ -123,6 +123,9 @@ class TopMovies extends Component {
                             
         return (
             <React.Fragment>
+                <Container>
+
+                
                 <Row className="no-gutters pt-2 pr-5 pl-5">
                     <Col>
                         <form onSubmit={this.handleSubmit}>
@@ -144,6 +147,7 @@ class TopMovies extends Component {
                 <Row className="no-gutters pr-5 pl-5">
                     {showTable}
                 </Row>
+                </Container>
             </React.Fragment>
         );
       }
