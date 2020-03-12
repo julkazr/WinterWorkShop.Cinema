@@ -119,7 +119,7 @@ getUser() {
       }
       
       return <Form inline onSubmit={this.handleLogout}>
-               <Button type="submit" variant="outline-success" className="mr-1">Log Out</Button>
+               <Button type="submit" variant="outline-success" className="mr-1 btn-outline-warning">Log Out</Button>
              </Form>
     }
 

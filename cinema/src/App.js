@@ -14,6 +14,7 @@ import Dashboard from './components/admin/Dashboard';
 import FilterProjections from './components/user/FilterProjections';
 import MovieSearch from './components/user/MovieSearch';
 import UserProfile from './components/user/UserProfile';
+import NotFound from './components/NotFound';
 
 // higher order component
 import { SuperUserRoute } from './components/hoc/SuperUserRoute';
@@ -26,13 +27,14 @@ function App() {
         <div className="set-overflow-y app-content-main bcg-image">
           <Switch>
             <Redirect exact from="/" to="projectionlist" />
-            <Route path="/UserProfile" component={UserProfile} />
+            <UserRoute path="/UserProfile" component={UserProfile} />
             <UserRoute path="/projectiondetails/:id" component={ProjectionDetails} />
             <Route path="/projectionlist" component={AllProjectionsForCinema} />
             <Route path="/topten" component={TopMovies} />
             <Route path="/FilterProjections" component={FilterProjections} />
             <Route path="/MovieSearch" component={MovieSearch} />
             <SuperUserRoute path="/dashboard" component={Dashboard} />
+            <Route path="*" component={NotFound} />
           </Switch>
           <NotificationContainer />
         </div>
