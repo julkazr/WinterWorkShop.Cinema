@@ -313,7 +313,7 @@ class ProjectionDetails extends Component {
               <Col>
                 <Card className="mt-5 card-width">
                   <Card.Body>
-                  <Card.Title><span className="card-title-font">{movieTitle}</span> <span className="float-right"> {rating}</span></Card.Title>
+                  <Card.Title><span className="card-title-font">Movie: {movieTitle}</span> <span className="float-right"> {rating}</span></Card.Title>
                       <hr/>
                     <Card.Subtitle className="mb-2 text-muted">Year of production: {movieYear} <span className="float-right">Time of projection: {Time}</span></Card.Subtitle>
                       <hr/>

@@ -209,6 +209,7 @@ class AllProjectionsForCinema extends Component {
                 <Row className="no-gutters set-overflow-y mt-3">
                   {list} 
                 </Row>
+                {!list &&
                 <Row>
                   <h2 className="text-primary font-italic py-3">Comming soon in cinema near you...</h2>
                   <div id="carouselExampleControls" class="carousel slide carousel-style" data-ride="carousel">
@@ -245,6 +246,7 @@ class AllProjectionsForCinema extends Component {
                     </a>
                   </div>
                 </Row>
+              }
               </Container>
             </div>
           </React.Fragment>

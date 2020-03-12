@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
-import { Row, Table, Col, FormControl, FormGroup, Button, FormText, Container } from 'react-bootstrap';
+import { Row, Table, Col, FormControl, FormGroup, Button, FormText, Container, Form } from 'react-bootstrap';
 import Spinner from '../Spinner';
 import { sharedGetRequestOptions, sharedResponse } from './../helpers/shared';
 
@@ -124,29 +124,28 @@ class TopMovies extends Component {
         return (
             <React.Fragment>
                 <Container>
-
-                
-                <Row className="no-gutters pt-2 pr-5 pl-5">
-                    <Col>
-                        <form onSubmit={this.handleSubmit}>
-                        <h1 className="form-header ml-2">Top 10 Movies</h1>
-                        <FormGroup>
-                            <FormControl
-                                id="Year"
-                                type="number"
-                                placeholder="Year"
-                                value={Year}
-                                onChange={this.handleChange}
-                            />
-                            <FormText className="text-danger">{yearError}</FormText>
-                            <Button type="submit" block>Top</Button>
-                        </FormGroup>
-                        </form>
-                    </Col>
-                </Row>
-                <Row className="no-gutters pr-5 pl-5">
-                    {showTable}
-                </Row>
+                    <Row className="no-gutters pt-2 pr-5 pl-5">
+                        <Col>
+                            <form onSubmit={this.handleSubmit}>
+                            <h1 className="form-header ml-2">Top 10 Movies</h1>
+                            <FormGroup>
+                                <Form.Label>For year:</Form.Label>
+                                <FormControl
+                                    id="Year"
+                                    type="number"
+                                    placeholder="Year"
+                                    value={Year}
+                                    onChange={this.handleChange}
+                                />
+                                <FormText className="text-danger">{yearError}</FormText>
+                                <Button type="submit" block>Top</Button>
+                            </FormGroup>
+                            </form>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters pr-5 pl-5">
+                        {showTable}
+                    </Row>
                 </Container>
             </React.Fragment>
         );
