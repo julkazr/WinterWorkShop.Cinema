@@ -38,10 +38,12 @@ class NewProjection extends React.Component {
 
     validate(id, value) {
         if (id === 'projectionTime') {
-            if (!value) {
-                this.setState({projectionTimeError: 'Chose projection time',
+            let date = new Date(value);
+            if (!value || date.getFullYear() > 2100 || date.getFullYear() < 1895) {
+                this.setState({projectionTimeError: 'Chose correct projection time',
                                 canSubmit: false});
             } else {
+                console.log(value)
                 this.setState({projectionTimeError: '',
                                 canSubmit: true});
             }
@@ -150,7 +152,7 @@ class NewProjection extends React.Component {
         }
     }
 
-    onDateChange = date => this.setState({ projectionTime: date })
+    onDateChange = date => (this.setState({ projectionTime: date }), this.validate('projectionTime', date))
 
     render() {
         const { auditoriums, movies, submitted, auditoriumIdError, movieIdError, projectionTimeError, canSubmit } = this.state;
