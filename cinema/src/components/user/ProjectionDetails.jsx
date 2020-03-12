@@ -3,6 +3,7 @@ import { NotificationManager } from 'react-notifications';
 import { serviceConfig } from '../../appSettings';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import classNames from 'classnames';
+import Spinner from '../../components/Spinner';
 import { getRoundedRating, sharedGetRequestOptions, sharedPostRequestOptions, sharedResponse } from './../helpers/shared';
 
 class ProjectionDetails extends Component {
@@ -24,7 +25,9 @@ class ProjectionDetails extends Component {
         ticketsInfo: [],
         canReserved: false,
         ProjectionTime: '',
-        errorMsg : []
+        errorMsg : [],
+        isLoading: true,
+        hideButton: false
     };
     this.reloadPage = this.reloadPage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -172,6 +175,7 @@ class ProjectionDetails extends Component {
       userId: this.state.user.id,
       seatsToReserveID: this.state.seatWantToReserve
     }
+    this.setState({isLoading: false, hideButton: true});
 
     const requestOptions = sharedPostRequestOptions(data);
     fetch(`${serviceConfig.baseURL}/api/Reservations/reserve`, requestOptions)
@@ -191,10 +195,12 @@ class ProjectionDetails extends Component {
         
         if(this.state.errorMsg.errorMessage == null){
           NotificationManager.success("Reservation successful!");
+          this.setState({isLoading: true});
         }else{
           NotificationManager.error(this.state.errorMsg.errorMessage);
           setTimeout(function(){ window.location.reload(true); }, 4000);
           NotificationManager.info("Page will be reloaded in a moment so you can try again!")
+          this.setState({hideButton:false});
         }
         this.ticketInfoForUser(this.state.user, this.state.ticketsInfo); 
       })
@@ -288,17 +294,19 @@ class ProjectionDetails extends Component {
   }
   reloadPage() {
     window.location.reload(true);
+    this.setState({hideButton:false});
   }
 
   render() {
   
-  const auditorium = this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
+  const auditorium = !this.state.isLoading ? <Spinner></Spinner> : this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
   const { submitted, canSubmit, movieTitle, movieYear, tickets, projection, ProjectionTime } = this.state;
   const rating = getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
   const pr = projection.projection;
   let Time = new Date(ProjectionTime).toLocaleString();
+  const button = (!this.state.hideButton) ? <Button type="submit" className="font-weight-bold" block>Pay for tickets and make reservations</Button> : null;
 
       return (
         <React.Fragment>
@@ -343,14 +351,14 @@ class ProjectionDetails extends Component {
                     <form onSubmit={this.handleSubmit}>
                       <Row className="pt-2">
                         <Col sm={12}>
-                          <Button type="submit" disabled={submitted || !canSubmit} className="font-weight-bold" block>Pay for tickets and make reservations</Button>
+                        {button}
                         </Col> 
                       </Row> 
                     </form>
                     { tickets.seat &&
                     <Row className="pt-2">
                         <Col sm={12}>
-                          <Button onClick={this.reloadPage} className="font-weight-bold" block>Make another reservations</Button>
+                          <Button onClick={this.reloadPage} className="font-weight-bold" variant="secondary" block>Make another reservations</Button>
                         </Col> 
                       </Row>
                     }
@@ -368,8 +376,7 @@ class ProjectionDetails extends Component {
                             <Card.Text>
                                 <span className="mb-2 font-weight-bold">
                                 Username: {tickets.username} 
-                                </span>
-                                
+                                </span>                               
                             </Card.Text>
                             <Card.Text>
                               <span className="mb-2 font-weight-bold">
