@@ -123,9 +123,18 @@ getUser() {
              </Form>
     }
 
-    renderUserTab(username) {
+    renderUserTab(user) {
+      let isInRole = '';
+      if(user.isAdmin) {
+        isInRole = '- admin';
+      } else if(user.isSuperUser) {
+        isInRole = '- superuser';
+      } else {
+        isInRole = '';
+      }
       if(localStorage.getItem('username')){
-      return <Nav.Link href="/UserProfile" className="text-white px-3">User: {username}</Nav.Link>
+        
+        return <Nav.Link href="/UserProfile" className="text-white px-3">User: {user.firstName} {isInRole}</Nav.Link>
       }
     }
 
@@ -133,7 +142,8 @@ getUser() {
       const { username, user } = this.state;
       let dasboard = this.renderdasboard(user);
       let loginLogout = this.renderLoginLogoutButton(username, user);
-      let userTab = this.renderUserTab(user.firstName);
+      let userTab = this.renderUserTab(user);
+      console.log(user);
 
         return (
             <Navbar bg="dark" expand="lg">
