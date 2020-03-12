@@ -155,7 +155,6 @@ class AllProjectionsForCinema extends Component {
 
 
     
-    
     fillListWithData(movies) {
 ;
       if(movies) {
