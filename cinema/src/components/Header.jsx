@@ -125,7 +125,7 @@ getUser() {
 
     renderUserTab(username) {
       if(localStorage.getItem('username')){
-        return <Nav.Link href="/UserProfile" className="text-white px-3">User</Nav.Link>
+      return <Nav.Link href="/UserProfile" className="text-white px-3">User: {username}</Nav.Link>
       }
     }
 
@@ -133,7 +133,7 @@ getUser() {
       const { username, user } = this.state;
       let dasboard = this.renderdasboard(user);
       let loginLogout = this.renderLoginLogoutButton(username, user);
-      let userTab = this.renderUserTab(username);
+      let userTab = this.renderUserTab(user.firstName);
 
         return (
             <Navbar bg="dark" expand="lg">
