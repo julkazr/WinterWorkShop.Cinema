@@ -17,7 +17,7 @@ import UserProfile from './components/user/UserProfile';
 
 // higher order component
 import { SuperUserRoute } from './components/hoc/SuperUserRoute';
-
+import { UserRoute } from '../src/components/hoc/UserRoute';
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
           <Switch>
             <Redirect exact from="/" to="projectionlist" />
             <Route path="/UserProfile" component={UserProfile} />
-            <Route path="/projectiondetails/:id" component={ProjectionDetails} />
+            <UserRoute path="/projectiondetails/:id" component={ProjectionDetails} />
             <Route path="/projectionlist" component={AllProjectionsForCinema} />
             <Route path="/topten" component={TopMovies} />
             <Route path="/FilterProjections" component={FilterProjections} />

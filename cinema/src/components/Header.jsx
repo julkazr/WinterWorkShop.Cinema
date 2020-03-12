@@ -47,6 +47,7 @@ handleLogout(e) {
   e.preventDefault();
 
   localStorage.removeItem("username");
+  localStorage.removeItem("jwt");
   let conf = window.confirm("CONFIRM LOGUT!");
   if(conf){
     window.location.reload(true);
