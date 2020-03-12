@@ -2,18 +2,53 @@
   overflow-y: auto !important;
 }
 
+.central-position {
+  display: block;
+  margin: 0 auto;
+  width: 30rem;
+}
+
+.user-img {
+  max-width: 10rem;
+  display: block;
+  margin: 0 auto;
+}
+
 .dashboard-navigation{
   background-color: #3e444a;
 }
 
 .app-content-main{
-  height: calc(100vh - 56px);
   overflow-y: auto;
+  height: calc(100vh - 56px);
 }
 
-.min-container-height {
-  min-height: 100vh;
-  background-color: white;
+.bcg-image {
+  /* must exist for background image opacity */
+  display: block;
+}
+
+.bcg-image::after {
+  content: "";
+  background-image: url('/Images/film-tape.jpg');
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.carousel-style {
+  min-width: 60vw;
+  background-color: #BDBDBD;
+}
+
+.img-style {
+  display: block;
+  max-width: 424px;
+  margin: 0 auto;
 }
 
 .cursor-pointer{
@@ -22,6 +57,10 @@
 
 .text-decoration-none{
   text-decoration: none;
+}
+
+.text-white:hover {
+  color: #ffc107!important;
 }
 
 .float-right{

@@ -22,7 +22,6 @@ class TopMovies extends Component {
 
     handleChange(e) {
         const { id, value } = e.target;
-        console.log(id + " " + value)
         this.setState({ [id]: value });
         this.validate(id, value);
     }
@@ -111,11 +110,9 @@ class TopMovies extends Component {
         const table = (<Table striped bordered hover size="sm" variant="dark">
                             <thead>
                             <tr>
-                                {/* <th>Id</th> */}
                                 <th>Title</th>
                                 <th>Rating</th>
                                 <th>Year</th>
-                                {/* <th>Is Current</th> */}
                             </tr>
                             </thead>
                             <tbody>
@@ -126,7 +123,7 @@ class TopMovies extends Component {
                             
         return (
             <React.Fragment>
-                <Row className="no-gutters pt-2">
+                <Row className="no-gutters pt-2 pr-5 pl-5">
                     <Col>
                         <form onSubmit={this.handleSubmit}>
                         <h1 className="form-header ml-2">Top 10 Movies</h1>

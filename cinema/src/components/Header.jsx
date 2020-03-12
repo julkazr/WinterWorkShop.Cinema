@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap';
 import { NotificationManager } from 'react-notifications';
@@ -27,18 +28,30 @@ handleChange(e) {
     this.setState({ [id]: value });
 }
 
+
 handleSubmit(e) {
     e.preventDefault();
 
     this.setState({ submitted: true });
     const { username } = this.state;
-    localStorage.setItem('username', this.state.username);
+    
     if (username) {
         this.login();
         this.getUser();
     } else {
         this.setState({ submitted: false });
     }
+}
+
+handleLogout(e) {
+  e.preventDefault();
+
+  localStorage.removeItem("username");
+  let conf = window.confirm("CONFIRM LOGUT!");
+  if(conf){
+    window.location.reload(true);
+  }
+  
 }
 
 login() {
@@ -51,14 +64,21 @@ login() {
     fetch(`${serviceConfig.baseURL}/get-token?name=${username}`, requestOptions)
         .then(sharedResponse)
         .then(data => {
-          NotificationManager.success('Successfuly signed in!');
+          NotificationManager.success('Successfuly logged in!');
           if (data.token) {
             localStorage.setItem("jwt", data.token);
+            localStorage.setItem('username', this.state.username);
             }
-            window.location.reload(true);
+            setTimeout(function(){ window.location.reload(true); }, 1000);
         })
         .catch(response => {
-            NotificationManager.error(response.message || response.statusText);
+            if(response.message==undefined || response.statusText==""){
+              
+              NotificationManager.error("There is no user with that username!");
+            }else{
+              NotificationManager.error(response.message && response.statusText);
+            }
+
             this.setState({ submitted: false });
         });
 }
@@ -75,39 +95,60 @@ getUser() {
         }
       })
       .catch(response => {
-        NotificationManager.error(response.message || response.statusText);
+        //NotificationManager.error(response.message && response.statusText);
       });
 }
 
     renderdasboard(user)
     {
-        console.log(user);
-        return ((user.isAdmin || user.isSuperUser) ? <Nav.Link href="/dashboard" className={"text-white"}>Dashboard</Nav.Link> : null)
+        return ((user.isAdmin || user.isSuperUser) ? <Nav.Link href="/dashboard" className={"text-white px-3"}>Dashboard</Nav.Link> : null)
     }
-    render() {
-      const { username, user } = this.state;
-      console.log(user.isAdmin)
-      let dasboard = this.renderdasboard(user);
-        return (
-            <Navbar bg="dark" expand="lg">
-            <Navbar.Brand className="text-info font-weight-bold text-capitalize"><Link className="text-decoration-none" to='/projectionlist'>Cinema 9</Link></Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-white" />
-            <Navbar.Collapse id="basic-navbar-nav" className="text-white">
-              <Nav className="mr-auto text-white" >
-        <Nav.Link href="/UserProfile" className="text-white">User: {user.userName}</Nav.Link>
-              <Nav.Link href="/topten" className="text-white">Top 10 Movies</Nav.Link>
-              <Nav.Link href="/FilterProjections" className="text-white">Filter Projections</Nav.Link>
-              <Nav.Link href="/MovieSearch" className="text-white">Movies Search</Nav.Link>
-              {dasboard}
-              </Nav>
-              <Form inline onSubmit={this.handleSubmit}>
+
+    renderLoginLogoutButton(username, user)
+    {
+
+      if(!localStorage.getItem('username')){
+        return <Form inline onSubmit={this.handleSubmit}>
                 <FormControl type="text" placeholder="Username"
                   id="username"
                   value={username}
                   onChange={this.handleChange}
                   className="mr-sm-2" />
                 <Button type="submit" variant="outline-success" className="mr-1">Log In</Button>
-              </Form>
+                </Form> 
+      }
+      
+      return <Form inline onSubmit={this.handleLogout}>
+               <Button type="submit" variant="outline-success" className="mr-1">Log Out</Button>
+             </Form>
+    }
+
+    renderUserTab(username) {
+      if(localStorage.getItem('username')){
+      return <Nav.Link href="/UserProfile" className="text-white px-3">User: {username}</Nav.Link>
+      }
+    }
+
+    render() {
+      const { username, user } = this.state;
+      let dasboard = this.renderdasboard(user);
+      let loginLogout = this.renderLoginLogoutButton(username, user);
+      let userTab = this.renderUserTab(user.firstName);
+
+        return (
+            <Navbar bg="dark" expand="lg">
+            <Navbar.Brand className="text-info font-weight-bold text-capitalize"><Link className="text-decoration-none" to='/projectionlist'>Cinema 9</Link></Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-white" />
+            <Navbar.Collapse id="basic-navbar-nav" className="text-white">
+              <Nav className="mr-auto" >
+              
+              <Nav.Link href="/topten" className="text-white px-3">Top 10 Movies</Nav.Link>
+              <Nav.Link href="/FilterProjections" className="text-white px-3">Filter Projections</Nav.Link>
+              <Nav.Link href="/MovieSearch" className="text-white px-3">Movies Search</Nav.Link>
+              {dasboard}
+              </Nav>
+              {userTab}
+              {loginLogout}
             </Navbar.Collapse>
           </Navbar>
         );

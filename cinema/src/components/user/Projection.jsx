@@ -25,11 +25,7 @@ class Projection extends Component {
     for(let i = 0; i < this.state.movie.projections.length; i++) {
       projectionTimes.push(this.state.movie.projections[i].projectionTime);
       projectionId = this.state.movie.projections[i].id;
-      console.log("ProjectionId: ");
-    console.log(projectionId);
     }
-    console.log("List of projectiontimes: ");
-    console.log(projectionTimes);
     
     return projectionTimes.map((time, index) => {
       var date = new Date(time).toLocaleString();

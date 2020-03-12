@@ -37,7 +37,6 @@ class NewProjection extends React.Component {
     }
 
     validate(id, value) {
-        console.log(id, value);
         if (id === 'projectionTime') {
             if (!value) {
                 this.setState({projectionTimeError: 'Chose projection time',
@@ -157,44 +156,46 @@ class NewProjection extends React.Component {
         const { auditoriums, movies, submitted, auditoriumIdError, movieIdError, projectionTimeError, canSubmit } = this.state;
         
         return (
-            <Container>
-                <Row>
-                    <Col>
-                        <h1 className="form-header">Add Projection</h1>
-                        <form onSubmit={this.handleSubmit}>
-                            <FormGroup>
-                                <Typeahead
-                                    labelKey="title"
-                                    options={movies}
-                                    placeholder="Choose a movie..."
-                                    id="movie"
-                                    onChange={e => {this.onMovieChange(e)}}
-                                    />
-                                <FormText className="text-danger">{movieIdError}</FormText>
-                            </FormGroup>
-                            <FormGroup>
-                                <Typeahead
-                                    labelKey="name"
-                                    options={auditoriums}
-                                    placeholder="Choose auditorium..."
-                                    id="auditorium"
-                                    onChange={e => {this.onAuditoriumChange(e)}}
-                                    />
-                                <FormText className="text-danger">{auditoriumIdError}</FormText>
-                            </FormGroup>
-                            <FormGroup>
-                                <DateTimePicker
-                                    className="form-control"
-                                    onChange={this.onDateChange}
-                                    value={this.state.projectionTime}
-                                    />
-                                <FormText className="text-danger">{projectionTimeError}</FormText>
-                            </FormGroup>
-                            <Button type="submit" disabled={submitted || !canSubmit} block>Add Projection</Button>
-                        </form>
-                    </Col>
-                </Row>
-            </Container>
+            <React.Fragment>
+                <Container>
+                    <Row>
+                        <Col>
+                            <h1 className="form-header">Add Projection</h1>
+                            <form onSubmit={this.handleSubmit}>
+                                <FormGroup>
+                                    <Typeahead
+                                        labelKey="title"
+                                        options={movies}
+                                        placeholder="Choose a movie..."
+                                        id="movie"
+                                        onChange={e => {this.onMovieChange(e)}}
+                                        />
+                                    <FormText className="text-danger">{movieIdError}</FormText>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Typeahead
+                                        labelKey="name"
+                                        options={auditoriums}
+                                        placeholder="Choose auditorium..."
+                                        id="auditorium"
+                                        onChange={e => {this.onAuditoriumChange(e)}}
+                                        />
+                                    <FormText className="text-danger">{auditoriumIdError}</FormText>
+                                </FormGroup>
+                                <FormGroup>
+                                    <DateTimePicker
+                                        className="form-control"
+                                        onChange={this.onDateChange}
+                                        value={this.state.projectionTime}
+                                        />
+                                    <FormText className="text-danger">{projectionTimeError}</FormText>
+                                </FormGroup>
+                                <Button type="submit" disabled={submitted || !canSubmit} block>Add Projection</Button>
+                            </form>
+                        </Col>
+                    </Row>
+                </Container>
+            </React.Fragment>
         );
     }
 }
