@@ -31,8 +31,9 @@
 .bcg-image::after {
   content: "";
   background-image: url('/Images/film-tape.jpg');
+  background-repeat: no-repeat;
   opacity: 0.2;
-  top: 0;
+  top: 70px;
   left: 0;
   bottom: 0;
   right: 0;
@@ -85,12 +86,16 @@
   border: 1px solid black;
   padding: 15px !important;
   background-color: #007bff;
+  max-width: 20px;
+  height: auto;
 }
 
 .want-to-reserve {
   border: 1px solid black;
   padding: 15px !important;
   background-color: grey;
+  max-width: 20px;
+  height: auto;
 }
 
 .is-reserved {
@@ -98,6 +103,12 @@
   padding: 15px !important;
   background-color: #ffc107;
   cursor: not-allowed !important;
+  max-width: 20px;
+  height: auto;
+}
+
+.img-size {
+  max-width: 20px;
 }
 
 .table-cinema-auditorium td:hover {
@@ -107,6 +118,7 @@
 
 .table-cinema-auditorium tr {
   margin-bottom: 10px;
+  max-height: 20px;
 }
 
 .cinema-screen {
