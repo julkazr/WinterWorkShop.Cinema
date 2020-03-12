@@ -45,7 +45,7 @@ class ShowAllProjections extends Component {
     fetch(`${serviceConfig.baseURL}/api/projections/${id}`, requestOptions)
         .then(sharedResponse)
         .then(result => {
-            NotificationManager.success('Successfuly removed projection with id:', id);
+            NotificationManager.success('Successfuly removed projection with id: '+ id);
             const newState = this.state.projections.filter(projection => {
                 return projection.id !== id;
             })
@@ -66,7 +66,7 @@ class ShowAllProjections extends Component {
                         <td width="15%">{projection.movieTitle}</td>
                         <td width="5%">{projection.auditoriumId}</td>
                         <td >{projection.aditoriumName}</td>
-                        <td width="18%">{projection.projectionTime}</td>
+                        <td width="18%">{Time}</td>
                         <td width="5%" className="text-center cursor-pointer" onClick={() => this.editProjection(projection.id)}>
                             <FontAwesomeIcon className="text-info mr-2 fa-1x" icon={faEdit}/>
                         </td>

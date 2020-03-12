@@ -45,7 +45,7 @@ class ShowAllCinemas extends Component {
           fetch(`${serviceConfig.baseURL}/api/cinemas/delete/${id}`, requestOptions)
           .then(sharedResponse)
           .then(result => {
-              NotificationManager.success('Successfuly removed movie with id:', id);
+              NotificationManager.success('Successfuly removed movie with id: ' + id);
               const newState = this.state.cinemas.filter(cinema => {
                   return cinema.id !== id;
               })

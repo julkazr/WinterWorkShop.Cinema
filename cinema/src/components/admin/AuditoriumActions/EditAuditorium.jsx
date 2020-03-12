@@ -113,7 +113,7 @@ class EditAuditorium extends React.Component {
                     NotificationManager.success('Successfuly edited auditorium!');
                 })
                 .catch(response => {
-                    NotificationManager.error(response.message || response.statusText);
+                    NotificationManager.error(response.message || response.statusText || "You can't delete reservad seat(s)");
                     this.setState({ submitted: false });
                 });
         }
