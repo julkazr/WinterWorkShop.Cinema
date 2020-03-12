@@ -21,15 +21,15 @@ class Projection extends Component {
 
   getProjections() {
     const projectionTimes = [];
-    let projectionId = '';
+    let projectionId = [];
     for(let i = 0; i < this.state.movie.projections.length; i++) {
       projectionTimes.push(this.state.movie.projections[i].projectionTime);
-      projectionId = this.state.movie.projections[i].id;
+      projectionId.push(this.state.movie.projections[i].id);
     }
     
     return projectionTimes.map((time, index) => {
       var date = new Date(time).toLocaleString();
-      return <Button key={index} onClick={() => this.navigateToProjectionDetails(projectionId)} className="mr-1 mb-2">{date}</Button>
+      return <Button key={index} onClick={() => this.navigateToProjectionDetails(projectionId[index])} className="mr-1 mb-2">{date}</Button>
     })
   }
 
