@@ -203,10 +203,14 @@ class FilterProjections extends Component {
 
     }
 
+    handleClickOnProjection(id){
+        this.props.history.push(`projectiondetails/${id}`);
+    }
+
     fillTableWithData() {
         return this.state.projections.map(projection => {
             let Time = new Date(projection.projectionTime).toLocaleString();       
-            return <tr key={projection.id}>                     
+            return <tr key={projection.id} onClick={this.handleClickOnProjection.bind(this, projection.id)} style={{cursor: "pointer"}}>                     
                         <td>{Time}</td>
                         <td>{projection.movieTitle}</td>
                         <td>{projection.aditoriumName}</td>
