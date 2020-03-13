@@ -143,7 +143,6 @@ getUser() {
       let dasboard = this.renderdasboard(user);
       let loginLogout = this.renderLoginLogoutButton(username, user);
       let userTab = this.renderUserTab(user);
-      console.log(user);
 
         return (
             <Navbar bg="dark" expand="lg">

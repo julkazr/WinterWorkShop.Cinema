@@ -101,7 +101,6 @@ class AllProjectionsForCinema extends Component {
         })
         .catch(response => {
           this.setState({isLoading: false});
-          //NotificationManager.error(response.message || response.statusText);
         })
     }
 
