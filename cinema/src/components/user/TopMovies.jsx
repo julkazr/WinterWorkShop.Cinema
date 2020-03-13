@@ -11,7 +11,7 @@ class TopMovies extends Component {
       this.state = {
           movies: [],
           isLoading: true,
-          Year: 0,
+          Year: '',
           yearError:'',
           submitted: false,
           canSubmit: true
