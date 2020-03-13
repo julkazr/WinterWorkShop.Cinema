@@ -203,14 +203,22 @@ class FilterProjections extends Component {
 
     }
 
-    handleClickOnProjection(id){
+    handleClickOnProjection(id, Time){
+        console.log("****************")
+        console.log(Time.getFullYear())
+        console.log("****************")
+        if(Time.getFullYear() < new Date().getFullYear())
+        {
+            NotificationManager.error("You can't access, projection expired!");
+        } else {
         this.props.history.push(`projectiondetails/${id}`);
+        }
     }
 
     fillTableWithData() {
         return this.state.projections.map(projection => {
             let Time = new Date(projection.projectionTime).toLocaleString();       
-            return <tr key={projection.id} onClick={this.handleClickOnProjection.bind(this, projection.id)} style={{cursor: "pointer"}}>                     
+            return <tr key={projection.id} onClick={this.handleClickOnProjection.bind(this, projection.id, new Date(projection.projectionTime))} style={{cursor: "pointer"}}>                     
                         <td>{Time}</td>
                         <td>{projection.movieTitle}</td>
                         <td>{projection.aditoriumName}</td>
