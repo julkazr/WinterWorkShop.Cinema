@@ -45,14 +45,14 @@ class ShowAllAuditoriums extends Component {
         fetch(`${serviceConfig.baseURL}/api/Auditoriums/delete/${id}`, requestOptions)
         .then(sharedResponse)
         .then(result => {
-            NotificationManager.success('Successfuly removed auditorium with id:', id);
+            NotificationManager.success('Successfuly removed auditorium with id: '+ id);
             const newState = this.state.auditoriums.filter(auditorium => {
                 return auditorium.id !== id;
             })
             this.setState({auditoriums: newState});
         })
         .catch(response => {
-            NotificationManager.error(response.message || response.statusText);
+            NotificationManager.error(response.message || response.statusText || "please, delete projections for this auditorium");
             this.setState({ submitted: false });
         });
 
