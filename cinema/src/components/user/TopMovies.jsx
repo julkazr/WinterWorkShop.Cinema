@@ -11,7 +11,7 @@ class TopMovies extends Component {
       this.state = {
           movies: [],
           isLoading: true,
-          Year: 0,
+          Year: '',
           yearError:'',
           submitted: false,
           canSubmit: true
@@ -35,7 +35,7 @@ class TopMovies extends Component {
         if (Year && canSubmit) {
             this.getTopMoviesByYear();
         } else {
-            NotificationManager.error('Please fill form with data.');
+            NotificationManager.error('Please fill form with correct data.');
             this.setState({ submitted: false });
         }
     }
@@ -43,7 +43,7 @@ class TopMovies extends Component {
     validate(id, value) {
         if (id === 'Year') {
             if(value === '' || value < 1895 || value > 2100){
-                this.setState({yearError: 'Fill Year',
+                this.setState({yearError: 'Fill Year with correct year(1895 - 2100)',
                                 canSubmit: false})
             } else {
                 this.setState({yearError: '',
