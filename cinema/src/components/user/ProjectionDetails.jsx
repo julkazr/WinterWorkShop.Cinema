@@ -373,7 +373,7 @@ class ProjectionDetails extends Component {
                               <hr/>
                             <Card.Text>
                                 <span className="mb-2 font-weight-bold">
-                                Username: {tickets.username} 
+                                User: {tickets.username} 
                                 </span>                               
                             </Card.Text>
                             <Card.Text>
