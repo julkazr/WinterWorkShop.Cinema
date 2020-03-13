@@ -211,7 +211,7 @@ class ProjectionDetails extends Component {
 
   ticketInfoForUser(user, seat) {
       const username = `${user.firstName} ${user.lastName}`;
-      const bonus = user.bonus;
+      const bonus = user.bonus + this.state.seatWantToReserve.length;
       let ticketsInfo = { username, bonus, seat}
       this.setState({tickets: ticketsInfo});
   }
@@ -297,7 +297,7 @@ class ProjectionDetails extends Component {
   }
 
   render() {
-  
+
   const auditorium = !this.state.isLoading ? <Spinner></Spinner> : this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
   const { movieTitle, movieYear, tickets, ProjectionTime } = this.state;
   const rating = getRoundedRating(this.state.movieRating);
