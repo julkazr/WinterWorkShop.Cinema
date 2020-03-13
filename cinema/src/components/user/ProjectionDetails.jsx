@@ -31,6 +31,7 @@ class ProjectionDetails extends Component {
     };
     this.reloadPage = this.reloadPage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.getCardWitchUser = this.getCardWitchUser.bind(this);
   }
 
   componentDidMount() {
@@ -296,15 +297,52 @@ class ProjectionDetails extends Component {
     this.setState({hideButton:false});
   }
 
+  getCardWitchUser(tickets, row, seatNumbers)
+  {
+    return(<Row className="justify-content-center">
+    <Col>
+      <Card className="mt-5 card-width">
+        <Card.Body format>
+        
+          <h3>You reservation was success!</h3> 
+        
+          <hr/>
+          <Card.Subtitle className="mb-2 text-muted">Tickets info:</Card.Subtitle>
+            <hr/>
+          <Card.Text>
+              <span className="mb-2 font-weight-bold">
+              User: {tickets.username} 
+              </span>                               
+          </Card.Text>
+          <Card.Text>
+            <span className="mb-2 font-weight-bold">
+              Row: {row}
+            </span><br/>
+            <span className="mb-2 font-weight-bold">
+              Seats: {seatNumbers} 
+            </span><br/>
+            <span className="mb-2 font-weight-bold">
+              Bonus: {tickets.bonus}
+            </span><br/>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  </Row>);
+  }
+
   render() {
 
   const auditorium = !this.state.isLoading ? <Spinner></Spinner> : this.renderRows(this.state.projection.auditoriumRowNumber, this.state.projection.auditoriumSeatNumber);
-  const { movieTitle, movieYear, tickets, ProjectionTime } = this.state;
+  const { movieTitle, movieYear, tickets, ProjectionTime, errorMsg } = this.state;
+  console.log(errorMsg)
   const rating = getRoundedRating(this.state.movieRating);
   const row = this.getSeatsRowForTicket();
   const seatNumbers = this.getSeatNumberForTicket();
   let Time = new Date(ProjectionTime).toLocaleString();
   const button = (!this.state.hideButton) ? <Button type="submit" className="font-weight-bold" block>Pay for tickets and make reservations</Button> : null;
+  const card = (errorMsg.length === 0) ? this.getCardWitchUser(tickets, row, seatNumbers) : null;
+
 
       return (
         <React.Fragment>
@@ -360,38 +398,7 @@ class ProjectionDetails extends Component {
                         </Col> 
                       </Row>
                     }
-                    { tickets.seat &&
-                    <Row className="justify-content-center">
-                      <Col>
-                        <Card className="mt-5 card-width">
-                          <Card.Body format>
-                          
-                            <h3>You reservation was success!</h3> 
-                          
-                            <hr/>
-                            <Card.Subtitle className="mb-2 text-muted">Tickets info:</Card.Subtitle>
-                              <hr/>
-                            <Card.Text>
-                                <span className="mb-2 font-weight-bold">
-                                User: {tickets.username} 
-                                </span>                               
-                            </Card.Text>
-                            <Card.Text>
-                              <span className="mb-2 font-weight-bold">
-                                Row: {row}
-                              </span><br/>
-                              <span className="mb-2 font-weight-bold">
-                                Seats: {seatNumbers} 
-                              </span><br/>
-                              <span className="mb-2 font-weight-bold">
-                                Bonus: {tickets.bonus}
-                              </span><br/>
-                            </Card.Text>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </Row>
-                    } 
+                    { tickets.seat && card } 
                   </Card.Body>
                 </Card>
               </Col>
